@@ -1,0 +1,83 @@
+"""Python script for checking Python versions"""
+
+import argparse
+import logging
+import sys
+
+from packaging.version import Version
+
+import tubthumper
+
+logger = logging.getLogger(__name__)
+
+IS_FINAL = "is_final"
+CURRENT_SUPERSEDES = "current_supersedes"
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Command line utility for checking Python versions"
+    )
+    parser.add_argument(
+        "-v", "--version", help="Version to check, defaults to current version"
+    )
+    parser.add_argument(
+        "check",
+        choices=[IS_FINAL, CURRENT_SUPERSEDES],
+        help="Type of check to perform",
+    )
+    return parser.parse_args()
+
+
+def _configure_logger(level: int = logging.INFO) -> None:
+    """Configures logger with a nice formatter, with optional level, defaulting to info"""
+    logger.setLevel(level)
+    formatter = logging.Formatter(
+        "%(asctime)s | %(pathname)s:%(funcName)s @ %(lineno)d | %(levelname)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S %Z",
+    )
+    handler = logging.StreamHandler()
+    handler.setLevel(level)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+
+def _get_current_version() -> Version:
+    """Gets the current version of tubthumper"""
+    curr_str = tubthumper.__version__
+    return Version(curr_str)
+
+
+def _is_final(ver: Version) -> None:
+    if ver.is_prerelease or ver.is_postrelease:
+        sys.exit(1)
+
+
+def _current_supersedes(ver: Version) -> None:
+    curr_ver = _get_current_version()
+    logger.info(f"Current version: {curr_ver}")
+    if curr_ver <= ver:
+        sys.exit(1)
+
+
+def main() -> None:
+    """Determines if this version is a final release"""
+    _configure_logger()
+    args = _parse_args()
+
+    if args.version is None:
+        ver = _get_current_version()
+        logger.info(f"Current version: {ver}")
+    else:
+        ver = Version(args.version)
+
+    if args.check == IS_FINAL:
+        return _is_final(ver)
+    if args.check == CURRENT_SUPERSEDES:
+        return _current_supersedes(ver)
+
+    raise ValueError(f"Invalid check {args.check} provided")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,36 @@
+# Installing
+pip
+setuptools
+wheel
+
+# Formatting
+black
+
+# Import formatting
+isort
+
+# Linting
+pylint
+
+# Type checking
+lxml
+mypy
+types-setuptools
+
+# Unit tests
+tox
+--requirement test_requirements.txt
+
+# Requirements generation
+pip-tools
+
+# Package publishing
+build
+check-wheel-contents
+twine
+
+# Versioning
+packaging
+
+# Docs
+--requirement docs_requirements.txt

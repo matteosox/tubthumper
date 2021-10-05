@@ -1,0 +1,26 @@
+# MacOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Tox env
+.tox/
+tubthumper.egg-info/
+
+# Pylint
+*.stats
+
+# Mypy
+.mypy_cache/
+
+# Test reports
+reports/
+
+# Docs
+docs/build

@@ -1,0 +1,15 @@
+# Exclude everything
+*
+
+# Except files we explicitly need, grouped by copy command
+!cicd/install_packages.sh
+
+!requirements/requirements.txt
+
+!tubthumper
+
+!LICENSE
+!pyproject.toml
+!README.md
+!setup.cfg
+!setup.py
