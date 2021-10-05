@@ -759,7 +759,7 @@ class TestRetryDecorator(unittest.TestCase):
         dec_func = retry_decorator(exceptions=constants.TestException)(func)
         dec_func_repr = repr(dec_func)
         self.assertRegex(
-            dec_func_repr, r"^<function get_a_func.<locals>.func at 0x[0-9a-fA-F]{9,16}>$"
+            dec_func_repr, r"^<function get_a_func.<locals>.func at 0x[0-9a-fA-F]{8,16}>$"
         )
 
 
