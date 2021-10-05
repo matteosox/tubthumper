@@ -6,7 +6,7 @@ from types import MethodType
 from mock import AsyncMock, Mock
 
 TIMING_OVERHEAD = 200e-3  # 200 ms
-TIMING_UNDERHEAD = 1e-3  # 1 ms
+TIMING_UNDERHEAD = time.get_clock_info("perf_counter").resolution
 
 
 def assert_time(test_case, duration, expected_duration):
