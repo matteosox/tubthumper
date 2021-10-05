@@ -7,7 +7,7 @@ cd "$REPO_DIR"
 
 echo "Checking version"
 
-docker run -it \
+docker run \
     --rm \
     --name version_check \
     --volume "$REPO_DIR":/home/cicd/tubthumper \

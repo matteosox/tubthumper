@@ -6,11 +6,12 @@ from types import MethodType
 from mock import AsyncMock, Mock
 
 TIMING_OVERHEAD = 200e-3  # 200 ms
+TIMING_UNDERHEAD = 1e-3  # 1 ms
 
 
 def assert_time(test_case, duration, expected_duration):
     """Assert a timer is within the expected duration, plus a small overhead"""
-    test_case.assertGreater(duration, expected_duration)
+    test_case.assertGreater(duration, expected_duration - TIMING_UNDERHEAD)
     test_case.assertLess(duration, expected_duration + TIMING_OVERHEAD)
 
 

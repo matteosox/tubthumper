@@ -26,5 +26,7 @@ Most checks are automated, but a few aren't, so make sure to go through and tick
   - The appropriate entry in `docs/source/CHANGELOG.md` has been included in the "Unreleased" section, i.e. "Added", "Changed", "Deprecated", "Removed", "Fixed", or "Security".
 - [ ] **Linting**
   - New Python code not in the `tubthumper` package must be added for linting to `test/pylint.sh`.
+- [ ] **Future work**
+  - Future work should be documented in the contributor guide, i.e. `.github/CONTRIBUTING.md`.
 
 If you have any questions not answered by a quick readthrough of the [contributor guide](https://tubthumper.mattefay.com/en/latest/contributor_guide.html), add them to this PR and submit it.

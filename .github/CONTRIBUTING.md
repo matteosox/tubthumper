@@ -238,7 +238,6 @@ When naming a branch, please use the syntax `firstname/branch-name-here`. If you
 
 ## Future Work
 
-- Update type annotations to use types.ParamSpec once Mypy supports them (currently a new feature in Python 3.10).
-- Remove python3.10-distutils once pip no longer uses distutils
+- Update type annotations to use types.ParamSpec once Mypy supports them (currently a new feature in Python 3.10). See [here](https://github.com/python/mypy/issues/8645).
+- Remove python3.10-distutils once pip migrates from `distutils` to `sysconfig`. See [here](https://pip.pypa.io/en/stable/news/#id60) & [here](https://docs.python.org/3.10/library/distutils.html#module-distutils).
 - Add py310 to black target list once black supports py310
-- Upgrade Python 3.10 version from rc2 to 3.10 in Github Actions once it's released
