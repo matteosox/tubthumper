@@ -5,7 +5,7 @@ from types import MethodType
 
 from mock import AsyncMock, Mock
 
-TIMING_OVERHEAD = 1e-1
+TIMING_OVERHEAD = 200e-3  # 200 ms
 
 
 def assert_time(test_case, duration, expected_duration):

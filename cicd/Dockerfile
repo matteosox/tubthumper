@@ -8,7 +8,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 
 # Create cicd user & switch to it
 ENV USER=cicd
-RUN groupadd "$USER" && useradd --shell /bin/bash --uid 1024 --create-home --gid "$USER" "$USER"
+RUN groupadd --gid 1024 "$USER" && useradd --uid 1024 --create-home --gid 1024 "$USER"
 USER "$USER"
 WORKDIR "/home/$USER"
 

@@ -9,9 +9,12 @@ echo "Running Pylint"
 
 mkdir -p reports
 
+LOCAL_GROUP_ID=$(id -g)
+
 docker run \
     --rm \
     --name pylint \
+    --user "1024:$LOCAL_GROUP_ID" \
     --env PYLINTHOME=/home/cicd/tubthumper \
     --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \

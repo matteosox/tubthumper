@@ -40,11 +40,14 @@ done
 
 echo "Running unit tests"
 
+LOCAL_GROUP_ID=$(id -g)
+
 if [[ ! -d ".tox" && "${CMD[0]}" == "tox" ]]; then
     echo "Initializing tox environment"
     docker run \
         --rm \
         --name init_tox \
+        --user "1024:$LOCAL_GROUP_ID" \
         --volume "$REPO_DIR":/home/cicd/tubthumper \
         matteosox/tubthumper-cicd \
         tox --notest --parallel
@@ -53,6 +56,7 @@ fi
 docker run \
     --rm \
     --name unit_tests \
+    --user "1024:$LOCAL_GROUP_ID" \
     --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \
     "${CMD[@]}"

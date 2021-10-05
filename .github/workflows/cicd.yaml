@@ -20,7 +20,7 @@ jobs:
         run: cicd/setup.sh
 
       - name: Test
-        run: cicd/test.sh
+        run: cicd/test.sh --all
 
       - name: Login to Docker Hub
         if: ${{ github.ref == 'refs/heads/main' }}

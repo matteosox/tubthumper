@@ -7,7 +7,7 @@ cd "$REPO_DIR"
 
 echo "Checking version to make sure it is updated appropriately"
 
-MAIN_BRANCH=main
+MAIN_BRANCH=remotes/origin/main
 BASE_REF=$(git merge-base "$MAIN_BRANCH" HEAD)
 echo "Best common ancestor of current branch with $MAIN_BRANCH is $BASE_REF"
 MAIN_VERSION=$(git show "$BASE_REF":tubthumper/VERSION)
