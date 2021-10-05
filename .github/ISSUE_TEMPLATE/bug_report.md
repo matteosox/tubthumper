@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us fix the issue
-title: ''
+title: '[BUG]'
 labels: ''
 assignees: matteosox
 

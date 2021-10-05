@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest a new idea
-title: ''
+title: '[FEATURE]'
 labels: ''
 assignees: matteosox
 
