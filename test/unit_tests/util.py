@@ -5,14 +5,21 @@ from types import MethodType
 
 from mock import AsyncMock, Mock
 
+# asyncio event loop uses the "monotonic" timer,
+# and we profile it using the "perf_counter" timer
+TIMER_RESOLUTION = (
+    time.get_clock_info("monotonic").resolution
+    + time.get_clock_info("perf_counter").resolution
+)
 TIMING_OVERHEAD = 200e-3  # 200 ms
-TIMING_UNDERHEAD = time.get_clock_info("perf_counter").resolution
 
 
 def assert_time(test_case, duration, expected_duration):
     """Assert a timer is within the expected duration, plus a small overhead"""
-    test_case.assertGreater(duration, expected_duration - TIMING_UNDERHEAD)
-    test_case.assertLess(duration, expected_duration + TIMING_OVERHEAD)
+    test_case.assertGreater(duration, expected_duration - TIMER_RESOLUTION)
+    test_case.assertLess(
+        duration, expected_duration + TIMING_OVERHEAD + TIMER_RESOLUTION
+    )
 
 
 def create_method_mock(*args, async_mock=False, **kwargs):
