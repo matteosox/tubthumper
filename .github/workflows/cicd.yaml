@@ -42,7 +42,7 @@ jobs:
       - name: Publish to PyPI
         if: ${{ github.ref == 'refs/heads/main' }}
         run: cicd/publish_to_pypi.sh
-        with:
+        env:
           username: ${{ secrets.TWINE_USERNAME }}
           password: ${{ secrets.TWINE_PASSWORD }}
 
