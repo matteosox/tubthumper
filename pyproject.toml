@@ -61,7 +61,8 @@ isolated_build = true
 [testenv]
 deps = -r{toxinidir}/requirements/test_requirements.txt
 setenv = PYTHONHASHSEED = 0
-commands = {toxinidir}/test/inner_unit_tests.sh {posargs}
+allowlist_externals = bash
+commands = bash {toxinidir}/test/inner_unit_tests.sh {posargs}
 
 [testenv:coverage-report]
 basepython = python3

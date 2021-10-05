@@ -16,7 +16,7 @@ while [[ "$#" -gt 0 ]]; do
     case "$1" in
         -t | --tox )
             CMD=("tox")
-            echo "Running Python unit tests with tox"
+            echo "Using tox"
             shift 1
             ;;
         -h | --help )
@@ -38,8 +38,6 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-echo "Running unit tests"
-
 LOCAL_GROUP_ID=$(id -g)
 
 if [[ ! -d ".tox" && "${CMD[0]}" == "tox" ]]; then
@@ -52,6 +50,8 @@ if [[ ! -d ".tox" && "${CMD[0]}" == "tox" ]]; then
         matteosox/tubthumper-cicd \
         tox --notest --parallel
 fi
+
+echo "Running unit tests"
 
 docker run \
     --rm \
