@@ -7,8 +7,8 @@ cd "$REPO_DIR"
 
 echo "Running Mypy"
 
-LOCAL_USER_ID=$(id --user)
-LOCAL_GROUP_ID=$(id --group)
+LOCAL_USER_ID=$(id -u)
+LOCAL_GROUP_ID=$(id -g)
 
 docker run \
     --rm \

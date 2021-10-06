@@ -176,7 +176,7 @@ _TL;DR: To publish the package to PyPI, run `publish/package.sh --repository pyp
 
 We use [`build`](https://pypa-build.readthedocs.io/en/latest/) to build source distributions and wheels, which we publish to [PyPI](https://pypi.org/) using [`twine`](https://twine.readthedocs.io/en/latest/). This is all handled using the `publish/package.sh` shell script. This script requires two environment variables are defined: `TWINE_USERNAME` and `TWINE_PASSWORD`, which are used for authenticating to the PyPI server.
 
-To test out package publishing, you can run the `publish/package.sh` with the flag `--repository testpypi` to publish to [TestPyPI](https://packaging.python.org/guides/using-testpypi/).
+To test out package publishing, you can run `publish/package.sh testpypi` to publish to [TestPyPI](https://packaging.python.org/guides/using-testpypi/).
 
 ### Publishing Documentation
 

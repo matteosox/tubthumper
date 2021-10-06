@@ -25,4 +25,4 @@ echo "Building package"
 python -m build
 
 echo "Publishing to $REPOSITORY"
-twine upload --repository "$REPOSITORY" dist/*
+twine upload --verbose --repository "$REPOSITORY" dist/*

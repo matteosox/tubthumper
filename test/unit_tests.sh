@@ -37,8 +37,8 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-LOCAL_USER_ID=$(id --user)
-LOCAL_GROUP_ID=$(id --group)
+LOCAL_USER_ID=$(id -u)
+LOCAL_GROUP_ID=$(id -g)
 
 if [[ "${CMD[0]}" == "tox" ]]; then
     cleanup() {
