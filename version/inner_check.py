@@ -3,6 +3,7 @@
 import argparse
 import logging
 import sys
+from typing import NoReturn
 
 from packaging.version import Version
 
@@ -48,16 +49,18 @@ def _get_current_version() -> Version:
     return Version(curr_str)
 
 
-def _is_final(ver: Version) -> None:
+def _is_final(ver: Version) -> NoReturn:
     if ver.is_prerelease or ver.is_postrelease:
         sys.exit(1)
+    sys.exit(0)
 
 
-def _current_supersedes(ver: Version) -> None:
+def _current_supersedes(ver: Version) -> NoReturn:
     curr_ver = _get_current_version()
     logger.info(f"Current version: {curr_ver}")
     if curr_ver <= ver:
         sys.exit(1)
+    sys.exit(0)
 
 
 def main() -> None:
@@ -72,11 +75,11 @@ def main() -> None:
         ver = Version(args.version)
 
     if args.check == IS_FINAL:
-        return _is_final(ver)
-    if args.check == CURRENT_SUPERSEDES:
-        return _current_supersedes(ver)
-
-    raise ValueError(f"Invalid check {args.check} provided")
+        _is_final(ver)
+    elif args.check == CURRENT_SUPERSEDES:
+        _current_supersedes(ver)
+    else:
+        raise ValueError(f"Invalid check {args.check} provided")
 
 
 if __name__ == "__main__":

@@ -1,10 +1,23 @@
-<h1 align="center"><b>Tubthumper</b>: Helping you get up ... again!</h1>
+<h1 align="center">
+  <b>Tubthumper</b>: Helping you get up ... again!
+</h1>
 
 <p align="center">
-<a href="https://github.com/matteosox/tubthumper/actions/workflows/cicd.yaml"><img alt="CI/CD: n/a" src="https://github.com/matteosox/tubthumper/actions/workflows/cicd.yaml/badge.svg"></a>
-<a href="https://tubthumper.mattefay.com"><img alt="Docs: n/a" src="https://readthedocs.org/projects/tubthumper/badge/?version=latest"></a>
-<a href="https://pepy.tech/project/tubthumper"><img alt="Downloads: n/a" src="https://static.pepy.tech/personalized-badge/tubthumper?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads"></a>
-<a href="https://pypi.org/project/tubthumper/"><img alt="PyPI: n/a" src="https://img.shields.io/badge/dynamic/json?color=blueviolet&label=PyPI&query=%24.info.version&url=https%3A%2F%2Fpypi.org%2Fpypi%2Ftubthumper%2Fjson"></a>
+  <a href="https://github.com/matteosox/tubthumper/actions/workflows/cicd.yaml">
+    <img alt="CI/CD: n/a" src="https://github.com/matteosox/tubthumper/actions/workflows/cicd.yaml/badge.svg">
+  </a>
+  <a href="https://tubthumper.mattefay.com">
+    <img alt="Docs: n/a" src="https://readthedocs.org/projects/tubthumper/badge/?version=latest">
+  </a>
+  <a href="https://pepy.tech/project/tubthumper">
+    <img alt="Downloads: n/a" src="https://static.pepy.tech/personalized-badge/tubthumper?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads">
+  </a>
+  <a href="https://pypi.org/project/tubthumper/">
+    <img alt="PyPI: n/a" src="https://img.shields.io/badge/dynamic/json?color=blueviolet&label=PyPI&query=%24.info.version&url=https%3A%2F%2Fpypi.org%2Fpypi%2Ftubthumper%2Fjson">
+  </a>
+  <a href="https://codecov.io/gh/matteosox/tubthumper">
+    <img src="https://codecov.io/gh/matteosox/tubthumper/branch/main/graph/badge.svg?token=8VKKDG9SMZ"/>
+  </a>
 </p>
 
 ----
