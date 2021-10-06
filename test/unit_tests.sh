@@ -16,7 +16,7 @@ while [[ "$#" -gt 0 ]]; do
     case "$1" in
         -t | --tox )
             CMD=("tox")
-            echo "Running Python unit tests with tox"
+            echo "Using tox"
             shift 1
             ;;
         -h | --help )
@@ -24,7 +24,6 @@ while [[ "$#" -gt 0 ]]; do
             exit 0
             ;;
         -- )
-            shift 1
             IFS=" " read -r -a OPTS <<< "$@"
             echo "Using custom options ${OPTS[*]}"
             CMD=("${CMD[@]}" "${OPTS[@]}")
@@ -38,21 +37,33 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-echo "Running unit tests"
+LOCAL_USER_ID=$(id --user)
+LOCAL_GROUP_ID=$(id --group)
 
-if [[ ! -d ".tox" && "${CMD[0]}" == "tox" ]]; then
-    echo "Initializing tox environment"
-    docker run \
-        --rm \
-        --name init_tox \
-        --volume "$REPO_DIR":/home/cicd/tubthumper \
-        matteosox/tubthumper-cicd \
-        tox --notest --parallel
+if [[ "${CMD[0]}" == "tox" ]]; then
+    cleanup() {
+        rm -rf tubthumper.egg-info
+    }
+    trap cleanup EXIT
+
+    if [[ ! -d ".cache/tox" ]]; then
+        echo "Initializing tox environment"
+        docker run \
+            --rm \
+            --name init_tox \
+            --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
+            --volume "$REPO_DIR":/home/cicd/tubthumper \
+            matteosox/tubthumper-cicd \
+            tox --notest --parallel
+    fi
 fi
+
+echo "Running unit tests"
 
 docker run \
     --rm \
     --name unit_tests \
+    --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
     --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \
     "${CMD[@]}"
