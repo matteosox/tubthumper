@@ -180,7 +180,9 @@ To test out package publishing, you can run `publish/package.sh testpypi` to pub
 
 ### Publishing Documentation
 
-We use [Read the Docs](https://docs.readthedocs.io/en/stable/index.html) for building and publishing `tubthumper`'s documentation. It's Github integration makes this process seamless. Read the Docs configuration can be found in the `.readthedocs.yaml` file at the root of the repo.
+We use [Read the Docs](https://docs.readthedocs.io/en/stable/index.html) for building and publishing `tubthumper`'s documentation. Its Github integration makes this process seamless. Read the Docs configuration can be found in the `.readthedocs.yaml` file at the root of the repo.
+
+While documentation for the `tubthumper` package is generated and hosted by Read the Docs, the documentation can be found at a custom domain: tubthumper.mattefay.com. You can read more about this [here](https://docs.readthedocs.io/en/stable/custom_domains.html).
 
 ### Publishing a Tag to Github
 
@@ -229,6 +231,10 @@ We store an artifact of the `reports` directory at the completion of each run, m
 ### OS Compatibility
 
 We use [`tox-gh-actions`](https://opensourcelibs.com/lib/tox-gh-actions) to configure tox to run on multiple versions of Python in a separate job intended to test compatibility across different operating systems. Using Github Actions' [build matrix feature](https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix), we're able to run unit tests on MacOS, Windows, & Linux, for each supported version of Python.
+
+#### Codecov
+
+In addition to validating that test coverage is 100% as part of the "main" CI/CD workflow — discussed further in the [test coverage](#test-coverage) section — we also upload coverage reports to codecov.io. This provides nice pull request comments and annotation, in addition to a fancy badge.
 
 ## Pull Requests
 
