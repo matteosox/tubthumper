@@ -5,10 +5,17 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$DIR"/..
 cd "$REPO_DIR"
 
+MAIN_BRANCH=main
+
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [[ "$CURRENT_BRANCH" == "$MAIN_BRANCH" ]]; then
+    echo "Current branch is $CURRENT_BRANCH, so skipping version check"
+    exit 0
+fi
+
 echo "Checking version to make sure it is updated appropriately"
 
-MAIN_BRANCH=remotes/origin/main
-BASE_REF=$(git merge-base "$MAIN_BRANCH" HEAD)
+BASE_REF=$(git merge-base remotes/origin/"$MAIN_BRANCH" HEAD)
 echo "Best common ancestor of current branch with $MAIN_BRANCH is $BASE_REF"
 MAIN_VERSION=$(git show "$BASE_REF":tubthumper/VERSION)
 echo "Version from best common ancestor is $MAIN_VERSION"

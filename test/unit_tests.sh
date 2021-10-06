@@ -51,6 +51,7 @@ if [[ "${CMD[0]}" == "tox" ]]; then
         docker run \
             --rm \
             --name init_tox \
+            --env TOX_PARALLEL_NO_SPINNER=1 \
             --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
             --volume "$REPO_DIR":/home/cicd/tubthumper \
             matteosox/tubthumper-cicd \
