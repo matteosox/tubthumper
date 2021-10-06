@@ -7,12 +7,13 @@ cd "$REPO_DIR"
 
 echo "Building docs"
 
-LOCAL_GROUP_ID=$(id -g)
+LOCAL_USER_ID=$(id --user)
+LOCAL_GROUP_ID=$(id --group)
 
 docker run \
     --rm \
     --name build_docs \
-    --user "1024:$LOCAL_GROUP_ID" \
+    --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
     --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \
     sphinx-build -W -b html docs/source/ docs/build/html

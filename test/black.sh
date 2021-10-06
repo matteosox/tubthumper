@@ -7,8 +7,8 @@ cd "$REPO_DIR"
 
 echo "Running Black"
 
-LOCAL_USER_ID=$(id -u)
-LOCAL_GROUP_ID=$(id -g)
+LOCAL_USER_ID=$(id --user)
+LOCAL_GROUP_ID=$(id --group)
 
 if ! docker run \
     --rm \

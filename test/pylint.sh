@@ -9,13 +9,13 @@ echo "Running Pylint"
 
 mkdir -p reports
 
-LOCAL_GROUP_ID=$(id -g)
+LOCAL_USER_ID=$(id --user)
+LOCAL_GROUP_ID=$(id --group)
 
 docker run \
     --rm \
     --name pylint \
-    --user "1024:$LOCAL_GROUP_ID" \
-    --env PYLINTHOME=/home/cicd/tubthumper \
+    --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
     --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \
     pylint tubthumper test/unit_tests version/inner_check.py docs/source/conf.py publish/tag.py
