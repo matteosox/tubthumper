@@ -27,8 +27,8 @@ jobs:
       - name: Set GIT_SHA
         run: |
           set -euf -o pipefail
-          REF="${$GITHUB_HEAD_REF-$GITHUB_REF}"
-          GIT_SHA="$(git rev-parse --short $REF)"
+          REF="${GITHUB_HEAD_REF-$GITHUB_REF}"
+          GIT_SHA="$(git rev-parse --short "$REF")"
           echo "GIT_SHA=$GIT_SHA" >> "$GITHUB_ENV"
 
       - name: Upload Artifact
