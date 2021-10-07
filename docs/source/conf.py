@@ -8,9 +8,16 @@ https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import datetime
 import inspect
+import io
+import logging
 import os
+import shlex
+import subprocess
 import sys
+import zipfile
+from typing import Any, Tuple
 
+import requests
 from packaging.version import Version
 
 import tubthumper
@@ -142,3 +149,117 @@ html_logo = "_static/logo.png"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+
+# -- Read the Docs runs main to grab the reports artifact from Github --------
+
+logger = logging.getLogger(__name__)
+
+GITHUB_HEADERS = {"accept": "application/vnd.github.v3+json"}
+PER_PAGE = 100
+ARTIFACTS_URL = "https://api.github.com/repos/matteosox/tubthumper/actions/artifacts"
+
+
+def _configure_logger(level: int = logging.INFO) -> None:
+    """
+    Configures logger with a nice formatter,
+    with optional level, defaulting to info
+    """
+    logger.setLevel(level)
+    formatter = logging.Formatter(
+        "%(asctime)s | %(pathname)s:%(funcName)s "
+        "@ %(lineno)d | %(levelname)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S %Z",
+    )
+    handler = logging.StreamHandler()
+    handler.setLevel(level)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+
+def _get_git_sha() -> str:
+    completed_process = subprocess.run(
+        shlex.split("git rev-parse --short HEAD"),
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    return completed_process.stdout.strip()
+
+
+def _get_auth_header() -> Tuple[str, str]:
+    return ("token", os.environ["GITHUB_TOKEN"])
+
+
+@tubthumper.retry_decorator(
+    exceptions=(requests.Timeout, requests.ConnectionError, requests.HTTPError)
+)
+def _get_with_retry(*args: Any, **kwargs: Any) -> requests.models.Response:
+    response = requests.get(*args, **kwargs)
+    if 500 <= response.status_code < 600:
+        response.raise_for_status()
+    return response
+
+
+class ArtifactNotFoundError(Exception):
+    """Thrown when an artifact can't be found"""
+
+
+@tubthumper.retry_decorator(
+    exceptions=ArtifactNotFoundError, exponential=1, init_backoff=30, jitter=False
+)
+def _get_reports_artifact_id(git_sha: str) -> int:
+    auth = _get_auth_header()
+    name = f"reports_{git_sha}"
+    page = 1
+    while True:
+        params = {"page": page, "per_page": PER_PAGE}
+        response = _get_with_retry(
+            ARTIFACTS_URL,
+            headers=GITHUB_HEADERS,
+            params=params,
+            auth=auth,
+            timeout=10,
+        )
+        response.raise_for_status()
+        result = response.json()
+        for artifact in result["artifacts"]:
+            if artifact["name"] == name:
+                return artifact["id"]
+        if result["total_count"] < PER_PAGE:
+            raise ArtifactNotFoundError(
+                f"Could not find reports artifact for git_sha {git_sha}"
+            )
+        page += 1
+
+
+def _dir_path() -> str:
+    return os.path.dirname(os.path.realpath(__file__))
+
+
+def _download_artfact(artifact_id: int) -> None:
+    auth = _get_auth_header()
+    response = _get_with_retry(
+        f"{ARTIFACTS_URL}/{artifact_id}/zip",
+        auth=auth,
+        timeout=10,
+    )
+    response.raise_for_status()
+    destination = os.path.join(_dir_path(), "_static", "reports")
+    with zipfile.ZipFile(io.BytesIO(response.content)) as myzip:
+        myzip.extractall(path=destination)
+
+
+def main() -> None:
+    """Downloads reports artifact from Github for corresponding git sha"""
+    _configure_logger()
+    logger.info("Getting reports from Github")
+    git_sha = _get_git_sha()
+    logger.info(f"Determining artifacts id for git sha {git_sha}")
+    artifact_id = _get_reports_artifact_id(git_sha)
+    logger.info(f"Downloading artifact with id {artifact_id}")
+    _download_artfact(artifact_id)
+
+
+if os.environ.get("READTHEDOCS") == "True":
+    main()
