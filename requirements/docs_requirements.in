@@ -1,4 +1,6 @@
 furo
 myst-parser
+packaging
+requests
 sphinx
 sphinx-notfound-page

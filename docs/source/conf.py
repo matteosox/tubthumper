@@ -171,7 +171,10 @@ def _configure_logger(level: int = logging.INFO) -> None:
 
 def _get_git_sha() -> str:
     completed_process = subprocess.run(
-        shlex.split("git rev-parse HEAD"), check=True, text=True, capture_output=True
+        shlex.split("git rev-parse --short HEAD"),
+        check=True,
+        text=True,
+        capture_output=True,
     )
     return completed_process.stdout.strip()
 
@@ -181,50 +184,59 @@ def _get_auth_header() -> Tuple[str, str]:
 
 
 @tubthumper.retry_decorator(
-    exceptions=Exception, exponential=1, init_backoff=30, jitter=False
+    exceptions=(requests.Timeout, requests.ConnectionError, requests.HTTPError)
+)
+def _get_with_retry(*args: Any, **kwargs: Any) -> requests.models.Response:
+    response = requests.get(*args, **kwargs)
+    if 500 <= response.status_code < 600:
+        response.raise_for_status()
+    return response
+
+
+class ArtifactNotFoundError(Exception):
+    """Thrown when an artifact can't be found"""
+
+
+@tubthumper.retry_decorator(
+    exceptions=ArtifactNotFoundError, exponential=1, init_backoff=30, jitter=False
 )
 def _get_reports_artifact_id(git_sha: str) -> int:
-    name = f"reports_{git_sha}"
     auth = _get_auth_header()
+    name = f"reports_{git_sha}"
     page = 1
     while True:
         params = {"page": page, "per_page": PER_PAGE}
-        response = requests.get(
+        response = _get_with_retry(
             "https://api.github.com/repos/matteosox/tubthumper/actions/artifacts",
             headers=GITHUB_HEADERS,
             params=params,
             auth=auth,
+            timeout=10,
         )
-        _validate_response(response)
+        response.raise_for_status()
         result = response.json()
         for artifact in result["artifacts"]:
             if artifact["name"] == name:
                 return artifact["id"]
         if result["total_count"] < PER_PAGE:
-            raise Exception(f"Could not find reports artifact for git_sha {git_sha}")
+            raise ArtifactNotFoundError(
+                f"Could not find reports artifact for git_sha {git_sha}"
+            )
         page += 1
-
-
-def _validate_response(response: requests.models.Response) -> Any:
-    if response.status_code != 200:
-        raise Exception(
-            f"Got bad response code {response.status_code} while trying to query "
-            f"at url {response.url}"
-        )
-    return response
 
 
 def _dir_path() -> str:
     return os.path.dirname(os.path.realpath(__file__))
 
 
-def _download_artfact(artifact_id: int):
+def _download_artfact(artifact_id: int) -> None:
     auth = _get_auth_header()
-    response = requests.get(
+    response = _get_with_retry(
         f"https://api.github.com/repos/matteosox/tubthumper/actions/artifacts/{artifact_id}/zip",
         auth=auth,
+        timeout=10,
     )
-    _validate_response(response)
+    response.raise_for_status()
     destination = os.path.join(_dir_path(), "_static", "reports")
     with zipfile.ZipFile(io.BytesIO(response.content)) as myzip:
         myzip.extractall(path=destination)

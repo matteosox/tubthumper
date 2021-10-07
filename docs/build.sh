@@ -7,7 +7,6 @@ cd "$REPO_DIR"
 
 echo "Building docs"
 
-
 if ! cp -R reports docs/source/_static; then
     echo "reports directory not found"
     echo "Generating it by running test suite"
