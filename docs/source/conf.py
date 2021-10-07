@@ -22,11 +22,6 @@ from packaging.version import Version
 
 import tubthumper
 
-logger = logging.getLogger(__name__)
-
-GITHUB_HEADERS = {"accept": "application/vnd.github.v3+json"}
-PER_PAGE = 100
-
 # -- Project information -----------------------------------------------------
 
 project = "Tubthumper"
@@ -156,11 +151,24 @@ html_logo = "_static/logo.png"
 html_static_path = ["_static"]
 
 
+# -- Read the Docs runs main to grab the reports artifact from Github --------
+
+logger = logging.getLogger(__name__)
+
+GITHUB_HEADERS = {"accept": "application/vnd.github.v3+json"}
+PER_PAGE = 100
+ARTIFACTS_URL = "https://api.github.com/repos/matteosox/tubthumper/actions/artifacts"
+
+
 def _configure_logger(level: int = logging.INFO) -> None:
-    """Configures logger with a nice formatter, with optional level, defaulting to info"""
+    """
+    Configures logger with a nice formatter,
+    with optional level, defaulting to info
+    """
     logger.setLevel(level)
     formatter = logging.Formatter(
-        "%(asctime)s | %(pathname)s:%(funcName)s @ %(lineno)d | %(levelname)s | %(message)s",
+        "%(asctime)s | %(pathname)s:%(funcName)s "
+        "@ %(lineno)d | %(levelname)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S %Z",
     )
     handler = logging.StreamHandler()
@@ -207,7 +215,7 @@ def _get_reports_artifact_id(git_sha: str) -> int:
     while True:
         params = {"page": page, "per_page": PER_PAGE}
         response = _get_with_retry(
-            "https://api.github.com/repos/matteosox/tubthumper/actions/artifacts",
+            ARTIFACTS_URL,
             headers=GITHUB_HEADERS,
             params=params,
             auth=auth,
@@ -232,7 +240,7 @@ def _dir_path() -> str:
 def _download_artfact(artifact_id: int) -> None:
     auth = _get_auth_header()
     response = _get_with_retry(
-        f"https://api.github.com/repos/matteosox/tubthumper/actions/artifacts/{artifact_id}/zip",
+        f"{ARTIFACTS_URL}/{artifact_id}/zip",
         auth=auth,
         timeout=10,
     )

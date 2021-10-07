@@ -25,7 +25,11 @@ jobs:
         run: cicd/test.sh --all
 
       - name: Set GIT_SHA
-        run: echo "GIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: |
+          set -euf -o pipefail
+          REF="${$GITHUB_HEAD_REF-$GITHUB_REF}"
+          GIT_SHA="$(git rev-parse --short $REF)"
+          echo "GIT_SHA=$GIT_SHA" >> "$GITHUB_ENV"
 
       - name: Upload Artifact
         if: ${{ always() }}

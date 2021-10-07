@@ -37,10 +37,14 @@ def main() -> None:
 
 
 def _configure_logger(level: int = logging.INFO) -> None:
-    """Configures logger with a nice formatter, with optional level, defaulting to info"""
+    """
+    Configures logger with a nice formatter,
+    with optional level, defaulting to info
+    """
     logger.setLevel(level)
     formatter = logging.Formatter(
-        "%(asctime)s | %(pathname)s:%(funcName)s @ %(lineno)d | %(levelname)s | %(message)s",
+        "%(asctime)s | %(pathname)s:%(funcName)s "
+        "@ %(lineno)d | %(levelname)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S %Z",
     )
     handler = logging.StreamHandler()
