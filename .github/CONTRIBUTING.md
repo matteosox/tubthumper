@@ -1,5 +1,11 @@
 # Contributor Guide
 
+## Reports
+
+- [Pylint](pylint)
+- [MyPy](mypy)
+- [Coverage](coverage)
+
 ## Getting started
 
 We use Docker as a clean, reproducible development environment within which to build, test, generate docs, and so on. See the [Setup Development Environment](#setup-development-environment) to get that working. Running things natively isn't a supported/maintained thing.
