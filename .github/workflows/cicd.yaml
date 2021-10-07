@@ -25,6 +25,7 @@ jobs:
         run: cicd/test.sh --all
 
       - name: Upload Artifact
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
           name: "reports_${{ github.sha }}"
