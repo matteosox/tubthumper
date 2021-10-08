@@ -7,14 +7,12 @@ import logging
 import os
 import pprint
 import re
-from typing import Any, Dict, Union
+from typing import Any
 
 import requests
 
 from tubthumper import __version__ as version
 from tubthumper import retry_decorator
-
-HEADERS = {"accept": "application/vnd.github.v3+json"}
 
 logger = logging.getLogger(__name__)
 
@@ -96,21 +94,19 @@ def _get_pylint_score() -> float:
     return float(match.group(1))
 
 
-def _get_mypy_badge_data(score: float) -> Dict[str, Union[int, str]]:
+def _get_mypy_badge_data(score: float) -> str:
     message = f"{score:.2f}%"
     hue = round(1.2 * score)
     return _generate_badge_data(label="MyPy", message=message, hue=hue)
 
 
-def _get_pylint_badge_data(score: float) -> Dict[str, Union[int, str]]:
+def _get_pylint_badge_data(score: float) -> str:
     message = f"{score:.2f}/10"
     hue = round(6 * score) + (60 if score == 10 else 0)
     return _generate_badge_data(label="Pylint", message=message, hue=hue)
 
 
-def _generate_badge_data(
-    label: str, message: str, hue: int
-) -> Dict[str, Union[int, str]]:
+def _generate_badge_data(label: str, message: str, hue: int) -> str:
     return json.dumps(
         {
             "schemaVersion": 1,
