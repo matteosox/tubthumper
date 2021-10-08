@@ -17,6 +17,6 @@ fi
 
 export TWINE_USERNAME="__token__"
 
-publish/package.sh --repository $REPOSITORY
+publish/package.sh $REPOSITORY
 
 echo "All done!"
