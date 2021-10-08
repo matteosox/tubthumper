@@ -29,6 +29,6 @@ docker run \
     --name publish_package \
     --env TWINE_USERNAME="$TWINE_USERNAME" \
     --env TWINE_PASSWORD="$TWINE_PASSWORD" \
-    --volume "$REPO_DIR"/publish:/home/cicd/tubthumper/publish \
+    --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \
     publish/inner_package.sh "$REPOSITORY"

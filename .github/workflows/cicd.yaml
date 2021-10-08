@@ -67,8 +67,8 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         run: cicd/publish_to_pypi.sh
         env:
-          username: ${{ secrets.TWINE_USERNAME }}
-          password: ${{ secrets.TWINE_PASSWORD }}
+          TESTPYPI_TOKEN: ${{ secrets.TESTPYPI_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
 
   os_compatibility:
     runs-on: ${{ matrix.os }}
