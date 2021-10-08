@@ -24,11 +24,15 @@ fi
 
 echo "Publishing package to $REPOSITORY"
 
+LOCAL_USER_ID=$(id -u)
+LOCAL_GROUP_ID=$(id -g)
+
 docker run \
     --rm \
     --name publish_package \
     --env TWINE_USERNAME="$TWINE_USERNAME" \
     --env TWINE_PASSWORD="$TWINE_PASSWORD" \
+    --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
     --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \
     publish/inner_package.sh "$REPOSITORY"
