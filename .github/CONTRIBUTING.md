@@ -94,7 +94,7 @@ _TL;DR: Run `test/pylint.sh` to lint your code._
 
 We use [Pyint](https://pylint.pycqa.org/en/latest/) for Python linting (h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/pylint/) for inspiration). To lint your code, run the `test/pylint.sh` shell script. In addition to showing any linting errors, it will also print out a report, which is also saved as `reports/pylint.txt` for ease of reference. A `unit_test1.stats` file will also be generated in the root of the repo, which pylint uses to store previous results (the generated report shows differences between the last run). Pylint configuration can be found in the `pylintrc` file at the root of the repo.
 
-Pylint is setup to lint the `tubthumper` & `test/unit_tests` packages along with the `version/inner_check.py`, `docs/source/conf.py`, & `publish/tag.py` modules. To add more modules or packages for linting, edit `test/pylint.sh`.
+Pylint is setup to lint the `tubthumper` & `test/unit_tests` packages along with the `version/inner_check.py`, `docs/source/conf.py`, `publish/tag.py`, & `publish/gist.py` modules. To add more modules or packages for linting, edit `test/pylint.sh`.
 
 ### Shellcheck Shell Script Linting
 
@@ -200,9 +200,17 @@ While documentation for the `tubthumper` package is generated and hosted by Read
 
 _TL;DR: To publish a tag to Github, run `cicd/tag.sh`._
 
-All releases, including prereleases, get a tag published to github using Github's [Create a release](https://docs.github.com/en/rest/reference/repos#create-a-release) REST API. This can be accomplished using the `cicd/tag.sh` shell script. This script requires one environment variable: `GITHUB_TOKEN`, which is used to authenticate.
+All non-dev releases, i.e. prereleases, final releases, and post releases, get a tag published to github using Github's [Create a release](https://docs.github.com/en/rest/reference/repos#create-a-release) REST API. This can be accomplished using the `cicd/tag.sh` shell script. This script requires one environment variable: `GITHUB_TOKEN`, which is used to authenticate.
 
 This script grabs the current version, and also collects up change information from the changelog.
+
+### Updating the Badge Data Gist
+
+_TL;DR: To update the data used to render the MyPy and Pylint badges, run `cicd/update_gist.sh`._
+
+All pushes to the `main` branch update [the Gist](https://gist.github.com/matteosox/bd79bbd912687bf44fac6b7887d18f14) used to data used by the MyPy and Pylint badges to render. Those badges are rendered [shields.io](https://shields.io/endpoint)'s endpoint feature, which relies on an endpoint to provide json data used to render a badge. You can find them in `README.md`.
+
+To update the data found in the Gist, you'll need an environment variable `GIST_TOKEN` set to a Github auth token with the proper access. In the CI/CD workflow, we use the `GIST_TOKEN` secret for this. With that, you can run the `cicd/update_gist.sh` shell script.
 
 ## Continuous Integration & Continuous Deployment
 
@@ -235,6 +243,10 @@ _TL;DR: To push Docker images to Docker Hub, run `cicd/push.sh`._
 Docker images are pushed when a build is triggered from the `main` branch. To run this locally, you'll need to be logged in to Docker. We use the `docker/login-action@v1` build action to login on Github Actions, and it uses a personal access token named `github-actions` from my Docker Hub account to do that, with the username and token stored as secrets. This uses the `matteosox/tubthumper-cicd` repository.
 
 In addition to pushing the image tagged with the git SHA of the code producing it, we also push an untagged (i.e. tagged as `latest`) image.
+
+#### Update Badge Data Gist
+
+The badge data Gist is updated when a build is triggered from th `main` branch. See [above](#updating-the-badge-data-gist) for more info on this step.
 
 #### Tag on Github
 
