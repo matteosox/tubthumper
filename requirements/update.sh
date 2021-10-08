@@ -10,6 +10,6 @@ echo "Updating requirements/requirements.txt"
 docker run \
     --rm \
     --name requirements_update \
-    --volume "$REPO_DIR"/requirements:/home/cicd/tubthumper/requirements \
+    --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \
     requirements/inner_update.sh

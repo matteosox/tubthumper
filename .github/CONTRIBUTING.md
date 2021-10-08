@@ -254,7 +254,7 @@ For prereleases or final releases triggered from the `main` branch, we publish a
 
 #### Publish to PyPI
 
-For workflows triggered from the `main` branch, we use the `cicd/publish.sh` shell script in CI, which wraps `publish/package.sh` with an additional check to ensure we only publish final releases. See [above](#publishing-the-package-to-pypi) for more info on publishing the package.
+For workflows triggered from the `main` branch, we use the `cicd/publish.sh` shell script in CI, which wraps `publish/package.sh`. For non-final releases, it publishes to TestPyPI. See [above](#publishing-the-package-to-pypi) for more info on publishing the package.
 
 ### OS Compatibility
 
