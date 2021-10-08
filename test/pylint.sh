@@ -18,4 +18,4 @@ docker run \
     --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
     --volume "$REPO_DIR":/home/cicd/tubthumper \
     matteosox/tubthumper-cicd \
-    pylint tubthumper test/unit_tests version/inner_check.py docs/source/conf.py publish/tag.py
+    pylint tubthumper test/unit_tests version/inner_check.py docs/source/conf.py publish/tag.py publish/gist.py

@@ -16,7 +16,13 @@
     <img alt="PyPI: n/a" src="https://img.shields.io/badge/dynamic/json?color=blueviolet&label=PyPI&query=%24.info.version&url=https%3A%2F%2Fpypi.org%2Fpypi%2Ftubthumper%2Fjson">
   </a>
   <a href="https://codecov.io/gh/matteosox/tubthumper">
-    <img src="https://codecov.io/gh/matteosox/tubthumper/branch/main/graph/badge.svg?token=8VKKDG9SMZ"/>
+    <img alt="codecov: n/a" src="https://codecov.io/gh/matteosox/tubthumper/branch/main/graph/badge.svg?token=8VKKDG9SMZ"/>
+  </a>
+  <a href="https://tubthumper.mattefay.com/en/latest/mypy.html">
+    <img alt="MyPY: n/a" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fmatteosox%2Fbd79bbd912687bf44fac6b7887d18f14%2Fraw%2Fmypy.json"/>
+  </a>
+  <a href="https://tubthumper.mattefay.com/en/latest/pylint.html">
+    <img alt="Pylint: n/a" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fmatteosox%2Fbd79bbd912687bf44fac6b7887d18f14%2Fraw%2Fpylint.json"/>
   </a>
 </p>
 
