@@ -10,7 +10,7 @@
 
 We use Docker as a clean, reproducible development environment within which to build, test, generate docs, and so on. See the [Setup Development Environment](#setup-development-environment) to get that working. Running things natively isn't a supported/maintained thing.
 
-Once you've got Docker setup and built the `cicd` image, you should be able to run the full test suite, as discussed [below](#tests). You should also be able to build the documentation, also discussed [further down](#documentation).
+Once you've got Docker setup and built the `matteosox/tubthumper-cicd` image using the `cicd/setup.sh` shell script as discussed [below](#setup-development-environment), you should be able to run the full test suite, discussed [further down](#tests).
 
 ## Requirements
 
@@ -30,7 +30,7 @@ Building the documentation for `tubthumper` requires additional packages. These 
 
 ### Dev Requirements
 
-There are two requirements files associated with the `cicd` Docker image:
+There are two requirements files associated with the `matteosox/tubthumper-cicd` Docker image:
 1) `requirements/requirements.in`
 2) `requirements/requirements.txt`
 
@@ -42,7 +42,7 @@ This gives us both a flexible way to describe dependencies while still achieving
 
 _TL;DR: To build the `cicd` Docker image, run `cicd/setup.sh`._
 
-The `setup.sh` shell script in the `cicd` directory will build the `cicd` image for you, installing both OS-level and Python dependencies, while also installing the `tubthumper` package in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable). Different workflows will mount the repo in a Docker container, allowing fast development, i.e. no need to re-build the image to test/document/etc. your changes as you go.
+The `setup.sh` shell script in the `cicd` directory will build the `matteosox/tubthumper-cicd` image for you, installing both OS-level and Python dependencies, while also installing the `tubthumper` package in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable). Different workflows will mount the repo in a Docker container, allowing fast development, i.e. no need to re-build the image to test/document/etc. your changes as you go.
 
 While the image is versioned per commit, you generally shouldn't need to rebuild it unless there are changes to more infrastructural stuff (requirements, anything in the `docker` directory). Even so, this is generally quite fast because of a few cacheing tricks.
 
@@ -66,7 +66,7 @@ When starting a new feature branch, you'll want to increment the version, likely
 
 _TL;DR: Run `test/requirements.sh to confirm requirements are up-to-date._
 
-As described [above](#requirements), we auto-generate the `requirements.txt` file used to pin Python dependencies in the `cicd` Docker image. The `test/requirements.sh` shell script ensures that any changes to the files associated with updating requirements have been propagated to `requirements.txt`.
+As described [above](#requirements), we auto-generate the `requirements.txt` file used to pin Python dependencies in the `matteosox/tubthumper-cicd` Docker image. The `test/requirements.sh` shell script ensures that any changes to the files associated with updating requirements have been propagated to `requirements.txt`.
 
 If this test is failing, see the [requirements](#requirements) section above to remedy the issue.
 
@@ -261,6 +261,10 @@ We use [`tox-gh-actions`](https://opensourcelibs.com/lib/tox-gh-actions) to conf
 #### Codecov
 
 In addition to validating that test coverage is 100% as part of the "main" CI/CD workflow — discussed further in the [test coverage](#test-coverage) section — we also upload coverage reports to codecov.io. This provides nice pull request comments and annotation, in addition to a fancy badge.
+
+### Weekly
+
+A separate `weekly` workflow is configured in `.github/workflows/weekly.yaml`. This workflow runs the non-publishing portions of the `main` workflow, except building the initial `cicd` Docker image
 
 ## Pull Requests
 
