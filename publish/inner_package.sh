@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$DIR"/..
+source "$DIR/../docker/strict_mode.sh"
+
+# Inner shell script for packaging & publishing Python
 
 usage()
 {

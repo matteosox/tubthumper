@@ -1,9 +1,8 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$DIR"/..
-cd "$REPO_DIR"
+source "$DIR/../docker/strict_mode.sh"
+
+echo "Publishing package"
 
 usage()
 {
@@ -22,17 +21,9 @@ else
     REPOSITORY="$1"
 fi
 
-echo "Publishing package to $REPOSITORY"
+echo "Repository set to $REPOSITORY"
 
-LOCAL_USER_ID=$(id -u)
-LOCAL_GROUP_ID=$(id -g)
-
-docker run \
-    --rm \
-    --name publish_package \
-    --env TWINE_USERNAME="$TWINE_USERNAME" \
-    --env TWINE_PASSWORD="$TWINE_PASSWORD" \
-    --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
-    --volume "$REPO_DIR":/home/cicd/tubthumper \
-    matteosox/tubthumper-cicd \
+docker/run.sh --name publish_package --env TWINE_USERNAME --env TWINE_PASSWORD \
     publish/inner_package.sh "$REPOSITORY"
+
+echo "$(basename "$0") completed successfully!"

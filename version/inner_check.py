@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Python script for checking Python versions"""
 
 import argparse
@@ -8,8 +9,9 @@ from typing import NoReturn
 from packaging.version import Version
 
 import tubthumper
+from util import configure_logger
 
-logger = logging.getLogger(__name__)
+logger = configure_logger(logging.getLogger(__name__))
 
 IS_FINAL = "is_final"
 CURRENT_SUPERSEDES = "current_supersedes"
@@ -28,23 +30,6 @@ def _parse_args() -> argparse.Namespace:
         help="Type of check to perform",
     )
     return parser.parse_args()
-
-
-def _configure_logger(level: int = logging.INFO) -> None:
-    """
-    Configures logger with a nice formatter,
-    with optional level, defaulting to info
-    """
-    logger.setLevel(level)
-    formatter = logging.Formatter(
-        "%(asctime)s | %(pathname)s:%(funcName)s "
-        "@ %(lineno)d | %(levelname)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S %Z",
-    )
-    handler = logging.StreamHandler()
-    handler.setLevel(level)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
 
 
 def _get_current_version() -> Version:
@@ -69,7 +54,6 @@ def _current_supersedes(ver: Version) -> NoReturn:
 
 def main() -> None:
     """Determines if this version is a final release"""
-    _configure_logger()
     args = _parse_args()
 
     if args.version is None:

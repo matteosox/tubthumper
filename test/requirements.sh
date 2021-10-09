@@ -1,8 +1,6 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$DIR"/..
+source "$DIR/../docker/strict_mode.sh"
 
 echo "Checking requirements.txt to make sure it is updated appropriately"
 
@@ -26,3 +24,5 @@ before committing.
         exit 1
     fi
 fi
+
+echo "$(basename "$0") completed successfully!"

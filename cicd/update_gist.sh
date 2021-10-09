@@ -1,11 +1,8 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
-# Publishes an update to the badge data Gist
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$DIR"/..
-cd "$REPO_DIR"
+source "$DIR"/../docker/strict_mode.sh
+
+echo "Updating the badge data Gist"
 
 PYLINT_FILE="$REPO_DIR/reports/pylint.txt"
 MYPY_FILE="$REPO_DIR/reports/mypy/index.html"
@@ -22,12 +19,7 @@ if [[ ! -e "$MYPY_FILE" ]]; then
     test/mypy.sh
 fi
 
-docker run \
-    --rm \
-    --name update_gist \
-    --env GIST_TOKEN="$GIST_TOKEN" \
-    --volume "$REPO_DIR":/home/cicd/tubthumper \
-    matteosox/tubthumper-cicd \
+docker/run.sh --name update_gist --env GIST_TOKEN \
     publish/gist.py
 
-echo "All done!"
+echo "$(basename "$0") completed successfully!"

@@ -1,15 +1,10 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$DIR"/..
-cd "$REPO_DIR"
+source "$DIR/../docker/strict_mode.sh"
 
 echo "Running ShellCheck"
 
-docker run \
-    --rm \
-    --name shellcheck \
-    --volume "$REPO_DIR":/home/cicd/tubthumper \
-    matteosox/tubthumper-cicd \
+docker/run.sh --name shellcheck \
     test/inner_shellcheck.sh
+
+echo "$(basename "$0") completed successfully!"

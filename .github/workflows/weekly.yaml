@@ -1,0 +1,50 @@
+name: Weekly
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Build from scratch
+        run: docker/build.sh --from-scratch
+
+      - name: Test
+        run: cicd/test.sh --all
+
+      - name: Set GIT_SHA
+        env:
+          PR_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          REF="${PR_SHA:-$GITHUB_SHA}"
+          GIT_SHA="$(git rev-parse --short "$REF")"
+          echo "GIT_SHA=$GIT_SHA" >> "$GITHUB_ENV"
+
+      - name: Upload Artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: "reports_${{ env.GIT_SHA }}"
+          path: reports
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push to Docker Hub
+        run: cicd/push_to_dockerhub.sh
+
+      - name: Update Badge Data Gist
+        run: cicd/update_gist.sh
+        env:
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}

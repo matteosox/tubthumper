@@ -1,22 +1,12 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$DIR"/..
+source "$DIR"/../docker/strict_mode.sh
 
-GIT_SHA=$(git rev-parse --short HEAD)
-echo "Building & tagging cicd Docker image for git sha $GIT_SHA"
+echo "Setting up Docker"
 
-export DOCKER_BUILDKIT=1
+echo "Pulling latest image"
+docker pull matteosox/tubthumper-cicd
 
-docker build \
-    --progress=plain \
-    --tag matteosox/tubthumper-cicd:"$GIT_SHA" \
-    --cache-from matteosox/tubthumper-cicd \
-    --build-arg BUILDKIT_INLINE_CACHE=1 \
-    --file cicd/Dockerfile \
-    .
+docker/build.sh
 
-docker tag matteosox/tubthumper-cicd:"$GIT_SHA" matteosox/tubthumper-cicd
-
-echo "All done!"
+echo "$(basename "$0") completed successfully!"

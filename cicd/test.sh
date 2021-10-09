@@ -1,9 +1,8 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$DIR"/../docker/strict_mode.sh
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[@]}")" && pwd)"
-REPO_DIR="$DIR"/..
-cd "$REPO_DIR"
+echo "Running tests"
 
 UNIT_TESTS_CMD=("test/unit_tests.sh")
 
@@ -31,8 +30,6 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-echo "Running tests"
-
 NC='\033[0m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -56,9 +53,15 @@ DOCS_STATUS="$NOT_STARTED"
 EXIT_CODE=0
 
 report_status() {
+    if [[ "$EXIT_CODE" == 0 ]]; then
+        TEST_STATUS="$SUCCESS"
+    else
+        TEST_STATUS=" $FAILED"
+    fi
+
     echo -e "${LIGHT_CYAN}
-Test Summary
-============
+Test Summary: $TEST_STATUS
+==========================
   - Requirements: $REQUIREMENTS_STATUS
   - Version: $VERSION_STATUS
   - Black: $BLACK_STATUS

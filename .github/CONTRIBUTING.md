@@ -10,7 +10,7 @@
 
 We use Docker as a clean, reproducible development environment within which to build, test, generate docs, and so on. See the [Setup Development Environment](#setup-development-environment) to get that working. Running things natively isn't a supported/maintained thing.
 
-Once you've got Docker setup and built the `cicd` image, you should be able to run the full test suite, as discussed [below](#tests). You should also be able to build the documentation, also discussed [further down](#documentation).
+Once you've got Docker setup and built the `matteosox/tubthumper-cicd` image using the `cicd/setup.sh` shell script as discussed [below](#setup-development-environment), you should be able to run the full test suite, discussed [further down](#tests).
 
 ## Requirements
 
@@ -30,7 +30,7 @@ Building the documentation for `tubthumper` requires additional packages. These 
 
 ### Dev Requirements
 
-There are two requirements files associated with the `cicd` Docker image:
+There are two requirements files associated with the `matteosox/tubthumper-cicd` Docker image:
 1) `requirements/requirements.in`
 2) `requirements/requirements.txt`
 
@@ -42,15 +42,13 @@ This gives us both a flexible way to describe dependencies while still achieving
 
 _TL;DR: To build the `cicd` Docker image, run `cicd/setup.sh`._
 
-The `setup.sh` shell script in the `cicd` directory will build the `cicd` image for you, installing both OS-level and Python dependencies, while also installing the `tubthumper` package in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable). Different workflows will mount the relevant parts of the repo in a Docker container, allowing fast development, i.e. no need to re-build the image to test/document/etc. your changes as you go.
+The `setup.sh` shell script in the `cicd` directory will build the `matteosox/tubthumper-cicd` image for you, installing both OS-level and Python dependencies, while also installing the `tubthumper` package in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable). Different workflows will mount the repo in a Docker container, allowing fast development, i.e. no need to re-build the image to test/document/etc. your changes as you go.
 
-You'll need to build this image for each commit (the image is tagged by git commit SHA), but this is generally quite fast because of a few cacheing tricks.
+While the image is versioned per commit, you generally shouldn't need to rebuild it unless there are changes to more infrastructural stuff (requirements, anything in the `docker` directory). Even so, this is generally quite fast because of a few cacheing tricks.
 
 ### Cacheing Tricks
 
-We do a couple of neat cacheing tricks to speed things up. First off, in the `Dockerfile`s themselves, we use the `RUN --mount=type=cache` functionality of Docker BuildKit to cache apt packages stored in `/var/cache/apt` and Python packages stored in `~/.cache/pip`. This keeps your local machine from re-downloading new packages each time. h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/docker-cache-pip-downloads/) for inspiration.
-
-Second, we use the new `BUILDKIT_INLINE_CACHE` feature to cache our images using Docker Hub. This is configured in the `docker build` command, and is smart enough to only download the layers you need. This DOES work in Github Actions, while the prior functionality does not. h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/speeding-up-docker-ci/) for inspiration.
+In `Dockerfile`, we use the `RUN --mount=type=cache` functionality of Docker BuildKit to cache apt packages stored in `/var/cache/apt` and Python packages stored in `~/.cache/pip`. This keeps your local machine from re-downloading new packages each time. h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/docker-cache-pip-downloads/) for inspiration.
 
 ## Tests
 
@@ -68,7 +66,7 @@ When starting a new feature branch, you'll want to increment the version, likely
 
 _TL;DR: Run `test/requirements.sh to confirm requirements are up-to-date._
 
-As described [above](#requirements), we auto-generate the `requirements.txt` file used to pin Python dependencies in the `cicd` Docker image. The `test/requirements.sh` shell script ensures that any changes to the files associated with updating requirements have been propagated to `requirements.txt`.
+As described [above](#requirements), we auto-generate the `requirements.txt` file used to pin Python dependencies in the `matteosox/tubthumper-cicd` Docker image. The `test/requirements.sh` shell script ensures that any changes to the files associated with updating requirements have been propagated to `requirements.txt`.
 
 If this test is failing, see the [requirements](#requirements) section above to remedy the issue.
 
@@ -94,13 +92,13 @@ _TL;DR: Run `test/pylint.sh` to lint your code._
 
 We use [Pyint](https://pylint.pycqa.org/en/latest/) for Python linting (h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/pylint/) for inspiration). To lint your code, run the `test/pylint.sh` shell script. In addition to showing any linting errors, it will also print out a report, which is also saved as `reports/pylint.txt` for ease of reference. A `unit_test1.stats` file will also be generated in the root of the repo, which pylint uses to store previous results (the generated report shows differences between the last run). Pylint configuration can be found in the `pylintrc` file at the root of the repo.
 
-Pylint is setup to lint the `tubthumper` & `test/unit_tests` packages along with the `version/inner_check.py`, `docs/source/conf.py`, `publish/tag.py`, & `publish/gist.py` modules. To add more modules or packages for linting, edit `test/pylint.sh`.
+Pylint is setup to lint the `tubthumper` & `test/unit_tests` packages along with the `./*.py`, `version/*.py`, `docs/source/*.py`, & `publish/*.py` modules. To add more modules or packages for linting, edit `test/pylint.sh`.
 
 ### Shellcheck Shell Script Linting
 
 _TL;DR: Run `test/shellcheck.sh` to lint your shell scripts._
 
-We use [ShellCheck](https://www.shellcheck.net/) for shell script linting (h/t [Julia Evans](https://wizardzines.com/comics/shellcheck/) for introducing me to shellcheck). To lint your shell scripts, run the `test/shellcheck.sh` shell script (yes, I know). There is no Shellcheck configuration.
+We use [ShellCheck](https://www.shellcheck.net/) for shell script linting (h/t [Julia Evans](https://wizardzines.com/comics/shellcheck/) for introducing me to shellcheck). To lint your shell scripts, run the `test/shellcheck.sh` shell script (yes, I know). Shellcheck configuration can be found in the `.shellcheckrc` file at the root of the repo.
 
 Shellcheck is setup to run on all files tracked by git that end `.sh`. This can be edited in `test/inner_shellcheck.sh`.
 
@@ -264,6 +262,10 @@ We use [`tox-gh-actions`](https://opensourcelibs.com/lib/tox-gh-actions) to conf
 
 In addition to validating that test coverage is 100% as part of the "main" CI/CD workflow — discussed further in the [test coverage](#test-coverage) section — we also upload coverage reports to codecov.io. This provides nice pull request comments and annotation, in addition to a fancy badge.
 
+### Weekly
+
+A separate `weekly` workflow is configured in `.github/workflows/weekly.yaml`. This workflow runs the non-publishing portions of the `main` workflow, except building the initial `cicd` Docker image
+
 ## Pull Requests
 
 The `main` branch has [branch protections](https://help.github.com/en/github/administering-a-repository/about-protected-branches) turned on in Github, requiring one reviewer to approve a PR before merging. We also use the code owners feature to specify who can approve certain PRs. As well, merging a PR requires status checks (Read the Docs and both CI/CD jobs) to complete successfully.
@@ -275,3 +277,4 @@ When naming a branch, please use the syntax `firstname/branch-name-here`. If you
 - Update type annotations to use types.ParamSpec once Mypy supports them (currently a new feature in Python 3.10). See [here](https://github.com/python/mypy/issues/8645).
 - Remove python3.10-distutils once pip migrates from `distutils` to `sysconfig`. See [here](https://pip.pypa.io/en/stable/news/#id60) & [here](https://docs.python.org/3.10/library/distutils.html#module-distutils).
 - Add py310 to black target list once black supports py310
+- Remove `-x` command-line argument from `inner_shellcheck.sh` once using version >= 0.8.0 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#added)), and remove `disable=SC1090` (can't find non-constant source) once using version >= 0.7.2 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#changed-1))

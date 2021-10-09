@@ -1,18 +1,10 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$DIR"/../docker/strict_mode.sh
 
 # Publishes tag to Github for prereleases and final releases
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$DIR"/..
-cd "$REPO_DIR"
-
-docker run \
-    --rm \
-    --name tag \
-    --env GITHUB_TOKEN="$GITHUB_TOKEN" \
-    --volume "$REPO_DIR":/home/cicd/tubthumper \
-    matteosox/tubthumper-cicd \
+docker/run.sh --env GITHUB_TOKEN --name tag \
     publish/tag.py
 
-echo "All done!"
+echo "$(basename "$0") completed successfully!"
