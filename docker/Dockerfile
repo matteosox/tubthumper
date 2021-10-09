@@ -2,7 +2,7 @@
 FROM ubuntu:20.04
 
 # Install apt-get packages
-COPY cicd/install_packages.sh /usr/local/bin/install_packages.sh
+COPY docker/install_packages.sh /usr/local/bin/install_packages.sh
 RUN --mount=type=cache,target=/var/cache/apt \
     --mount=type=cache,target=/var/lib/apt \
     install_packages.sh python3.6 python3.7 python3.8 python3.8-venv python3.9 python3.10 python3.10-distutils pypy3 git shellcheck
@@ -31,5 +31,3 @@ COPY --chown="$USER" tubthumper tubthumper/
 COPY --chown="$USER" LICENSE pyproject.toml README.md setup.cfg setup.py ./
 RUN --mount=type=cache,target=/home/cicd/tubthumper/.cache/pip,uid=1024,gid=1024 \
     pip install --editable .
-
-CMD ["bash"]

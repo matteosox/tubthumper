@@ -1,9 +1,8 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$DIR"/..
-cd "$REPO_DIR"
+source "$DIR/../docker/strict_mode.sh"
+
+# Shell script for testing the version
 
 MAIN_BRANCH=main
 
@@ -26,3 +25,5 @@ Current version does not supersede version from $MAIN_BRANCH
 To fix this, run version/increment.sh"
     exit 1
 fi
+
+echo "$(basename "$0") completed successfully!"

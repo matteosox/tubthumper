@@ -1,15 +1,10 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$DIR"/..
-cd "$REPO_DIR"
+source "$DIR/../docker/strict_mode.sh"
 
-echo "Updating requirements/requirements.txt"
+echo "Updating requirements"
 
-docker run \
-    --rm \
-    --name requirements_update \
-    --volume "$REPO_DIR":/home/cicd/tubthumper \
-    matteosox/tubthumper-cicd \
+docker/run.sh --name requirements_update \
     requirements/inner_update.sh
+
+echo "$(basename "$0") completed successfully!"

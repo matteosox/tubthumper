@@ -42,15 +42,13 @@ This gives us both a flexible way to describe dependencies while still achieving
 
 _TL;DR: To build the `cicd` Docker image, run `cicd/setup.sh`._
 
-The `setup.sh` shell script in the `cicd` directory will build the `cicd` image for you, installing both OS-level and Python dependencies, while also installing the `tubthumper` package in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable). Different workflows will mount the relevant parts of the repo in a Docker container, allowing fast development, i.e. no need to re-build the image to test/document/etc. your changes as you go.
+The `setup.sh` shell script in the `cicd` directory will build the `cicd` image for you, installing both OS-level and Python dependencies, while also installing the `tubthumper` package in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable). Different workflows will mount the repo in a Docker container, allowing fast development, i.e. no need to re-build the image to test/document/etc. your changes as you go.
 
-You'll need to build this image for each commit (the image is tagged by git commit SHA), but this is generally quite fast because of a few cacheing tricks.
+While the image is versioned per commit, you generally shouldn't need to rebuild it unless there are changes to more infrastructural stuff (requirements, anything in the `docker` directory). Even so, this is generally quite fast because of a few cacheing tricks.
 
 ### Cacheing Tricks
 
-We do a couple of neat cacheing tricks to speed things up. First off, in the `Dockerfile`s themselves, we use the `RUN --mount=type=cache` functionality of Docker BuildKit to cache apt packages stored in `/var/cache/apt` and Python packages stored in `~/.cache/pip`. This keeps your local machine from re-downloading new packages each time. h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/docker-cache-pip-downloads/) for inspiration.
-
-Second, we use the new `BUILDKIT_INLINE_CACHE` feature to cache our images using Docker Hub. This is configured in the `docker build` command, and is smart enough to only download the layers you need. This DOES work in Github Actions, while the prior functionality does not. h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/speeding-up-docker-ci/) for inspiration.
+In `Dockerfile`, we use the `RUN --mount=type=cache` functionality of Docker BuildKit to cache apt packages stored in `/var/cache/apt` and Python packages stored in `~/.cache/pip`. This keeps your local machine from re-downloading new packages each time. h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/docker-cache-pip-downloads/) for inspiration.
 
 ## Tests
 
@@ -100,7 +98,7 @@ Pylint is setup to lint the `tubthumper` & `test/unit_tests` packages along with
 
 _TL;DR: Run `test/shellcheck.sh` to lint your shell scripts._
 
-We use [ShellCheck](https://www.shellcheck.net/) for shell script linting (h/t [Julia Evans](https://wizardzines.com/comics/shellcheck/) for introducing me to shellcheck). To lint your shell scripts, run the `test/shellcheck.sh` shell script (yes, I know). There is no Shellcheck configuration.
+We use [ShellCheck](https://www.shellcheck.net/) for shell script linting (h/t [Julia Evans](https://wizardzines.com/comics/shellcheck/) for introducing me to shellcheck). To lint your shell scripts, run the `test/shellcheck.sh` shell script (yes, I know). Shellcheck configuration can be found in the `.shellcheckrc` file at the root of the repo.
 
 Shellcheck is setup to run on all files tracked by git that end `.sh`. This can be edited in `test/inner_shellcheck.sh`.
 
@@ -275,3 +273,4 @@ When naming a branch, please use the syntax `firstname/branch-name-here`. If you
 - Update type annotations to use types.ParamSpec once Mypy supports them (currently a new feature in Python 3.10). See [here](https://github.com/python/mypy/issues/8645).
 - Remove python3.10-distutils once pip migrates from `distutils` to `sysconfig`. See [here](https://pip.pypa.io/en/stable/news/#id60) & [here](https://docs.python.org/3.10/library/distutils.html#module-distutils).
 - Add py310 to black target list once black supports py310
+- Remove `-x` command-line argument from `inner_shellcheck.sh` once using version >= 0.8.0 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#added)), and remove `disable=SC1090` (can't find non-constant source) once using version >= 0.7.2 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#changed-1))

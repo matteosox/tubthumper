@@ -2,7 +2,7 @@
 *
 
 # Except files we explicitly need, grouped by copy command
-!cicd/install_packages.sh
+!docker/install_packages.sh
 
 !requirements/requirements.txt
 

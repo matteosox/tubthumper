@@ -1,9 +1,8 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$DIR"/..
-cd "$REPO_DIR"
+source "$DIR/../docker/strict_mode.sh"
+
+# Shell script for running unit tests
 
 CMD=("test/inner_unit_tests.sh" "--no-coverage")
 
@@ -24,7 +23,9 @@ while [[ "$#" -gt 0 ]]; do
             exit 0
             ;;
         -- )
+            OLD_IFS="$IFS"
             IFS=" " read -r -a OPTS <<< "$@"
+            IFS="$OLD_IFS"
             echo "Using custom options ${OPTS[*]}"
             CMD=("${CMD[@]}" "${OPTS[@]}")
             break
@@ -37,34 +38,25 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-LOCAL_USER_ID=$(id -u)
-LOCAL_GROUP_ID=$(id -g)
-
 if [[ "${CMD[0]}" == "tox" ]]; then
     cleanup() {
         rm -rf tubthumper.egg-info
+        if [[ -e .coverage ]]; then
+            mv .coverage reports/coverage
+        fi
+        rm -f .coverage.*
     }
     trap cleanup EXIT
 
     if [[ ! -d ".cache/tox" ]]; then
         echo "Initializing tox environment"
-        docker run \
-            --rm \
-            --name init_tox \
-            --env TOX_PARALLEL_NO_SPINNER=1 \
-            --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
-            --volume "$REPO_DIR":/home/cicd/tubthumper \
-            matteosox/tubthumper-cicd \
+        docker/run.sh --name init_tox --env TOX_PARALLEL_NO_SPINNER=1 \
             tox --notest --parallel
     fi
 fi
 
 echo "Running unit tests"
-
-docker run \
-    --rm \
-    --name unit_tests \
-    --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
-    --volume "$REPO_DIR":/home/cicd/tubthumper \
-    matteosox/tubthumper-cicd \
+docker/run.sh --name unit_tests \
     "${CMD[@]}"
+
+echo "$(basename "$0") completed successfully!"

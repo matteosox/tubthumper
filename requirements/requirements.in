@@ -24,9 +24,10 @@ tox
 # Requirements generation
 pip-tools
 
-# Package publishing
+# Publishing
 build
 check-wheel-contents
+requests
 twine
 
 # Versioning

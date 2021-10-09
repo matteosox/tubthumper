@@ -12,7 +12,7 @@ babel==2.9.1
     # via sphinx
 beautifulsoup4==4.10.0
     # via furo
-certifi==2021.5.30
+certifi==2021.10.8
     # via requests
 charset-normalizer==2.0.6
     # via requests
@@ -21,7 +21,7 @@ docutils==0.17.1
     #   myst-parser
     #   sphinx
 furo==2021.9.22
-    # via -r docs_requirements.in
+    # via -r requirements/docs_requirements.in
 idna==3.2
     # via requests
 imagesize==1.2.0
@@ -39,10 +39,10 @@ markupsafe==2.0.1
 mdit-py-plugins==0.2.8
     # via myst-parser
 myst-parser==0.15.2
-    # via -r docs_requirements.in
+    # via -r requirements/docs_requirements.in
 packaging==21.0
     # via
-    #   -r docs_requirements.in
+    #   -r requirements/docs_requirements.in
     #   sphinx
 pygments==2.10.0
     # via sphinx
@@ -54,7 +54,7 @@ pyyaml==5.4.1
     # via myst-parser
 requests==2.26.0
     # via
-    #   -r docs_requirements.in
+    #   -r requirements/docs_requirements.in
     #   sphinx
 snowballstemmer==2.1.0
     # via sphinx
@@ -62,11 +62,11 @@ soupsieve==2.2.1
     # via beautifulsoup4
 sphinx==4.2.0
     # via
-    #   -r docs_requirements.in
+    #   -r requirements/docs_requirements.in
     #   furo
     #   myst-parser
 sphinx-notfound-page==0.7.1
-    # via -r docs_requirements.in
+    # via -r requirements/docs_requirements.in
 sphinxcontrib-applehelp==1.0.2
     # via sphinx
 sphinxcontrib-devhelp==1.0.2

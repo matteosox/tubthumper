@@ -5,20 +5,16 @@ import datetime
 import logging
 import os
 
-import requests
 from packaging.version import Version
 
 import tubthumper
+from util import configure_logger, request_with_retry
 
-URL = "https://api.github.com/repos/matteosox/tubthumper/releases"
-HEADERS = {"accept": "application/vnd.github.v3+json"}
-
-logger = logging.getLogger(__name__)
+logger = configure_logger(logging.getLogger(__name__))
 
 
 def main() -> None:
     """Pushes a git tag to Github"""
-    _configure_logger()
     version = tubthumper.__version__
     if not _should_tag(version):
         logger.info(f"Not tagging {version} since it is not a final or prerelease")
@@ -33,24 +29,13 @@ def main() -> None:
         "body": _get_changes(version),
         "prerelease": _is_prerelease(version),
     }
-    requests.post(URL, headers=HEADERS, auth=auth, json=payload)
-
-
-def _configure_logger(level: int = logging.INFO) -> None:
-    """
-    Configures logger with a nice formatter,
-    with optional level, defaulting to info
-    """
-    logger.setLevel(level)
-    formatter = logging.Formatter(
-        "%(asctime)s | %(pathname)s:%(funcName)s "
-        "@ %(lineno)d | %(levelname)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S %Z",
+    request_with_retry(
+        "POST",
+        "https://api.github.com/repos/matteosox/tubthumper/releases",
+        headers={"accept": "application/vnd.github.v3+json"},
+        auth=auth,
+        json=payload,
     )
-    handler = logging.StreamHandler()
-    handler.setLevel(level)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
 
 
 def _should_tag(version_str: str) -> bool:

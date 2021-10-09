@@ -15,12 +15,12 @@ import shlex
 import subprocess
 import sys
 import zipfile
-from typing import Any, Tuple
+from typing import Tuple
 
-import requests
 from packaging.version import Version
 
 import tubthumper
+from util import configure_logger, request_with_retry
 
 # -- Project information -----------------------------------------------------
 
@@ -153,28 +153,12 @@ html_static_path = ["_static"]
 
 # -- Read the Docs runs main to grab the reports artifact from Github --------
 
-logger = logging.getLogger(__name__)
+logger = configure_logger(logging.getLogger(__name__))
 
 GITHUB_HEADERS = {"accept": "application/vnd.github.v3+json"}
 PER_PAGE = 100
 ARTIFACTS_URL = "https://api.github.com/repos/matteosox/tubthumper/actions/artifacts"
-
-
-def _configure_logger(level: int = logging.INFO) -> None:
-    """
-    Configures logger with a nice formatter,
-    with optional level, defaulting to info
-    """
-    logger.setLevel(level)
-    formatter = logging.Formatter(
-        "%(asctime)s | %(pathname)s:%(funcName)s "
-        "@ %(lineno)d | %(levelname)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S %Z",
-    )
-    handler = logging.StreamHandler()
-    handler.setLevel(level)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+GET = "GET"
 
 
 def _get_git_sha() -> str:
@@ -191,16 +175,6 @@ def _get_auth_header() -> Tuple[str, str]:
     return ("token", os.environ["GITHUB_TOKEN"])
 
 
-@tubthumper.retry_decorator(
-    exceptions=(requests.Timeout, requests.ConnectionError, requests.HTTPError)
-)
-def _get_with_retry(*args: Any, **kwargs: Any) -> requests.models.Response:
-    response = requests.get(*args, **kwargs)
-    if 500 <= response.status_code < 600:
-        response.raise_for_status()
-    return response
-
-
 class ArtifactNotFoundError(Exception):
     """Thrown when an artifact can't be found"""
 
@@ -214,7 +188,8 @@ def _get_reports_artifact_id(git_sha: str) -> int:
     page = 1
     while True:
         params = {"page": page, "per_page": PER_PAGE}
-        response = _get_with_retry(
+        response = request_with_retry(
+            GET,
             ARTIFACTS_URL,
             headers=GITHUB_HEADERS,
             params=params,
@@ -239,7 +214,8 @@ def _dir_path() -> str:
 
 def _download_artfact(artifact_id: int) -> None:
     auth = _get_auth_header()
-    response = _get_with_retry(
+    response = request_with_retry(
+        GET,
         f"{ARTIFACTS_URL}/{artifact_id}/zip",
         auth=auth,
         timeout=10,
@@ -252,7 +228,6 @@ def _download_artfact(artifact_id: int) -> None:
 
 def main() -> None:
     """Downloads reports artifact from Github for corresponding git sha"""
-    _configure_logger()
     logger.info("Getting reports from Github")
     git_sha = _get_git_sha()
     logger.info(f"Determining artifacts id for git sha {git_sha}")

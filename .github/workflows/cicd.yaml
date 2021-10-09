@@ -28,7 +28,6 @@ jobs:
         env:
           PR_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          set -euf -o pipefail
           REF="${PR_SHA:-$GITHUB_SHA}"
           GIT_SHA="$(git rev-parse --short "$REF")"
           echo "GIT_SHA=$GIT_SHA" >> "$GITHUB_ENV"

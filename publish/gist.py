@@ -7,19 +7,15 @@ import logging
 import os
 import pprint
 import re
-from typing import Any
 
-import requests
+import tubthumper
+from util import configure_logger, request_with_retry
 
-from tubthumper import __version__ as version
-from tubthumper import retry_decorator
-
-logger = logging.getLogger(__name__)
+logger = configure_logger(logging.getLogger(__name__))
 
 
 def main() -> None:
     """Updates the badge data Gist"""
-    _configure_logger()
     mypy_score = _get_mypy_score()
     logger.info(f"MyPy score: {mypy_score}")
 
@@ -33,40 +29,22 @@ def main() -> None:
     logger.info(f"Pylint badge data:\n{pylint_badge_data}")
 
     auth = ("token", os.environ["GIST_TOKEN"])
-    headers = {"accept": "application/vnd.github.v3+json"}
     data = {
         "files": {
             "mypy.json": {"content": mypy_badge_data},
             "pylint.json": {"content": pylint_badge_data},
         },
-        "description": f"Updated Badge Data for tubthumper=={version}",
+        "description": f"Updated Badge Data for tubthumper=={tubthumper.__version__}",
     }
-    response = _request_with_retry(
+    response = request_with_retry(
         "PATCH",
         "https://api.github.com/gists/bd79bbd912687bf44fac6b7887d18f14",
-        headers=headers,
+        headers={"accept": "application/vnd.github.v3+json"},
         auth=auth,
         json=data,
     )
     response.raise_for_status()
     logger.info(f"Github Response:\n{pprint.pformat(response.json())}")
-
-
-def _configure_logger(level: int = logging.INFO) -> None:
-    """
-    Configures logger with a nice formatter,
-    with optional level, defaulting to info
-    """
-    logger.setLevel(level)
-    formatter = logging.Formatter(
-        "%(asctime)s | %(pathname)s:%(funcName)s "
-        "@ %(lineno)d | %(levelname)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S %Z",
-    )
-    handler = logging.StreamHandler()
-    handler.setLevel(level)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
 
 
 def _dir_path() -> str:
@@ -116,16 +94,6 @@ def _generate_badge_data(label: str, message: str, hue: int) -> str:
         },
         indent=2,
     )
-
-
-@retry_decorator(
-    exceptions=(requests.Timeout, requests.ConnectionError, requests.HTTPError)
-)
-def _request_with_retry(*args: Any, **kwargs: Any) -> requests.models.Response:
-    response = requests.request(*args, **kwargs)
-    if 500 <= response.status_code < 600:
-        response.raise_for_status()
-    return response
 
 
 if __name__ == "__main__":

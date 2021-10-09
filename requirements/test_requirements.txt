@@ -5,13 +5,13 @@
 #    requirements/update.sh
 #
 asynctest==0.13.0
-    # via -r test_requirements.in
+    # via -r requirements/test_requirements.in
 coverage[toml]==6.0.1
-    # via -r test_requirements.in
+    # via -r requirements/test_requirements.in
 mock==4.0.3
-    # via -r test_requirements.in
+    # via -r requirements/test_requirements.in
 packaging==21.0
-    # via -r test_requirements.in
+    # via -r requirements/test_requirements.in
 pyparsing==2.4.7
     # via packaging
 tomli==1.2.1

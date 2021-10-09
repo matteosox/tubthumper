@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
-set -euf -o pipefail
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$DIR"/..
+source "$DIR/../docker/strict_mode.sh"
+
+# Inner shell script for linting shell scripts
 
 EXIT_CODE=0
 SHELL_SCRIPTS=$(git ls-files | grep ".*\.sh$")
@@ -19,7 +19,7 @@ trap report_status EXIT
 
 for script in $SHELL_SCRIPTS; do
     STATUSES[$script]=RUNNING
-    if shellcheck "$script"; then
+    if shellcheck -x "$script"; then
         STATUSES[$script]=SUCCESS
     else
         EXIT_CODE=1
