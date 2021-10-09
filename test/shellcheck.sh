@@ -4,7 +4,6 @@ source "$DIR/../docker/strict_mode.sh"
 
 echo "Running ShellCheck"
 
-docker/run.sh --name shellcheck \
-    test/inner_shellcheck.sh
+docker/exec.sh test/inner_shellcheck.sh
 
 echo "$(basename "$0") completed successfully!"

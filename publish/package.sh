@@ -23,7 +23,7 @@ fi
 
 echo "Repository set to $REPOSITORY"
 
-docker/run.sh --name publish_package --env TWINE_USERNAME --env TWINE_PASSWORD \
+docker/exec.sh --env TWINE_USERNAME --env TWINE_PASSWORD \
     publish/inner_package.sh "$REPOSITORY"
 
 echo "$(basename "$0") completed successfully!"

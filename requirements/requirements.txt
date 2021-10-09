@@ -68,7 +68,7 @@ filelock==3.3.0
     # via
     #   tox
     #   virtualenv
-furo==2021.9.22
+furo==2021.10.9
     # via -r requirements/docs_requirements.txt
 idna==3.2
     # via

@@ -4,7 +4,6 @@ source "$DIR/../docker/strict_mode.sh"
 
 echo "Updating requirements"
 
-docker/run.sh --name requirements_update \
-    requirements/inner_update.sh
+docker/exec.sh requirements/inner_update.sh
 
 echo "$(basename "$0") completed successfully!"

@@ -3,6 +3,7 @@
 
 # Except files we explicitly need, grouped by copy command
 !docker/install_packages.sh
+!docker/timer.sh
 
 !requirements/requirements.txt
 
