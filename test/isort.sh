@@ -4,8 +4,7 @@ source "$DIR/../docker/strict_mode.sh"
 
 echo "Running isort"
 
-if ! docker/run.sh --name isort \
-    isort . "$@"; then
+if ! docker/exec.sh isort . "$@"; then
     echo "isort check failed. Run test/isort.sh to resolve."
     exit 1
 fi

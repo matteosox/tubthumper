@@ -4,8 +4,7 @@ source "$DIR/../docker/strict_mode.sh"
 
 echo "Running Black"
 
-if ! docker/run.sh --name black \
-    black "$@" .; then
+if ! docker/exec.sh black "$@" .; then
     echo "black check failed. Run test/black.sh to resolve."
     exit 1
 fi

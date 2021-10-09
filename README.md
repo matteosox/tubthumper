@@ -94,7 +94,7 @@ While `tubthumper` ships with a set of sensible defaults, its retry behavior is 
 
 ### Exceptions
 
-Because overbroad except clauses are [the most diabolical python antipattern](https://realpython.com/the-most-diabolical-python-antipattern/), there is no sensible default for what exception or exceptions to catch and retry. Thus, every `tubthumper` interface has a required `exceptions` keyword-only argument, which takes an exception or tuple of exceptions to catch and retry on, i.e. a sensible lack of a default.
+Because overbroad except clauses are [the most diabolical Python antipattern](https://realpython.com/the-most-diabolical-python-antipattern/), there is no sensible default for what exception or exceptions to catch and retry. Thus, every `tubthumper` interface has a required `exceptions` keyword-only argument, which takes an exception or tuple of exceptions to catch and retry on, i.e. a sensible lack of a default.
 
 ```python
 >>> retry(get_json, args=("spam",), exceptions=ConnectionError)

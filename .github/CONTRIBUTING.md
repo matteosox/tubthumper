@@ -8,9 +8,7 @@
 
 ## Getting started
 
-We use Docker as a clean, reproducible development environment within which to build, test, generate docs, and so on. See the [Setup Development Environment](#setup-development-environment) to get that working. Running things natively isn't a supported/maintained thing.
-
-Once you've got Docker setup and built the `matteosox/tubthumper-cicd` image using the `cicd/setup.sh` shell script as discussed [below](#setup-development-environment), you should be able to run the full test suite, discussed [further down](#tests).
+We use Docker as a clean, reproducible development environment within which to build, test, generate docs, and so on. As long as you have a modern version of Docker, you should be able to run the full test suite, discussed [further down](#tests). Running things natively isn't a supported/maintained thing.
 
 ## Requirements
 
@@ -38,17 +36,21 @@ The `.in` file is where we collect immediate dependencies, described in PyPI for
 
 This gives us both a flexible way to describe dependencies while still achieving reproducible builds. Inspired by [this](https://hynek.me/articles/python-app-deps-2018/) and [this](https://pythonspeed.com/articles/pipenv-docker/).
 
-## Setup Development Environment
+## Development Environment
 
-_TL;DR: To build the `cicd` Docker image, run `cicd/setup.sh`._
+_TL;DR: To setup the local development environment, run `cicd/setup.sh`._
 
-The `setup.sh` shell script in the `cicd` directory will build the `matteosox/tubthumper-cicd` image for you, installing both OS-level and Python dependencies, while also installing the `tubthumper` package in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable). Different workflows will mount the repo in a Docker container, allowing fast development, i.e. no need to re-build the image to test/document/etc. your changes as you go.
+The `setup.sh` shell script in the `cicd` directory will build the `matteosox/tubthumper-cicd` image for you, installing both OS-level and Python dependencies, while also installing the `tubthumper` package in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable). Once that's complete, it will start a Docker container named `tubthumper-cicd` in the background with the repo mounted. Different workflows (e.g. running tests, building docs, updating requirements) will use the `docker/exec.sh` shell script to `docker exec` a command in the running container. The container will stop itself if more than five minutes of inactivity goes by, but feel free to `docker stop` it before then; the `docker/exec.sh` shell script is smart enough to restart the container the next time you use it.
 
 While the image is versioned per commit, you generally shouldn't need to rebuild it unless there are changes to more infrastructural stuff (requirements, anything in the `docker` directory). Even so, this is generally quite fast because of a few cacheing tricks.
 
 ### Cacheing Tricks
 
 In `Dockerfile`, we use the `RUN --mount=type=cache` functionality of Docker BuildKit to cache apt packages stored in `/var/cache/apt` and Python packages stored in `~/.cache/pip`. This keeps your local machine from re-downloading new packages each time. h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/docker-cache-pip-downloads/) for inspiration.
+
+As well, we use the new `BUILDKIT_INLINE_CACHE` feature to cache our images using Docker Hub. This is configured in the `docker build` command, and is smart enough to only download the layers you need. h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/speeding-up-docker-ci/) for inspiration.
+
+While the first cacheing trick won't speed things up in Github Actions, in theory, the second should. In practice however, Docker layer caching in general (for example, even with a more traditional `docker pull` preceding the build step) seems to be intermittent there, likely due to differences between the build agents.
 
 ## Tests
 

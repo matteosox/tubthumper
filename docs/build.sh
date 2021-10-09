@@ -10,7 +10,7 @@ if ! cp -R reports docs/source/_static; then
     cicd/test.sh
 fi
 
-docker/run.sh --name build_docs \
+docker/exec.sh \
     sphinx-build -W -b html docs/source/ docs/build/html
 
 echo "$(basename "$0") completed successfully!"

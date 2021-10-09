@@ -4,7 +4,6 @@ source "$DIR/../docker/strict_mode.sh"
 
 echo "Running Mypy"
 
-docker/run.sh --name mypy \
-    mypy --package tubthumper
+docker/exec.sh mypy --package tubthumper
 
 echo "$(basename "$0") completed successfully!"

@@ -19,7 +19,7 @@ if [[ ! -e "$MYPY_FILE" ]]; then
     test/mypy.sh
 fi
 
-docker/run.sh --name update_gist --env GIST_TOKEN \
+docker/exec.sh --env GIST_TOKEN \
     publish/gist.py
 
 echo "$(basename "$0") completed successfully!"

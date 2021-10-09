@@ -23,9 +23,7 @@ while [[ "$#" -gt 0 ]]; do
             exit 0
             ;;
         -- )
-            OLD_IFS="$IFS"
             IFS=" " read -r -a OPTS <<< "$@"
-            IFS="$OLD_IFS"
             echo "Using custom options ${OPTS[*]}"
             CMD=("${CMD[@]}" "${OPTS[@]}")
             break
@@ -50,13 +48,12 @@ if [[ "${CMD[0]}" == "tox" ]]; then
 
     if [[ ! -d ".cache/tox" ]]; then
         echo "Initializing tox environment"
-        docker/run.sh --name init_tox --env TOX_PARALLEL_NO_SPINNER=1 \
+        docker/exec.sh --env TOX_PARALLEL_NO_SPINNER=1 \
             tox --notest --parallel
     fi
 fi
 
 echo "Running unit tests"
-docker/run.sh --name unit_tests \
-    "${CMD[@]}"
+docker/exec.sh "${CMD[@]}"
 
 echo "$(basename "$0") completed successfully!"
