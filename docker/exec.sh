@@ -54,7 +54,7 @@ EXEC_CMD=("${OPTS[@]}" "${CMD[@]}")
 
 restart_timer() {
     mkdir -p .cache
-    touch "$TIMER_FILE"
+    touch .cache/last_run
 }
 trap restart_timer EXIT
 
