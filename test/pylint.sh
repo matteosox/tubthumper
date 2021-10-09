@@ -7,6 +7,7 @@ echo "Running Pylint"
 mkdir -p reports
 
 docker/run.sh --name pylint \
-    pylint tubthumper test/unit_tests util.py version/inner_check.py docs/source/conf.py publish/tag.py publish/gist.py
+    pylint tubthumper test/unit_tests \
+    ./*.py version/*.py docs/source/*.py publish/*.py
 
 echo "$(basename "$0") completed successfully!"

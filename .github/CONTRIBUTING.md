@@ -92,7 +92,7 @@ _TL;DR: Run `test/pylint.sh` to lint your code._
 
 We use [Pyint](https://pylint.pycqa.org/en/latest/) for Python linting (h/t Itamar Turner-Trauring from his site [pythonspeed](https://pythonspeed.com/articles/pylint/) for inspiration). To lint your code, run the `test/pylint.sh` shell script. In addition to showing any linting errors, it will also print out a report, which is also saved as `reports/pylint.txt` for ease of reference. A `unit_test1.stats` file will also be generated in the root of the repo, which pylint uses to store previous results (the generated report shows differences between the last run). Pylint configuration can be found in the `pylintrc` file at the root of the repo.
 
-Pylint is setup to lint the `tubthumper` & `test/unit_tests` packages along with the `version/inner_check.py`, `docs/source/conf.py`, `publish/tag.py`, & `publish/gist.py` modules. To add more modules or packages for linting, edit `test/pylint.sh`.
+Pylint is setup to lint the `tubthumper` & `test/unit_tests` packages along with the `./*.py`, `version/*.py`, `docs/source/*.py`, & `publish/*.py` modules. To add more modules or packages for linting, edit `test/pylint.sh`.
 
 ### Shellcheck Shell Script Linting
 

@@ -14,6 +14,7 @@ line_length = 88
 [tool.isort]
 verbose = true
 profile = "black"
+skip = ".cache"
 skip_gitignore = true
 line_length = 88
 
