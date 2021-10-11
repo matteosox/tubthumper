@@ -14,6 +14,7 @@ RUNNING="${RED}RUNNING${LIGHT_CYAN}"
 FAILED="${RED}FAILED${LIGHT_CYAN}"
 SUCCESS="${GREEN}SUCCESS${LIGHT_CYAN}"
 
+VERSION_STATUS="$NOT_STARTED"
 REQUIREMENTS_STATUS="$NOT_STARTED"
 BLACK_STATUS="$NOT_STARTED"
 ISORT_STATUS="$NOT_STARTED"
@@ -35,6 +36,7 @@ report_status() {
     echo -e "${LIGHT_CYAN}
 Test Summary: $TEST_STATUS
 =====================
+  - Version: $VERSION_STATUS
   - Requirements: $REQUIREMENTS_STATUS
   - Black: $BLACK_STATUS
   - isort: $ISORT_STATUS
@@ -50,6 +52,20 @@ trap report_status EXIT
 
 
 echo -e "${LIGHT_CYAN}
+Running version check
+==========================
+${NC}"
+VERSION_STATUS="$RUNNING"
+if test/version.sh; then
+    VERSION_STATUS="$SUCCESS"
+else
+    EXIT_CODE=1
+    VERSION_STATUS="$FAILED"
+fi
+echo -e "${LIGHT_CYAN}
+Version check completed w/ status: $VERSION_STATUS
+
+
 Running requirements check
 ==========================
 ${NC}"
