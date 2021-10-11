@@ -11,4 +11,4 @@ MyPy Report
       .content-icon-container { display: none; }
    </style>
 
-   <iframe src="_static/reports/mypy/index.html" class="my-iframe"></iframe>
+   <iframe src="_static/mypy/index.html" class="my-iframe"></iframe>

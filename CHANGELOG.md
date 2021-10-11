@@ -6,10 +6,11 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Ch
 ## Unreleased
 
 ### Added
-- `RetryError` exception
-- `retry_factory` function
-- `retry_decorator` function
 - `retry` function
+- `retry_decorator` function
+- `retry_factory` function
+- `RetryError` exception
+- `LoggerType` type
 
 ### Changed
 

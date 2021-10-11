@@ -23,7 +23,7 @@ Most checks are automated, but a few aren't, so make sure to go through and tick
 - [ ] **Documentation**
   - New functions/classes/etc. must be added to `docs/source/api.rst`.
   - Changed/added classes/methods/functions have appropriate `versionadded`, `versionchanged`, or `deprecated` [directives](http://www.sphinx-doc.org/en/stable/markup/para.html#directive-versionadded).
-  - The appropriate entry in `docs/source/CHANGELOG.md` has been included in the "Unreleased" section, i.e. "Added", "Changed", "Deprecated", "Removed", "Fixed", or "Security".
+  - The appropriate entry in `CHANGELOG.md` has been included in the "Unreleased" section, i.e. "Added", "Changed", "Deprecated", "Removed", "Fixed", or "Security".
 - [ ] **Linting**
   - New Python code not in the `tubthumper` package must be added for linting to `test/pylint.sh`.
 - [ ] **Future work**

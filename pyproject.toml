@@ -14,13 +14,12 @@ line_length = 88
 [tool.isort]
 verbose = true
 profile = "black"
-skip = ".cache"
 skip_gitignore = true
 line_length = 88
 
 [tool.mypy]
-cache_dir = ".cache/mypy"
-html_report = "reports/mypy"
+cache_dir = "~/.cache/mypy"
+html_report = "docs/source/_static/mypy"
 warn_unused_configs = true
 disallow_any_generics = true
 disallow_subclassing_any = true
@@ -52,15 +51,14 @@ exclude_lines = [
 ]
 
 [tool.coverage.html]
-directory = "reports/coverage"
+directory = "docs/source/_static/coverage"
 
 [tool.tox]
 legacy_tox_ini = """
 [tox]
 envlist = py36, py37, py38, py39, py310, pypy3, coverage-report
 isolated_build = true
-toxworkdir = {toxinidir}/.cache/tox
-distshare = {toxinidir}/.cache/tox/distshare
+toxworkdir = {homedir}/.cache/tox
 
 [testenv]
 deps = -r{toxinidir}/requirements/test_requirements.txt

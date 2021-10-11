@@ -2,14 +2,31 @@
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$DIR/../docker/strict_mode.sh"
 
-echo "Building docs"
+# Build documentation
 
-if ! cp -R reports docs/source/_static; then
-    echo "reports directory not found"
-    echo "Generating it by running test suite"
-    cicd/test.sh
+PYLINT_FILE=docs/source/_static/pylint.txt
+MYPY_DIR=docs/source/_static/mypy
+COVERAGE_DIR=docs/source/_static/coverage
+
+if [[ ! -e "$PYLINT_FILE" ]]; then
+    echo "Pylint file $PYLINT_FILE does not exist"
+    echo "Generating it by running test/pylint.sh"
+    test/pylint.sh
 fi
 
+if [[ ! -e "$MYPY_DIR" ]]; then
+    echo "MyPy directory $MYPY_DIR does not exist"
+    echo "Generating it by running test/mypy.sh"
+    test/mypy.sh
+fi
+
+if [[ ! -e "$COVERAGE_DIR" ]]; then
+    echo "Coverage directory $COVERAGE_DIR does not exist"
+    echo "Generating it by running test/tox.sh"
+    test/tox.sh
+fi
+
+echo "Building docs"
 docker/exec.sh \
     sphinx-build -W -b html docs/source/ docs/build/html
 

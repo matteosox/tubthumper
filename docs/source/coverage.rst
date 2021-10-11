@@ -11,4 +11,4 @@ Coverage Report
       .content-icon-container { display: none; }
    </style>
 
-   <iframe class="my-iframe" src="_static/reports/coverage/index.html"></iframe>
+   <iframe class="my-iframe" src="_static/coverage/index.html"></iframe>

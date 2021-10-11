@@ -2,10 +2,10 @@
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$DIR"/strict_mode.sh
 
-# Shell script for running a command inside docker
+# Execute a command inside docker
 
 OPTS=()
-NAME=tubthumper-cicd
+NAME="tubthumper-cicd-$GIT_SHA"
 
 usage()
 {
@@ -32,8 +32,8 @@ done
 STATE=$(docker ps --all --filter "name=$NAME" --format "{{.State}}")
 
 if [[ -z "$STATE" ]]; then
-    echo "No Docker container found, so setting it up for you"
-    cicd/setup.sh
+    echo "No $NAME Docker container found, so creating it for you"
+    docker/create_container.sh
 fi
 
 if [[ "$STATE" == "paused" ]]; then
@@ -53,8 +53,7 @@ OPTS+=("$NAME")
 EXEC_CMD=("${OPTS[@]}" "${CMD[@]}")
 
 restart_timer() {
-    mkdir -p .cache
-    touch .cache/last_run
+    touch README.md
 }
 trap restart_timer EXIT
 
