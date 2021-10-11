@@ -13,6 +13,12 @@ Running the test suite generates three test reports which are incorporated into 
 - [MyPy](mypy)
 - [Coverage](coverage)
 
+### Version Check
+
+_TL;DR: Run `test/version.sh to confirm version is valid._
+
+The `test/version.sh` shell script checks the current version, ensuring that it isn't identical to any versions from the `main` branch's history. When starting a new feature branch, you'll want to increment the version, likely by incrementing the `.devN` number, in order to pass this test.
+
 ### Requirements Check
 
 _TL;DR: Run `test/requirements.sh to confirm requirements are up-to-date._
