@@ -18,7 +18,7 @@ CURR_VERSION=$(cat tubthumper/VERSION)
 echo "Current version is $CURR_VERSION"
 
 echo "Previous versions"
-PREV_REFS=$(git log "$MAIN_BRANCH" --pretty=format:"%h")
+PREV_REFS=$(git log remotes/origin/"$MAIN_BRANCH" --pretty=format:"%h")
 for PREV_REF in $PREV_REFS; do
     PREV_VERSION=$(git show "$PREV_REF":tubthumper/VERSION)
     echo "$PREV_VERSION"
