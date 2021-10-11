@@ -39,4 +39,6 @@ docker build \
     --file docker/Dockerfile \
     .
 
+docker rm -f "tubthumper-cicd-$GIT_SHA" &> /dev/null || true
+
 echo "$(basename "$0") completed successfully!"
