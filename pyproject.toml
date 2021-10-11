@@ -67,7 +67,6 @@ allowlist_externals = bash
 commands = bash {toxinidir}/test/inner_unit_tests.sh {posargs}
 
 [testenv:coverage-report]
-basepython = python3
 deps = coverage[toml]
 skip_install = true
 depends = py36, py37, py38, py39, py310, pypy3
