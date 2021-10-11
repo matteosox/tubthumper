@@ -7,22 +7,21 @@ source "$DIR"/strict_mode.sh
 OPTS=()
 NAME="tubthumper-cicd-$GIT_SHA"
 
-usage()
-{
+usage() {
     echo "usage: exec.sh [--env -e ENV] [CMD ...]"
 }
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        -e | --env )
+        -e | --env)
             OPTS+=("--env" "$2")
             shift 2
             ;;
-        -h | --help )
+        -h | --help)
             usage
             exit 0
             ;;
-        * )
+        *)
             IFS=" " read -r -a CMD <<< "$@"
             break
             ;;
