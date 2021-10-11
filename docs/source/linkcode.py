@@ -2,7 +2,11 @@
 
 import inspect
 import os
+import shlex
+import subprocess
 import sys
+
+from packaging.version import Version
 
 import tubthumper
 
@@ -19,12 +23,28 @@ def linkcode_resolve(domain: str, info: dict) -> str:
 
     modname = info["module"]
     fullname = info["fullname"]
-    rel_url = (
-        "VERSION" if fullname == "__version__" else _get_rel_url(modname, fullname)
-    )
-    blob = "main" if "dev" in tubthumper.__version__ else tubthumper.__version__
+    rel_url = _get_rel_url(modname, fullname)
+    blob = _get_blob()
 
     return f"https://github.com/matteosox/tubthumper/blob/{blob}/tubthumper/{rel_url}"
+
+
+def _get_blob() -> str:
+    version_str = tubthumper.__version__
+    version = Version(version_str)
+    if version.is_devrelease or version.is_postrelease:
+        return _get_git_sha()
+    return version_str
+
+
+def _get_git_sha() -> str:
+    completed_process = subprocess.run(
+        shlex.split("git rev-parse --short HEAD"),
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    return completed_process.stdout.strip()
 
 
 def _get_rel_url(modname: str, fullname: str) -> str:

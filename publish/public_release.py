@@ -8,8 +8,8 @@ import tubthumper
 
 def main() -> None:
     """Determines if this version should be released"""
-    ver = Version(tubthumper.__version__)
-    print(not (ver.is_devrelease or ver.is_postrelease))
+    version = Version(tubthumper.__version__)
+    print(not (version.is_devrelease or version.is_postrelease))
 
 
 if __name__ == "__main__":
