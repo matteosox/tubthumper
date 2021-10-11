@@ -10,7 +10,6 @@ if [[ ! -d "$HOME/.cache/tox" ]]; then
 fi
 
 cleanup() {
-    rm -rf tubthumper.egg-info
     mv .coverage docs/source/_static/coverage &> /dev/null && true
     rm -f .coverage.*
 }

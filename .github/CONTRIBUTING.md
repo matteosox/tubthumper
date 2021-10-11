@@ -81,7 +81,7 @@ If you haven't run this before, the script will initialize tox, creating each Py
 
 _TL;DR: Run `test/unit_tests.sh` to unit test your code quickly._
 
-We use [unittest](https://docs.python.org/3/library/unittest.html) for unit testing. To unit test your code, run the `test/unit_tests.sh` shell script. This will run unit tests in Python 3.8 only without any coverage reporting overhead, which should only take about a second.
+We use [unittest](https://docs.python.org/3/library/unittest.html) for unit testing. To unit test your code, run the `test/unit_tests.sh` shell script. This will run unit tests in Python 3.9 only, without any coverage reporting overhead, which should only take about a second.
 
 `unittest` is setup to discover tests using its [test discovery](https://docs.python.org/3/library/unittest.html#test-discovery) functionality from the `test` directory. In practice, we put all unit tests in the `test/unit_tests` package directory. All test files must match the pattern `test*.py`. To add more directories for unit test discovery, edit `test/inner_unit_tests.sh`.
 
