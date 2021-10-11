@@ -18,7 +18,7 @@ skip_gitignore = true
 line_length = 88
 
 [tool.mypy]
-cache_dir = "$HOME/.cache/mypy"
+cache_dir = "~/.cache/mypy"
 html_report = "docs/source/_static/mypy"
 warn_unused_configs = true
 disallow_any_generics = true
