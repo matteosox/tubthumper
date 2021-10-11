@@ -20,6 +20,6 @@ if [[ ! -e "$MYPY_FILE" ]]; then
 fi
 
 docker/exec.sh --env GIST_TOKEN \
-    publish/gist.py
+    docs/gist.py
 
 echo "$(basename "$0") completed successfully!"
