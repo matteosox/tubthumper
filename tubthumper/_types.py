@@ -29,7 +29,7 @@ class LoggerType(Protocol):
     Generally a `logging.Logger`, but since we want to support
     `duck typing <https://docs.python.org/3/glossary.html#term-duck-typing>`_,
     this is a `typing.Protocol` to enable
-    `structural subbtyping <https://www.python.org/dev/peps/pep-0544/>`_.
+    `structural subtyping <https://www.python.org/dev/peps/pep-0544/>`_.
     """
 
     def log(self, level: int, msg: str, exc_info: bool, **kwargs: Any) -> Any:

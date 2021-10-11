@@ -2,11 +2,10 @@
 set -o errexit -o nounset -o pipefail
 IFS=$'\n\t'
 
-TIMER_FILE=".cache/last_run"
+TIMER_FILE="README.md"
 INTERVAL=300
 
 start_timer() {
-    mkdir -p .cache
     touch "$TIMER_FILE"
 }
 

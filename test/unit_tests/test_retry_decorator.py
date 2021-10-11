@@ -717,7 +717,7 @@ class TestRetryDecorator(unittest.TestCase):
         self.assertEqual(func_annotations, dec_func_annotations)
 
     def test_function_attrs(self):
-        """Test that the decorated function has the same attribbutes as the original"""
+        """Test that the decorated function has the same attributes as the original"""
         func = util.get_a_func()
         dec_func = retry_decorator(exceptions=constants.TestException)(func)
         for key in func.__dict__:

@@ -9,12 +9,8 @@ __pycache__/
 /.vscode/
 /*.code-workspace
 
-# XDG_CACHE_HOME from Docker
-/.cache
-
-# Test reports
-/reports/
-
 # Docs
 /docs/build
-/docs/source/_static/reports/
+/docs/source/_static/pylint.txt
+/docs/source/_static/mypy/
+/docs/source/_static/coverage/

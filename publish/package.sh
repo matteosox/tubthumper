@@ -1,8 +1,9 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$DIR/../docker/strict_mode.sh"
 
-echo "Publishing package"
+# Inner shell script for publishing `tubthumper`
+# to a Python Package Index
 
 usage()
 {
@@ -17,13 +18,18 @@ elif [[ $# -gt 1 ]]; then
     echo "Too many inputs supplied"
     usage
     exit 2
-else
-    REPOSITORY="$1"
 fi
 
-echo "Repository set to $REPOSITORY"
+REPOSITORY="$1"
 
-docker/exec.sh --env TWINE_USERNAME --env TWINE_PASSWORD \
-    publish/inner_package.sh "$REPOSITORY"
+cleanup() {
+    rm -rf dist
+    rm -rf tubthumper.egg-info
+}
+trap cleanup EXIT
 
-echo "$(basename "$0") completed successfully!"
+echo "Building package"
+python -m build
+
+echo "Publishing to $REPOSITORY"
+twine upload --verbose --repository "$REPOSITORY" dist/*

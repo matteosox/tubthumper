@@ -1,14 +1,14 @@
 #! /usr/bin/env bash
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$DIR"/../docker/strict_mode.sh
+source "$DIR"/strict_mode.sh
 
-# Build & tag Docker image, create Docker container
+# Build Docker image
 
 OPTIONS=("--cache-from" "matteosox/tubthumper-cicd")
 
 usage()
 {
-    echo "usage: setup.sh [--from-scratch -f]"
+    echo "usage: build_image.sh [--from-scratch -f]"
 }
 
 while [[ "$#" -gt 0 ]]; do
@@ -38,22 +38,5 @@ docker build \
     --build-arg BUILDKIT_INLINE_CACHE=1 \
     --file docker/Dockerfile \
     .
-
-echo "Tagging Docker image"
-docker tag matteosox/tubthumper-cicd:"$GIT_SHA" matteosox/tubthumper-cicd
-
-echo "Removing previous Docker container"
-NAME="tubthumper-cicd"
-docker rm -f "$NAME" &> /dev/null || true
-
-echo "Creating new Docker container"
-LOCAL_USER_ID=$(id -u)
-LOCAL_GROUP_ID=$(id -g)
-docker run \
-    --detach \
-    --name "$NAME" \
-    --user "$LOCAL_USER_ID:$LOCAL_GROUP_ID" \
-    --volume "$REPO_DIR":/home/cicd/tubthumper \
-    matteosox/tubthumper-cicd
 
 echo "$(basename "$0") completed successfully!"

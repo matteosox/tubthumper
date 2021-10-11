@@ -4,8 +4,8 @@ source "$DIR"/../docker/strict_mode.sh
 
 echo "Updating the badge data Gist"
 
-PYLINT_FILE="$REPO_DIR/reports/pylint.txt"
-MYPY_FILE="$REPO_DIR/reports/mypy/index.html"
+PYLINT_FILE=docs/source/_static/pylint.txt
+MYPY_FILE=docs/source/_static/mypy/index.html
 
 if [[ ! -e "$PYLINT_FILE" ]]; then
     echo "Pylint file $PYLINT_FILE does not exist"

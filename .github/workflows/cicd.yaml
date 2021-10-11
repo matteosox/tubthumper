@@ -18,11 +18,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup
-        run: cicd/setup.sh
-
       - name: Test
-        run: cicd/test.sh --all
+        run: cicd/test.sh
 
       - name: Set GIT_SHA
         env:
@@ -37,7 +34,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: "reports_${{ env.GIT_SHA }}"
-          path: reports
+          path: |
+            docs/source/_static/pylint.txt
+            docs/source/_static/mypy
+            docs/source/_static/coverage
 
       - name: Login to Docker Hub
         if: ${{ github.ref == 'refs/heads/main' }}
@@ -56,16 +56,11 @@ jobs:
         env:
           GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
 
-      - name: Tag on Github
+      - name: Publish
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: cicd/tag_on_github.sh
+        run: cicd/publish.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to PyPI
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: cicd/publish_to_pypi.sh
-        env:
           TESTPYPI_TOKEN: ${{ secrets.TESTPYPI_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
 

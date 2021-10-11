@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Python script for pushing a git tag to Github"""
+"""Python script for publishing a tag to Github"""
 
-import datetime
+import argparse
 import logging
 import os
+import pprint
 
 from packaging.version import Version
 
@@ -15,32 +16,32 @@ logger = configure_logger(logging.getLogger(__name__))
 
 def main() -> None:
     """Pushes a git tag to Github"""
+    args = _parse_args()
     version = tubthumper.__version__
-    if not _should_tag(version):
-        logger.info(f"Not tagging {version} since it is not a final or prerelease")
-        return
-
     logger.info(f"Publishing tag {version} to Github")
 
-    auth = ("token", os.environ["GITHUB_TOKEN"])
-    payload = {
-        "tag_name": version,
-        "name": version,
-        "body": _get_changes(version),
-        "prerelease": _is_prerelease(version),
-    }
-    request_with_retry(
-        "POST",
-        "https://api.github.com/repos/matteosox/tubthumper/releases",
-        headers={"accept": "application/vnd.github.v3+json"},
-        auth=auth,
-        json=payload,
+    prerelease = _is_prerelease(version)
+    if prerelease:
+        logger.info("This is a prerelease")
+
+    draft = args.draft
+    if draft:
+        logger.info("This is a draft release")
+
+    changes = _get_changes(version)
+    logger.info(f"Changes:\n{changes}")
+
+    _publish_tag(version, changes, prerelease, draft)
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Command line utility for tagging on Github"
     )
-
-
-def _should_tag(version_str: str) -> bool:
-    version = Version(version_str)
-    return not (version.is_devrelease or version.is_postrelease)
+    parser.add_argument(
+        "-d", "--draft", action="store_true", help="Publish a draft release"
+    )
+    return parser.parse_args()
 
 
 def _is_prerelease(version: str) -> bool:
@@ -48,14 +49,9 @@ def _is_prerelease(version: str) -> bool:
 
 
 def _get_changes(version: str) -> str:
-    search_pattern = f"## {version}"
-    if _is_prerelease(version):
-        search_pattern = "## Unreleased"
-
-    date = datetime.datetime.now().date()
-    changes_lines = [f"## {version} ({date})"]
-
-    with open("docs/source/CHANGELOG.md", encoding="utf-8") as file_obj:
+    search_pattern = "## Unreleased" if _is_prerelease(version) else f"## {version}"
+    changes_lines = []
+    with open("CHANGELOG.md", encoding="utf-8") as file_obj:
         for line in file_obj:
             if line.startswith(search_pattern):
                 break
@@ -68,6 +64,25 @@ def _get_changes(version: str) -> str:
             changes_lines.append(line)
 
     return "".join(changes_lines)
+
+
+def _publish_tag(version: str, changes: str, prerelease: bool, draft: bool) -> None:
+    payload = {
+        "tag_name": version,
+        "name": version,
+        "body": changes,
+        "prerelease": prerelease,
+        "draft": draft,
+    }
+    auth = ("token", os.environ["GITHUB_TOKEN"])
+    response = request_with_retry(
+        "POST",
+        "https://api.github.com/repos/matteosox/tubthumper/releases",
+        headers={"accept": "application/vnd.github.v3+json"},
+        auth=auth,
+        json=payload,
+    )
+    logger.info(f"Github Response:\n{pprint.pformat(response.json())}")
 
 
 if __name__ == "__main__":

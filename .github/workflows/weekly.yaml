@@ -15,10 +15,10 @@ jobs:
           fetch-depth: 0
 
       - name: Build from scratch
-        run: cicd/setup.sh --from-scratch
+        run: docker/build.sh --from-scratch
 
       - name: Test
-        run: cicd/test.sh --all
+        run: cicd/test.sh
 
       - name: Set GIT_SHA
         env:
@@ -33,7 +33,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: "reports_${{ env.GIT_SHA }}"
-          path: reports
+          path: |
+            docs/source/_static/pylint.txt
+            docs/source/_static/mypy
+            docs/source/_static/coverage
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1

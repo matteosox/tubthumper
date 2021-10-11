@@ -4,32 +4,6 @@ source "$DIR"/../docker/strict_mode.sh
 
 echo "Running tests"
 
-UNIT_TESTS_CMD=("test/unit_tests.sh")
-
-usage()
-{
-    echo "usage: cicd/test.sh [--all -a]"
-}
-
-while [[ "$#" -gt 0 ]]; do
-    case "$1" in
-        -a | --all )
-            UNIT_TESTS_CMD+=("--tox")
-            echo "Running full test suite"
-            shift 1
-            ;;
-        -h | --help )
-            usage
-            exit 0
-            ;;
-        * )
-            echo "Invalid inputs, see below"
-            usage
-            exit 2
-            ;;
-    esac
-done
-
 NC='\033[0m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -40,14 +14,13 @@ RUNNING="${RED}RUNNING${LIGHT_CYAN}"
 FAILED="${RED}FAILED${LIGHT_CYAN}"
 SUCCESS="${GREEN}SUCCESS${LIGHT_CYAN}"
 
-VERSION_STATUS="$NOT_STARTED"
 REQUIREMENTS_STATUS="$NOT_STARTED"
 BLACK_STATUS="$NOT_STARTED"
 ISORT_STATUS="$NOT_STARTED"
 PYLINT_STATUS="$NOT_STARTED"
 SHELLCHECK_STATUS="$NOT_STARTED"
 MYPY_STATUS="$NOT_STARTED"
-UNIT_TESTS_STATUS="$NOT_STARTED"
+TOX_STATUS="$NOT_STARTED"
 PACKAGING_STATUS="$NOT_STARTED"
 DOCS_STATUS="$NOT_STARTED"
 EXIT_CODE=0
@@ -62,14 +35,13 @@ report_status() {
     echo -e "${LIGHT_CYAN}
 Test Summary: $TEST_STATUS
 =====================
-  - Version: $VERSION_STATUS
   - Requirements: $REQUIREMENTS_STATUS
   - Black: $BLACK_STATUS
   - isort: $ISORT_STATUS
   - Pylint: $PYLINT_STATUS
   - ShellCheck: $SHELLCHECK_STATUS
   - Mypy: $MYPY_STATUS
-  - Unit Tests: $UNIT_TESTS_STATUS
+  - Tox: $TOX_STATUS
   - Packaging Tests: $PACKAGING_STATUS
   - Docs Tests: $DOCS_STATUS
 ${NC}"
@@ -78,20 +50,6 @@ trap report_status EXIT
 
 
 echo -e "${LIGHT_CYAN}
-Running version check
-=====================
-${NC}"
-VERSION_STATUS="$RUNNING"
-if test/version.sh; then
-    VERSION_STATUS="$SUCCESS"
-else
-    EXIT_CODE=1
-    VERSION_STATUS="$FAILED"
-fi
-echo -e "${LIGHT_CYAN}
-Version check completed w/ status: $VERSION_STATUS
-
-
 Running requirements check
 ==========================
 ${NC}"
@@ -176,18 +134,18 @@ echo -e "${LIGHT_CYAN}
 Mypy completed w/ status: $MYPY_STATUS
 
 
-Running unit tests
-==================
+Running unit tests with tox
+===========================
 ${NC}"
-UNIT_TESTS_STATUS="$RUNNING"
-if "${UNIT_TESTS_CMD[@]}"; then
-    UNIT_TESTS_STATUS="$SUCCESS"
+TOX_STATUS="$RUNNING"
+if test/tox.sh; then
+    TOX_STATUS="$SUCCESS"
 else
     EXIT_CODE=1
-    UNIT_TESTS_STATUS="$FAILED"
+    TOX_STATUS="$FAILED"
 fi
 echo -e "${LIGHT_CYAN}
-Unit tests completed w/ status: $UNIT_TESTS_STATUS
+Tox completed w/ status: $TOX_STATUS
 
 
 Running packaging tests

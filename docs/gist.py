@@ -53,7 +53,9 @@ def _dir_path() -> str:
 
 def _get_mypy_score() -> float:
     summary_line = '<th class="summary summary-filename">Total</th>'
-    report_path = os.path.join(_dir_path(), "..", "reports", "mypy", "index.html")
+    report_path = os.path.join(
+        _dir_path(), "..", "docs", "source", "_static", "mypy", "index.html"
+    )
     with open(report_path, encoding="utf-8") as report_file:
         while not (line := report_file.readline()).startswith(summary_line):
             pass
@@ -65,7 +67,9 @@ def _get_mypy_score() -> float:
 
 
 def _get_pylint_score() -> float:
-    report_path = os.path.join(_dir_path(), "..", "reports", "pylint.txt")
+    report_path = os.path.join(
+        _dir_path(), "..", "docs", "source", "_static", "pylint.txt"
+    )
     with open(report_path, encoding="utf-8") as report_file:
         report_lines = report_file.readlines()
     match = re.match(r"Your code has been rated at (\d{2}\.\d{2})/10", report_lines[-2])
