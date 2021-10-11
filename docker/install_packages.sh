@@ -4,7 +4,7 @@ IFS=$'\n\t'
 
 echo "Installing apt packages"
 
-# Ubuntu image is configured to delete cached files. 
+# Ubuntu image is configured to delete cached files.
 # We're using a cache mount, so we remove that config.
 rm --force /etc/apt/apt.conf.d/docker-clean
 echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache

@@ -15,13 +15,13 @@ Running the test suite generates three test reports which are incorporated into 
 
 ### Version Check
 
-_TL;DR: Run `test/version.sh to confirm version is valid._
+_TL;DR: Run `test/version.sh` to confirm version is valid._
 
 The `test/version.sh` shell script checks the current version, ensuring that it isn't identical to any versions from the `main` branch's history. When starting a new feature branch, you'll want to increment the version, likely by incrementing the `.devN` number, in order to pass this test.
 
 ### Requirements Check
 
-_TL;DR: Run `test/requirements.sh to confirm requirements are up-to-date._
+_TL;DR: Run `test/requirements.sh` to confirm requirements are up-to-date._
 
 As described [below](#requirements), we auto-generate the `requirements.txt` file used to pin Python dependencies in the Docker development environment. The `test/requirements.sh` shell script ensures that any changes to the files associated with updating requirements have been propagated to `requirements.txt`.
 
@@ -33,7 +33,7 @@ _TL;DR: Run `test/black.sh` to format your code._
 
 We use [Black](https://black.readthedocs.io/en/stable/index.html) for code formatting. To format your code, run the `test/black.sh` shell script to get all your spaces in a row. Black configuration can be found in the `pyproject.toml` file at the root of the repo.
 
-Black is setup to discover Python files recursively from the root of the repo, ignoring files and directories matching any `.gitignore` files.
+Black is setup to discover Python files recursively from the root of the repo, ignoring files and directories matching any `.gitignore` files. To add more Python files for formatting, edit `test/black.sh`.
 
 ### isort Import Ordering
 
@@ -41,7 +41,15 @@ _TL;DR: Run `test/isort.sh` to order your imports._
 
 For import ordering, we use [isort](https://pycqa.github.io/isort/). To get imports ordered correctly, run the `test/isort.sh` shell script. isort configuration can be found in the `pyproject.toml` file at the root of the repo.
 
-isort is setup to discover Python files recursively from the root of the repo, ignoring files and directories matching any `.gitignore` files.
+isort is setup to discover Python files recursively from the root of the repo, ignoring files and directories matching any `.gitignore` files. To add more Python files for import ordering, edit `test/isort.sh`.
+
+### shfmt Shell Script Formatting
+
+_TL;DR: Run `test/shfmt.sh -w` to format your shell scripts._
+
+We use [shfmt](https://github.com/mvdan/sh) for shell script formatting. To format your shell scripts, run the `test/shfmt.sh -w` shell script to get all your spaces in a row. shfmt configuration can be found in the `.editorconfig` file at the root of the repo.
+
+shfmt is setup to discover all shell script files recursively from the root of the repo. To add more shell scripts for formatting, edit `test/shfmt.sh`.
 
 ### Pylint Code Linting
 

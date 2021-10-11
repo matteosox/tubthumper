@@ -5,8 +5,7 @@ source "$DIR/../docker/strict_mode.sh"
 # Inner shell script for publishing `tubthumper`
 # to a Python Package Index
 
-usage()
-{
+usage() {
     echo "usage: publish/package.sh REPOSITORY"
 }
 

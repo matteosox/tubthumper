@@ -18,6 +18,7 @@ VERSION_STATUS="$NOT_STARTED"
 REQUIREMENTS_STATUS="$NOT_STARTED"
 BLACK_STATUS="$NOT_STARTED"
 ISORT_STATUS="$NOT_STARTED"
+SHFMT_STATUS="$NOT_STARTED"
 PYLINT_STATUS="$NOT_STARTED"
 SHELLCHECK_STATUS="$NOT_STARTED"
 MYPY_STATUS="$NOT_STARTED"
@@ -40,6 +41,7 @@ Test Summary: $TEST_STATUS
   - Requirements: $REQUIREMENTS_STATUS
   - Black: $BLACK_STATUS
   - isort: $ISORT_STATUS
+  - shfmt: $SHFMT_STATUS
   - Pylint: $PYLINT_STATUS
   - ShellCheck: $SHELLCHECK_STATUS
   - Mypy: $MYPY_STATUS
@@ -49,7 +51,6 @@ Test Summary: $TEST_STATUS
 ${NC}"
 }
 trap report_status EXIT
-
 
 echo -e "${LIGHT_CYAN}
 Running version check
@@ -106,6 +107,20 @@ else
 fi
 echo -e "${LIGHT_CYAN}
 isort completed w/ status: $ISORT_STATUS
+
+
+Running shfmt
+=============
+${NC}"
+SHFMT_STATUS="$RUNNING"
+if test/shfmt.sh -d; then
+    SHFMT_STATUS="$SUCCESS"
+else
+    EXIT_CODE=1
+    SHFMT_STATUS="$FAILED"
+fi
+echo -e "${LIGHT_CYAN}
+shfmt completed w/ status: $SHFMT_STATUS
 
 
 Running Pylint

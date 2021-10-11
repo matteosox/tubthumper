@@ -6,26 +6,26 @@ source "$DIR"/strict_mode.sh
 
 OPTIONS=("--cache-from" "matteosox/tubthumper-cicd")
 
-usage()
-{
+usage() {
     echo "usage: build_image.sh [--from-scratch -f]"
 }
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        -f | --from-scratch )
+        -f | --from-scratch)
             echo "Building from scratch"
             OPTIONS=("--pull" "--no-cache")
             shift 1
             ;;
-        -h | --help )
+        -h | --help)
             usage
             exit 0
             ;;
-        * )
+        *)
             echo "Invalid inputs, see below"
             usage
             exit 1
+            ;;
     esac
 done
 
@@ -38,5 +38,7 @@ docker build \
     --build-arg BUILDKIT_INLINE_CACHE=1 \
     --file docker/Dockerfile \
     .
+
+docker rm -f "tubthumper-cicd-$GIT_SHA" &> /dev/null || true
 
 echo "$(basename "$0") completed successfully!"

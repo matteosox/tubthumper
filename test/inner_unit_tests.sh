@@ -6,23 +6,22 @@ source "$DIR/../docker/strict_mode.sh"
 
 CMD=("coverage" "run")
 
-usage()
-{
+usage() {
     echo "usage: test/inner_unit_test.sh [--no-coverage -n]"
 }
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        -n | --no-coverage )
+        -n | --no-coverage)
             CMD=("python")
             echo "Running unit tests without coverage tracking"
             shift 1
             ;;
-        -h | --help )
+        -h | --help)
             usage
             exit 0
             ;;
-        * )
+        *)
             echo "Invalid inputs, see below"
             usage
             exit 2

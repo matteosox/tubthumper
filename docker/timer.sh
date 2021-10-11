@@ -9,7 +9,7 @@ start_timer() {
     touch "$TIMER_FILE"
 }
 
-get_timer(){
+get_timer() {
     PIDS=$(ps -A --format pid --no-headers)
     NUM_PIDS=$(echo "$PIDS" | wc -l)
     if [[ "$NUM_PIDS" -gt 3 ]]; then
