@@ -6,7 +6,7 @@
 #
 asynctest==0.13.0
     # via -r requirements/test_requirements.in
-coverage[toml]==6.0.1
+coverage[toml]==6.0.2
     # via -r requirements/test_requirements.in
 mock==4.0.3
     # via -r requirements/test_requirements.in

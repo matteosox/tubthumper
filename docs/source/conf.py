@@ -55,7 +55,7 @@ pygments_dark_style = "monokai"
 # Sphinx warns about all references where the target cannot be found, except
 # those explicitly ignored.
 nitpicky = True
-nitpick_ignore = [("py:class", "tubthumper._types.ReturnType")]
+nitpick_ignore = [("py:class", "tubthumper._types.T")]
 
 
 # -- Extension configuration -------------------------------------------------
@@ -70,6 +70,9 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.linkcode",
+    "sphinx.ext.napoleon",
+    "sphinx_copybutton",
+    "sphinxext.opengraph",
 ]
 
 # Show typehints as content of the function or method The typehints of
@@ -89,19 +92,34 @@ suppress_warnings = ["myst.header"]
 # corresponding to the object referenced.
 linkcode_resolve = linkcode.linkcode_resolve
 
+# sphinxext-opengraph settings
+ogp_site_url = "https://tubthumper.mattefay.com"
+ogp_site_name = f"Tubthumper {tubthumper.__version__}"
+ogp_image = "https://tubthumper.mattefay.com/en/latest/_static/logo.png"
+ogp_image_alt = False
+
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 html_theme = "furo"
-html_title = tubthumper.__version__
+html_theme_options = {
+    "sidebar_hide_name": True,
+}
+
+# Path to the logo placed at the top of the sidebar
 html_logo = "_static/logo.png"
+
+html_title = f"Tubthumper {tubthumper.__version__}"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+# Hide link to each page's source file in the footer.
+html_show_sourcelink = False
 
 
 # -- Read the Docs runs this to grab the reports artifact from Github --------

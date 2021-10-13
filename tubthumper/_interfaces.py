@@ -1,11 +1,11 @@
 """Interfaces for tubthumper package"""
 
 import logging
-from typing import Callable
 
 from tubthumper import _types
 from tubthumper._retry_factory import RetryConfig
 from tubthumper._retry_factory import retry_factory as _retry_factory
+from tubthumper._types import Decorator, RetryCallable, T
 
 __all__ = ["retry", "retry_decorator", "retry_factory"]
 
@@ -20,52 +20,61 @@ LOGGER_DEFAULT = logging.getLogger("tubthumper")
 
 
 def retry(
-    call_able: Callable[..., _types.ReturnType],
+    func: RetryCallable[T],
     *,
-    exceptions: _types.ExceptionsType,
-    args: _types.ArgsType = None,
-    kwargs: _types.KwargsType = None,
-    retry_limit: _types.RetryLimitType = RETRY_LIMIT_DEFAULT,
-    time_limit: _types.TimeLimitType = TIME_LIMIT_DEFAULT,
-    init_backoff: _types.InitBackoffType = INIT_BACKOFF_DEFAULT,
-    exponential: _types.ExponentialType = EXPONENTIAL_DEFAULT,
-    jitter: _types.JitterType = JITTER_DEFAULT,
-    reraise: _types.ReraiseType = RERAISE_DEFAULT,
-    log_level: _types.LogLevelType = LOG_LEVEL_DEFAULT,
-    logger: _types.LoggerType = LOGGER_DEFAULT,
-) -> _types.ReturnType:
-    r"""
-    Call the provided callable with retry logic.
+    exceptions: _types.Exceptions,
+    args: _types.Args = None,
+    kwargs: _types.Kwargs = None,
+    retry_limit: _types.RetryLimit = RETRY_LIMIT_DEFAULT,
+    time_limit: _types.TimeLimit = TIME_LIMIT_DEFAULT,
+    init_backoff: _types.InitBackoff = INIT_BACKOFF_DEFAULT,
+    exponential: _types.Exponential = EXPONENTIAL_DEFAULT,
+    jitter: _types.Jitter = JITTER_DEFAULT,
+    reraise: _types.Reraise = RERAISE_DEFAULT,
+    log_level: _types.LogLevel = LOG_LEVEL_DEFAULT,
+    logger: _types.Logger = LOGGER_DEFAULT,
+) -> T:
+    r"""Call the provided callable with retry logic.
 
-    :param call_able:
-        the callable to be called
-    :param exceptions:
-        the exceptions to be caught for retry
-    :param args:
+    Parameters
+    ----------
+    func
+        callable to be called
+    exceptions
+        exceptions to be caught, resulting in a retry
+    args
         positional arguments for the callable
-    :param kwargs:
+    kwargs
         keyword arguments for the callable
-    :param retry_limit:
-        the number of retries to perform before not catching
-        the given exceptions
-    :param time_limit:
-        the maximum number of seconds after the callable is called
-        for a retry attempt to begin
-    :param init_backoff:
-        the number of seconds to sleep for the first retry
-    :param exponential:
-        time between retries grows by ``exponential ** n``
-    :param jitter:
-        whether or not to "jitter" the exponential backoff randomly
-    :param reraise:
+    retry_limit
+        number of retries to perform before raising an exception,
+        e.g. ``retry_limit=1`` results in at most two calls
+    time_limit
+        duration in seconds after which a retry attempt will
+        be prevented by raising an exception, i.e. not a timeout
+        stopping long running calls, but rather a mechanism to prevent
+        retry attempts after a certain duration
+    init_backoff
+        duration in seconds to sleep before the first retry
+    exponential
+        backoff duration between retries grows by this factor with each retry
+    jitter
+        whether or not to "jitter" the backoff duration randomly
+    reraise
         whether or not to re-raise the caught exception instead of
-        a RetryError when a retry or time limit is reached
-    :param log_level:
-        the level for logging of caught exceptions
-    :param logger:
-        the logger to log caught exceptions with
+        a `RetryError` when a retry or time limit is reached
+    log_level
+        level for logging caught exceptions, defaults to `logging.WARNING`
+    logger
+        logger to log caught exceptions with
 
-    :returns:
+    Raises
+    ------
+    RetryError
+        Raised when a retry or time limit is reached, unless ``reraise=True``
+
+
+    Returns:
         the returned object of the callable
     """
     if args is None:
@@ -83,55 +92,63 @@ def retry(
         log_level=log_level,
         logger=logger,
     )
-    retry_func = _retry_factory(call_able, retry_config)
+    retry_func = _retry_factory(func, retry_config)
     return retry_func(*args, **kwargs)
 
 
 def retry_decorator(
     *,
-    exceptions: _types.ExceptionsType,
-    retry_limit: _types.RetryLimitType = RETRY_LIMIT_DEFAULT,
-    time_limit: _types.TimeLimitType = TIME_LIMIT_DEFAULT,
-    init_backoff: _types.InitBackoffType = INIT_BACKOFF_DEFAULT,
-    exponential: _types.ExponentialType = EXPONENTIAL_DEFAULT,
-    jitter: _types.JitterType = JITTER_DEFAULT,
-    reraise: _types.ReraiseType = RERAISE_DEFAULT,
-    log_level: _types.LogLevelType = LOG_LEVEL_DEFAULT,
-    logger: _types.LoggerType = LOGGER_DEFAULT,
-) -> Callable[[Callable[..., _types.ReturnType]], Callable[..., _types.ReturnType]]:
-    r"""
-    Construct a decorator function for defining a function with built-in retry logic.
+    exceptions: _types.Exceptions,
+    retry_limit: _types.RetryLimit = RETRY_LIMIT_DEFAULT,
+    time_limit: _types.TimeLimit = TIME_LIMIT_DEFAULT,
+    init_backoff: _types.InitBackoff = INIT_BACKOFF_DEFAULT,
+    exponential: _types.Exponential = EXPONENTIAL_DEFAULT,
+    jitter: _types.Jitter = JITTER_DEFAULT,
+    reraise: _types.Reraise = RERAISE_DEFAULT,
+    log_level: _types.LogLevel = LOG_LEVEL_DEFAULT,
+    logger: _types.Logger = LOGGER_DEFAULT,
+) -> Decorator[T]:
+    r"""Construct a decorator function for defining a function with built-in retry logic.
 
-    :param exceptions:
-        the exceptions to be caught for retry
-    :param retry_limit:
-        the number of retries to perform before not catching
-        the given exceptions
-    :param time_limit:
-        the maximum number of seconds after the callable is called
-        for a retry attempt to begin
-    :param init_backoff:
-        the number of seconds to sleep for the first retry
-    :param exponential:
-        time between retries grows by ``exponential ** n``
-    :param jitter:
-        whether or not to "jitter" the exponential backoff randomly
-    :param reraise:
+    Parameters
+    ----------
+    exceptions
+        exceptions to be caught, resulting in a retry
+    retry_limit
+        number of retries to perform before raising an exception,
+        e.g. ``retry_limit=1`` results in at most two calls
+    time_limit
+        duration in seconds after which a retry attempt will
+        be prevented by raising an exception, i.e. not a timeout
+        stopping long running calls, but rather a mechanism to prevent
+        retry attempts after a certain duration
+    init_backoff
+        duration in seconds to sleep before the first retry
+    exponential
+        backoff duration between retries grows by this factor with each retry
+    jitter
+        whether or not to "jitter" the backoff duration randomly
+    reraise
         whether or not to re-raise the caught exception instead of
-        a RetryError when a retry or time limit is reached
-    :param log_level:
-        the level for logging of caught exceptions
-    :param logger:
-        the logger to log caught exceptions with
-    :returns:
+        a `RetryError` when a retry or time limit is reached
+    log_level
+        level for logging caught exceptions, defaults to `logging.WARNING`
+    logger
+        logger to log caught exceptions with
+
+    Raises
+    ------
+    RetryError
+        Raised when a retry or time limit is reached, unless ``reraise=True``
+
+
+    Returns:
         a decorator function that, when used as such,
         returns a function that looks like the callable it
         decorates, but with configured retry logic
     """
 
-    def decorator(
-        call_able: Callable[..., _types.ReturnType],
-    ) -> Callable[..., _types.ReturnType]:
+    def decorator(func: RetryCallable[T]) -> RetryCallable[T]:
         retry_config = RetryConfig(
             exceptions=exceptions,
             retry_limit=retry_limit,
@@ -143,52 +160,62 @@ def retry_decorator(
             log_level=log_level,
             logger=logger,
         )
-        return _retry_factory(call_able, retry_config)
+        return _retry_factory(func, retry_config)
 
     return decorator
 
 
 def retry_factory(
-    call_able: Callable[..., _types.ReturnType],
+    func: RetryCallable[T],
     *,
-    exceptions: _types.ExceptionsType,
-    retry_limit: _types.RetryLimitType = RETRY_LIMIT_DEFAULT,
-    time_limit: _types.TimeLimitType = TIME_LIMIT_DEFAULT,
-    init_backoff: _types.InitBackoffType = INIT_BACKOFF_DEFAULT,
-    exponential: _types.ExponentialType = EXPONENTIAL_DEFAULT,
-    jitter: _types.JitterType = JITTER_DEFAULT,
-    reraise: _types.ReraiseType = RERAISE_DEFAULT,
-    log_level: _types.LogLevelType = LOG_LEVEL_DEFAULT,
-    logger: _types.LoggerType = LOGGER_DEFAULT,
-) -> Callable[..., _types.ReturnType]:
-    r"""
-    Construct a function with built-in retry logic given a callable to retry.
+    exceptions: _types.Exceptions,
+    retry_limit: _types.RetryLimit = RETRY_LIMIT_DEFAULT,
+    time_limit: _types.TimeLimit = TIME_LIMIT_DEFAULT,
+    init_backoff: _types.InitBackoff = INIT_BACKOFF_DEFAULT,
+    exponential: _types.Exponential = EXPONENTIAL_DEFAULT,
+    jitter: _types.Jitter = JITTER_DEFAULT,
+    reraise: _types.Reraise = RERAISE_DEFAULT,
+    log_level: _types.LogLevel = LOG_LEVEL_DEFAULT,
+    logger: _types.Logger = LOGGER_DEFAULT,
+) -> RetryCallable[T]:
+    r"""Construct a function with built-in retry logic given a callable to retry.
 
-    :param call_able:
-        the callable to be called
-    :param exceptions:
-        the exceptions to be caught for retry
-    :param retry_limit:
-        the number of retries to perform before not catching
-        the given exceptions
-    :param time_limit:
-        the maximum number of seconds after the callable is called
-        for a retry attempt to begin
-    :param init_backoff:
-        the number of seconds to sleep for the first retry
-    :param exponential:
-        time between retries grows by ``exponential ** n``
-    :param jitter:
-        whether or not to "jitter" the exponential backoff randomly
-    :param reraise:
+    Parameters
+    ----------
+    func
+        callable to be called
+    exceptions
+        exceptions to be caught, resulting in a retry
+    retry_limit
+        number of retries to perform before raising an exception,
+        e.g. ``retry_limit=1`` results in at most two calls
+    time_limit
+        duration in seconds after which a retry attempt will
+        be prevented by raising an exception, i.e. not a timeout
+        stopping long running calls, but rather a mechanism to prevent
+        retry attempts after a certain duration
+    init_backoff
+        duration in seconds to sleep before the first retry
+    exponential
+        backoff duration between retries grows by this factor with each retry
+    jitter
+        whether or not to "jitter" the backoff duration randomly
+    reraise
         whether or not to re-raise the caught exception instead of
-        a RetryError when a retry or time limit is reached
-    :param log_level:
-        the level for logging of caught exceptions
-    :param logger:
-        the logger to log caught exceptions with
-    :returns:
-        a function that looks like the callable it decorates,
+        a `RetryError` when a retry or time limit is reached
+    log_level
+        level for logging caught exceptions, defaults to `logging.WARNING`
+    logger
+        logger to log caught exceptions with
+
+    Raises
+    ------
+    RetryError
+        Raised when a retry or time limit is reached, unless ``reraise=True``
+
+
+    Returns:
+        a function that looks like the callable provided,
         but with configured retry logic
     """
     retry_config = RetryConfig(
@@ -202,4 +229,4 @@ def retry_factory(
         log_level=log_level,
         logger=logger,
     )
-    return _retry_factory(call_able, retry_config)
+    return _retry_factory(func, retry_config)

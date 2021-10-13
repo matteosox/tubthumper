@@ -6,9 +6,10 @@ import random
 import time
 from dataclasses import dataclass
 from functools import update_wrapper
-from typing import Any, Awaitable, Callable, Union, overload
+from typing import Any, overload
 
-import tubthumper._types as types
+from tubthumper import _types
+from tubthumper._types import AwaitableCallable, RetryCallable, T
 
 __all__ = ["RetryError"]
 
@@ -23,30 +24,30 @@ class RetryError(Exception):
 class RetryConfig:
     """Config class for retry logic"""
 
-    exceptions: types.ExceptionsType
-    retry_limit: types.RetryLimitType
-    time_limit: types.TimeLimitType
-    init_backoff: types.InitBackoffType
-    exponential: types.ExponentialType
-    jitter: types.JitterType
-    reraise: types.ReraiseType
-    log_level: types.LogLevelType
-    logger: types.LoggerType
+    exceptions: _types.Exceptions
+    retry_limit: _types.RetryLimit
+    time_limit: _types.TimeLimit
+    init_backoff: _types.InitBackoff
+    exponential: _types.Exponential
+    jitter: _types.Jitter
+    reraise: _types.Reraise
+    log_level: _types.LogLevel
+    logger: _types.Logger
 
 
 @overload
 def retry_factory(
-    func: Callable[..., Awaitable[types.ReturnType]],
+    func: AwaitableCallable[T],
     retry_config: RetryConfig,
-) -> Callable[..., Awaitable[types.ReturnType]]:
+) -> AwaitableCallable[T]:
     ...
 
 
 @overload
 def retry_factory(
-    func: Callable[..., types.ReturnType],
+    func: RetryCallable[T],
     retry_config: RetryConfig,
-) -> Callable[..., types.ReturnType]:
+) -> RetryCallable[T]:
     ...
 
 
@@ -63,30 +64,11 @@ def retry_factory(func, retry_config):  # type: ignore
     return retry_func
 
 
-def _sync_retry_factory(
-    func: Callable[..., types.ReturnType],
-    retry_config: RetryConfig,
-) -> Callable[..., types.ReturnType]:
-    def retry_func(*args: Any, **kwargs: Any) -> types.ReturnType:
-        retry_timeout = _get_timeout(retry_config.time_limit)
-        for retry_count in itertools.count():
-            try:
-                return func(*args, **kwargs)
-            except retry_config.exceptions as exc:
-                backoff = _process_exception(
-                    retry_config, exc, retry_count, retry_timeout
-                )
-            time.sleep(backoff)
-        raise COUNTER_EXCEPTION
-
-    return retry_func
-
-
 def _async_retry_factory(
-    func: Callable[..., Awaitable[types.ReturnType]],
+    func: AwaitableCallable[T],
     retry_config: RetryConfig,
-) -> Callable[..., Awaitable[types.ReturnType]]:
-    async def retry_func(*args: Any, **kwargs: Any) -> types.ReturnType:
+) -> AwaitableCallable[T]:
+    async def retry_func(*args: Any, **kwargs: Any) -> T:
         retry_timeout = _get_timeout(retry_config.time_limit)
         for retry_count in itertools.count():
             try:
@@ -101,9 +83,28 @@ def _async_retry_factory(
     return retry_func
 
 
+def _sync_retry_factory(
+    func: RetryCallable[T],
+    retry_config: RetryConfig,
+) -> RetryCallable[T]:
+    def retry_func(*args: Any, **kwargs: Any) -> T:
+        retry_timeout = _get_timeout(retry_config.time_limit)
+        for retry_count in itertools.count():
+            try:
+                return func(*args, **kwargs)
+            except retry_config.exceptions as exc:
+                backoff = _process_exception(
+                    retry_config, exc, retry_count, retry_timeout
+                )
+            time.sleep(backoff)
+        raise COUNTER_EXCEPTION
+
+    return retry_func
+
+
 def _process_exception(
     retry_config: RetryConfig, exc: Exception, retry_count: int, retry_timeout: float
-) -> Union[int, float]:
+) -> float:
     if retry_count >= retry_config.retry_limit:
         if retry_config.reraise:
             raise exc
@@ -124,5 +125,5 @@ def _process_exception(
     return backoff
 
 
-def _get_timeout(time_limit: types.TimeLimitType) -> float:
+def _get_timeout(time_limit: _types.TimeLimit) -> float:
     return time.perf_counter() + time_limit

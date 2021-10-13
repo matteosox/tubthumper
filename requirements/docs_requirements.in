@@ -3,4 +3,6 @@ myst-parser
 packaging
 requests
 sphinx
+sphinx-copybutton
 sphinx-notfound-page
+sphinxext-opengraph
