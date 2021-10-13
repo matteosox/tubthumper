@@ -11,7 +11,6 @@ Summary
    retry
    retry_decorator
    retry_factory
-   LoggerType
    RetryError
 
 Interfaces
@@ -23,10 +22,10 @@ Interfaces
 
 .. autofunction:: retry_factory
 
+.. autoexception:: RetryError
+
 Odds & Ends
 -----------
 
-.. autoclass:: LoggerType
-   :members:
-
-.. autoexception:: RetryError
+.. autoclass:: tubthumper._types.Logger
+    :members:
