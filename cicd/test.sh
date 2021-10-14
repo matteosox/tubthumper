@@ -197,7 +197,7 @@ Running documentation tests
 ===========================
 ${NC}"
 DOCS_STATUS="$RUNNING"
-if docs/build.sh; then
+if test/docs.sh; then
     DOCS_STATUS="$SUCCESS"
 else
     EXIT_CODE=1

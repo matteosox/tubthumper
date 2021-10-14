@@ -28,6 +28,6 @@ fi
 
 echo "Building docs"
 docker/exec.sh \
-    sphinx-build -W -b html docs/source/ docs/build/html
+    sphinx-build -T -W -b html docs/source/ docs/build/html
 
 echo "$(basename "$0") completed successfully!"
