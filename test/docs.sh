@@ -5,7 +5,9 @@ source "$DIR/../docker/strict_mode.sh"
 echo "Testing documentation"
 
 docs/build.sh
+
+echo "Running doctest"
 docker/exec.sh \
     sphinx-build -T -W -b doctest docs/source/ docs/build/html
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

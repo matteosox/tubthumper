@@ -29,4 +29,4 @@ for PREV_REF in $PREV_REFS; do
     fi
 done
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

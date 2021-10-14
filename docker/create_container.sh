@@ -24,4 +24,4 @@ docker run \
     --volume /root/tubthumper/tubthumper.egg-info \
     "$IMAGE_REF"
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

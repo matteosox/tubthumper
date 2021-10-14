@@ -109,7 +109,9 @@ We use [`build`](https://pypa-build.readthedocs.io/en/latest/) to build source d
 
 ### Documentation Tests
 
-See [below](#documentation) for more info on the documentation build process. The test script simply builds the docs, which are configured to error out if any warnings are found.
+_TL;DR: Run `test/docs.sh` to test the documentation._
+
+See [below](#documentation) for more info on the documentation build process. In addition to building the documentation, the `test/docs.sh` shell script uses Sphinx's [`doctest`](https://www.sphinx-doc.org/en/master/usage/extensions/doctest.html) builder to ensure the documented output of usage examples is accurate.
 
 ## Documentation
 
@@ -125,9 +127,13 @@ Sphinx is setup to generate pages based on what it finds in the `toctree` direct
 
 The "API Reference" page is mostly auto-generated using the [`autodoc`](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html), [`autosummary`](https://www.sphinx-doc.org/en/master/usage/extensions/autosummary.html), [`intersphinx`](https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html), and [`linkcode`](https://www.sphinx-doc.org/en/master/usage/extensions/viewcode.html) Sphinx extensions. Classes, functions, decorators, and so on need to be added manually to the `docs/source/api.rst` file, but once included, the entries are auto-generated using type annotations and docstrings.
 
+### Docstring Formatting
+
+We use the [`napoleon`](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html) Sphinx extension to enable docstring formats other than Sphinx's default, rather unreadable format. Instead, we use [Google's docstring standard](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). Types and defaults should not be referenced in the docstring, instead included in annotations.
+
 ### Auto-generated Github Links
 
-We use the [`linkcode`](https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html) Sphinx extension to add links to Github on the API Reference page. The code for mapping Python objects to links can be found in the `docs/source/linkcode.py` Python module.
+We use the [`linkcode`](https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html) Sphinx extension to add links to Github on the API Reference page. The code for mapping Python objects to links can be found in the `docs/linkcode.py` Python module.
 
 ### Changelog
 

@@ -41,4 +41,4 @@ docker build \
 
 docker rm -f "tubthumper-cicd-$GIT_SHA" &> /dev/null || true
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

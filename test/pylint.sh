@@ -7,4 +7,4 @@ echo "Running Pylint"
 docker/exec.sh pylint tubthumper test/unit_tests \
     ./*.py docs/**/*.py publish/*.py
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

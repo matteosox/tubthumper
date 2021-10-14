@@ -36,43 +36,40 @@ def retry(
 ) -> T:
     r"""Call the provided callable with retry logic.
 
-    Parameters
-    ----------
-    func
-        callable to be called
-    exceptions
-        exceptions to be caught, resulting in a retry
-    args
-        positional arguments for the callable
-    kwargs
-        keyword arguments for the callable
-    retry_limit
-        number of retries to perform before raising an exception,
-        e.g. ``retry_limit=1`` results in at most two calls
-    time_limit
-        duration in seconds after which a retry attempt will
-        be prevented by raising an exception, i.e. not a timeout
-        stopping long running calls, but rather a mechanism to prevent
-        retry attempts after a certain duration
-    init_backoff
-        duration in seconds to sleep before the first retry
-    exponential
-        backoff duration between retries grows by this factor with each retry
-    jitter
-        whether or not to "jitter" the backoff duration randomly
-    reraise
-        whether or not to re-raise the caught exception instead of
-        a `RetryError` when a retry or time limit is reached
-    log_level
-        level for logging caught exceptions, defaults to `logging.WARNING`
-    logger
-        logger to log caught exceptions with
+    Args:
+        func:
+            callable to be called
+        exceptions:
+            exceptions to be caught, resulting in a retry
+        args:
+            positional arguments for the callable
+        kwargs:
+            keyword arguments for the callable
+        retry_limit:
+            number of retries to perform before raising an exception,
+            e.g. ``retry_limit=1`` results in at most two calls
+        time_limit:
+            duration in seconds after which a retry attempt will
+            be prevented by raising an exception, i.e. not a timeout
+            stopping long running calls, but rather a mechanism to prevent
+            retry attempts after a certain duration
+        init_backoff:
+            duration in seconds to sleep before the first retry
+        exponential:
+            backoff duration between retries grows by this factor with each retry
+        jitter:
+            whether or not to "jitter" the backoff duration randomly
+        reraise:
+            whether or not to re-raise the caught exception instead of
+            a `RetryError` when a retry or time limit is reached
+        log_level:
+            level for logging caught exceptions, defaults to `logging.WARNING`
+        logger:
+            logger to log caught exceptions with
 
-    Raises
-    ------
-    RetryError
-        Raised when a retry or time limit is reached, unless ``reraise=True``
-
+    Raises:
+        RetryError:
+            Raised when a retry or time limit is reached, unless ``reraise=True``
 
     Returns:
         the returned object of the callable
@@ -110,37 +107,34 @@ def retry_decorator(
 ) -> Decorator[T]:
     r"""Construct a decorator function for defining a function with built-in retry logic.
 
-    Parameters
-    ----------
-    exceptions
-        exceptions to be caught, resulting in a retry
-    retry_limit
-        number of retries to perform before raising an exception,
-        e.g. ``retry_limit=1`` results in at most two calls
-    time_limit
-        duration in seconds after which a retry attempt will
-        be prevented by raising an exception, i.e. not a timeout
-        stopping long running calls, but rather a mechanism to prevent
-        retry attempts after a certain duration
-    init_backoff
-        duration in seconds to sleep before the first retry
-    exponential
-        backoff duration between retries grows by this factor with each retry
-    jitter
-        whether or not to "jitter" the backoff duration randomly
-    reraise
-        whether or not to re-raise the caught exception instead of
-        a `RetryError` when a retry or time limit is reached
-    log_level
-        level for logging caught exceptions, defaults to `logging.WARNING`
-    logger
-        logger to log caught exceptions with
+    Args:
+        exceptions:
+            exceptions to be caught, resulting in a retry
+        retry_limit:
+            number of retries to perform before raising an exception,
+            e.g. ``retry_limit=1`` results in at most two calls
+        time_limit:
+            duration in seconds after which a retry attempt will
+            be prevented by raising an exception, i.e. not a timeout
+            stopping long running calls, but rather a mechanism to prevent
+            retry attempts after a certain duration
+        init_backoff:
+            duration in seconds to sleep before the first retry
+        exponential:
+            backoff duration between retries grows by this factor with each retry
+        jitter:
+            whether or not to "jitter" the backoff duration randomly
+        reraise:
+            whether or not to re-raise the caught exception instead of
+            a `RetryError` when a retry or time limit is reached
+        log_level:
+            level for logging caught exceptions, defaults to `logging.WARNING`
+        logger:
+            logger to log caught exceptions with
 
-    Raises
-    ------
-    RetryError
-        Raised when a retry or time limit is reached, unless ``reraise=True``
-
+    Raises:
+        RetryError:
+            Raised when a retry or time limit is reached, unless ``reraise=True``
 
     Returns:
         a decorator function that, when used as such,
@@ -180,39 +174,36 @@ def retry_factory(
 ) -> RetryCallable[T]:
     r"""Construct a function with built-in retry logic given a callable to retry.
 
-    Parameters
-    ----------
-    func
-        callable to be called
-    exceptions
-        exceptions to be caught, resulting in a retry
-    retry_limit
-        number of retries to perform before raising an exception,
-        e.g. ``retry_limit=1`` results in at most two calls
-    time_limit
-        duration in seconds after which a retry attempt will
-        be prevented by raising an exception, i.e. not a timeout
-        stopping long running calls, but rather a mechanism to prevent
-        retry attempts after a certain duration
-    init_backoff
-        duration in seconds to sleep before the first retry
-    exponential
-        backoff duration between retries grows by this factor with each retry
-    jitter
-        whether or not to "jitter" the backoff duration randomly
-    reraise
-        whether or not to re-raise the caught exception instead of
-        a `RetryError` when a retry or time limit is reached
-    log_level
-        level for logging caught exceptions, defaults to `logging.WARNING`
-    logger
-        logger to log caught exceptions with
+    Args:
+        func:
+            callable to be called
+        exceptions:
+            exceptions to be caught, resulting in a retry
+        retry_limit:
+            number of retries to perform before raising an exception,
+            e.g. ``retry_limit=1`` results in at most two calls
+        time_limit:
+            duration in seconds after which a retry attempt will
+            be prevented by raising an exception, i.e. not a timeout
+            stopping long running calls, but rather a mechanism to prevent
+            retry attempts after a certain duration
+        init_backoff:
+            duration in seconds to sleep before the first retry
+        exponential:
+            backoff duration between retries grows by this factor with each retry
+        jitter:
+            whether or not to "jitter" the backoff duration randomly
+        reraise:
+            whether or not to re-raise the caught exception instead of
+            a `RetryError` when a retry or time limit is reached
+        log_level:
+            level for logging caught exceptions, defaults to `logging.WARNING`
+        logger:
+            logger to log caught exceptions with
 
-    Raises
-    ------
-    RetryError
-        Raised when a retry or time limit is reached, unless ``reraise=True``
-
+    Raises:
+        RetryError:
+            Raised when a retry or time limit is reached, unless ``reraise=True``
 
     Returns:
         a function that looks like the callable provided,

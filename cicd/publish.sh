@@ -26,4 +26,4 @@ export TWINE_USERNAME="__token__"
 docker/exec.sh --env TWINE_USERNAME --env TWINE_PASSWORD \
     publish/package.sh "$REPOSITORY"
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

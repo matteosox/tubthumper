@@ -5,4 +5,4 @@ source "$DIR/../docker/strict_mode.sh"
 echo "Running unit tests"
 docker/exec.sh test/inner_unit_tests.sh --no-coverage
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

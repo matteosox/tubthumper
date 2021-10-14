@@ -9,4 +9,4 @@ if ! docker/exec.sh black "$@" .; then
     exit 1
 fi
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

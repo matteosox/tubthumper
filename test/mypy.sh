@@ -6,4 +6,4 @@ echo "Running Mypy"
 
 docker/exec.sh mypy --package tubthumper
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

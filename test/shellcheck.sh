@@ -6,4 +6,4 @@ echo "Running ShellCheck"
 
 docker/exec.sh test/inner_shellcheck.sh
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

@@ -22,4 +22,4 @@ fi
 docker/exec.sh --env GIST_TOKEN \
     docs/gist.py
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

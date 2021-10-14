@@ -4,7 +4,7 @@ Configuration file for the Sphinx documentation builder.
 For a full list of confiuration options, see the documentation:
 https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name, import-error
 
 import datetime
 import doctest
@@ -21,7 +21,7 @@ def _dir_path() -> str:
 
 
 # Setup sys.path so we can import other modules
-sys.path.append(os.path.join(_dir_path()))
+sys.path.append(os.path.join(_dir_path(), ".."))
 sys.path.append(os.path.join(_dir_path(), "..", ".."))
 
 import linkcode
@@ -86,65 +86,6 @@ autodoc_typehints = "description"
 intersphinx_mapping = {
     "https://docs.python.org/3": None,
 }
-
-# Python code that is treated like it were put in a testsetup directive for
-# every file that is tested, and for every group. We do this here so the
-# README.md renders nicely on Github & PyPI.
-doctest_global_setup = """
-import logging
-import random
-import time
-
-import requests
-from requests import ConnectionError
-
-# Make backoff periods consistent
-random.seed(0)
-# Don't actually sleep
-time.sleep = lambda arg: None
-# Spoof main script
-__name__ = "__main__"
-# Set logger's handler to print to get doctest to work
-logger = logging.getLogger("tubthumper")
-
-
-class PrintHandler(logging.Handler):
-    def emit(self, record):
-        msg = self.format(record)
-        print(msg)
-
-
-print_handler = PrintHandler()
-formatter = logging.Formatter('%(levelname)s: %(message)s')
-print_handler.setFormatter(formatter)
-logger.addHandler(print_handler)
-
-
-# Mock a response to requests.get that fails every other time
-class Response:
-    def __call__(self, url):
-        self.fail = not getattr(self, "fail", False)
-        if self.fail:
-            raise ConnectionError(url)
-        return self
-
-    def json(self):
-        return {"ip": "8.8.8.8"}
-
-
-requests.get = Response()
-
-
-def get_ip(*args, **kwargs):
-    return requests.get("http://ip.jsontest.com").json()
-
-
-def fails_often(arg=[0]):
-    arg[0] += 1
-    if arg[0] % 3:
-        raise Exception
-
-"""
 
 doctest_default_flags = doctest.DONT_ACCEPT_TRUE_FOR_1 | doctest.ELLIPSIS
 
