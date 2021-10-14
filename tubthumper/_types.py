@@ -40,7 +40,7 @@ Decorator = Callable[[RetryCallable[T]], RetryCallable[T]]
 class Logger(Protocol):
     """
     Generally a `logging.Logger`, but since we want to support
-    `duck typing <https://docs.python.org/3/glossary.html#term-duck-typing>`_,
+    `duck-typing <https://docs.python.org/3/glossary.html#term-duck-typing>`_,
     this is a `typing.Protocol` to enable
     `structural subtyping <https://www.python.org/dev/peps/pep-0544/>`_.
     """
@@ -50,12 +50,11 @@ class Logger(Protocol):
     ) -> Any:
         r"""We call this method to log at the configured level with ``exc_info=True``
 
-        Parameters
-        ----------
-        level
-            the level of the message to be logged
-        msg
-            the message to be logged
-        exc_info
-            causes exception information to be added to the logging message
+        Args:
+            level:
+                the level of the message to be logged
+            msg:
+                the message to be logged
+            exc_info:
+                causes exception information to be added to the logging message
         """

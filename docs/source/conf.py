@@ -4,9 +4,10 @@ Configuration file for the Sphinx documentation builder.
 For a full list of confiuration options, see the documentation:
 https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name, import-error
 
 import datetime
+import doctest
 import os
 import sys
 
@@ -20,7 +21,7 @@ def _dir_path() -> str:
 
 
 # Setup sys.path so we can import other modules
-sys.path.append(os.path.join(_dir_path()))
+sys.path.append(os.path.join(_dir_path(), ".."))
 sys.path.append(os.path.join(_dir_path(), "..", ".."))
 
 import linkcode
@@ -68,6 +69,7 @@ extensions = [
     "notfound.extension",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.linkcode",
     "sphinx.ext.napoleon",
@@ -84,6 +86,8 @@ autodoc_typehints = "description"
 intersphinx_mapping = {
     "https://docs.python.org/3": None,
 }
+
+doctest_default_flags = doctest.DONT_ACCEPT_TRUE_FOR_1 | doctest.ELLIPSIS
 
 # We don't need warnings about non-consecutive header level
 suppress_warnings = ["myst.header"]

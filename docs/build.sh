@@ -26,8 +26,8 @@ if [[ ! -e "$COVERAGE_DIR" ]]; then
     test/tox.sh
 fi
 
-echo "Building docs"
+echo "Building documentation"
 docker/exec.sh \
-    sphinx-build -W -b html docs/source/ docs/build/html
+    sphinx-build -T -W -b html docs/source/ docs/build/html
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

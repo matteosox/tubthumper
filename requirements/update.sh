@@ -6,4 +6,4 @@ echo "Updating requirements"
 
 docker/exec.sh requirements/inner_update.sh
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

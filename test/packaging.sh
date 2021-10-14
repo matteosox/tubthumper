@@ -6,4 +6,4 @@ echo "Testing packaging"
 
 docker/exec.sh test/inner_packaging.sh
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"

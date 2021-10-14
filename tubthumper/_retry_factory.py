@@ -119,7 +119,7 @@ def _process_exception(
     retry_config.logger.log(
         retry_config.log_level,
         f"Function threw exception below on try {retry_count + 1}, "
-        f"retrying in {backoff:.3f} seconds",
+        f"retrying in {backoff:n} seconds",
         exc_info=True,
     )
     return backoff

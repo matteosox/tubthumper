@@ -6,4 +6,4 @@ echo "Running unit tests with tox"
 
 docker/exec.sh test/inner_tox.sh "$@"
 
-echo "$(basename "$0") completed successfully!"
+echo "$0 completed successfully!"
