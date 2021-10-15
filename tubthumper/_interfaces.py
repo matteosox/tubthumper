@@ -36,6 +36,8 @@ def retry(
 ) -> T:
     r"""Call the provided callable with retry logic.
 
+    For usage examples, see `here <index.html#usage>`__.
+
     Args:
         func:
             callable to be called
@@ -107,6 +109,8 @@ def retry_decorator(
 ) -> Decorator[T]:
     r"""Construct a decorator function for defining a function with built-in retry logic.
 
+    For usage examples, see `here <index.html#usage>`__.
+
     Args:
         exceptions:
             exceptions to be caught, resulting in a retry
@@ -173,6 +177,8 @@ def retry_factory(
     logger: _types.Logger = LOGGER_DEFAULT,
 ) -> RetryCallable[T]:
     r"""Construct a function with built-in retry logic given a callable to retry.
+
+    For usage examples, see `here <index.html#usage>`__.
 
     Args:
         func:
