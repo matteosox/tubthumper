@@ -56,9 +56,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 Want to retry web requests selectively, e.g. server-side HTTP errors? Wrap `requests.request` with the `retry_decorator`:
 
 ```python
-@retry_decorator(
-    exceptions=(requests.HTTPError)
-)
+@retry_decorator(exceptions=(requests.HTTPError))
 def request_with_retry(
     method: str, url: str, **kwargs: Any
 ) -> requests.models.Response:

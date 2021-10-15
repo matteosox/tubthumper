@@ -2,3 +2,5 @@ asynctest
 coverage[toml]
 mock
 packaging
+pytest
+pytest-html

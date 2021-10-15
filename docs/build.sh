@@ -6,6 +6,7 @@ source "$DIR/../docker/strict_mode.sh"
 
 PYLINT_FILE=docs/source/_static/pylint.txt
 MYPY_DIR=docs/source/_static/mypy
+PYTEST_FILE=docs/source/_static/pytest.html
 COVERAGE_DIR=docs/source/_static/coverage
 
 if [[ ! -e "$PYLINT_FILE" ]]; then
@@ -18,6 +19,12 @@ if [[ ! -e "$MYPY_DIR" ]]; then
     echo "MyPy directory $MYPY_DIR does not exist"
     echo "Generating it by running test/mypy.sh"
     test/mypy.sh
+fi
+
+if [[ ! -e "$PYTEST_FILE" ]]; then
+    echo "Pytest file $PYTEST_FILE does not exist"
+    echo "Generating it by running test/unit_tests.sh"
+    test/unit_tests.sh
 fi
 
 if [[ ! -e "$COVERAGE_DIR" ]]; then

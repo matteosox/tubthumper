@@ -6,7 +6,6 @@ import logging
 import random
 import unittest
 
-import asynctest
 from mock import AsyncMock, Mock
 
 from tubthumper import RetryError, retry_decorator
@@ -17,7 +16,7 @@ tubthumper_logger = logging.getLogger("tubthumper")
 tubthumper_logger.setLevel(logging.ERROR)  # silence warnings from retries
 
 
-class TestRetryDecoratorAsync(asynctest.TestCase):
+class TestRetryDecoratorAsync(util.IsolatedAsyncioTestCase):
     """Test case for retry decorator with coroutines"""
 
     async def test_coroutine_success(self):
