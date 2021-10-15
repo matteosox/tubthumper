@@ -31,7 +31,7 @@ def get_ip(*args, **kwargs):
 
 ```
 
-```{include} ../../README.md
+```{include} ../build/readme.md
 ```
 
 ```{toctree}
