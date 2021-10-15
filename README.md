@@ -1,5 +1,3 @@
-<center>
-
 # **Tubthumper**: Helping you get up ... again!
 
 [![CI/CD: n/a](https://github.com/matteosox/tubthumper/actions/workflows/cicd.yaml/badge.svg)](https://github.com/matteosox/tubthumper/actions/workflows/cicd.yaml)
@@ -9,8 +7,6 @@
 [![codecov: n/a](https://codecov.io/gh/matteosox/tubthumper/branch/main/graph/badge.svg?token=8VKKDG9SMZ)](https://codecov.io/gh/matteosox/tubthumper)
 [![MyPY: n/a](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fmatteosox%2Fbd79bbd912687bf44fac6b7887d18f14%2Fraw%2Fmypy.json)](https://tubthumper.mattefay.com/en/latest/mypy.html)
 [![Pylint: n/a](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fmatteosox%2Fbd79bbd912687bf44fac6b7887d18f14%2Fraw%2Fpylint.json)](https://tubthumper.mattefay.com/en/latest/pylint.html)
-
-</center>
 
 ----
 
@@ -29,7 +25,7 @@
 
 `tubthumper` is a pip-installable package [hosted on PyPI](https://pypi.org/project/tubthumper/). Getting started is as easy as:
 
-```shell
+```console
 $ pip install tubthumper
 ```
 
@@ -46,6 +42,7 @@ Call a function with retry and jittered exponential backoff:
 WARNING: Function threw exception below on try 1, retrying in 0.844422 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
@@ -54,9 +51,10 @@ Call that same function with positional and keyword arguments:
 >>> retry(get_ip,
 ...     args=(42, "test"), kwargs={"dev": True},
 ...     exceptions=ConnectionError)
-WARNING: Function threw exception below on try 1, retrying in 0.757954 seconds
+WARNING: Function threw exception below on try 1, retrying in 0.420572 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
@@ -66,9 +64,10 @@ Bake retry behavior into your function with a decorator:
 ... def get_ip_retry():
 ...     return requests.get("http://ip.jsontest.com").json()
 >>> get_ip_retry()
-WARNING: Function threw exception below on try 1, retrying in 0.420572 seconds
+WARNING: Function threw exception below on try 1, retrying in 0.511275 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
@@ -76,9 +75,10 @@ Create a new function with retry behavior from an existing one:
 ```{doctest}
 >>> get_ip_retry = retry_factory(get_ip, exceptions=ConnectionError)
 >>> get_ip_retry()
-WARNING: Function threw exception below on try 1, retrying in 0.258917 seconds
+WARNING: Function threw exception below on try 1, retrying in 0.783799 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
@@ -92,14 +92,16 @@ Because overbroad except clauses are [the most diabolical Python antipattern](ht
 
 ```{doctest}
 >>> retry(get_ip, exceptions=ConnectionError)
-WARNING: Function threw exception below on try 1, retrying in 0.511275 seconds
+WARNING: Function threw exception below on try 1, retrying in 0.476597 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 >>> retry(get_ip, exceptions=(KeyError, ConnectionError))
-WARNING: Function threw exception below on try 1, retrying in 0.404934 seconds
+WARNING: Function threw exception below on try 1, retrying in 0.908113 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
@@ -152,6 +154,7 @@ The default backoff timing is to double the waiting period with each retry, star
 WARNING: Function threw exception below on try 1, retrying in 1 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
@@ -162,19 +165,23 @@ You can set the initial backoff period using the `init_backoff` keyword-only arg
 WARNING: Function threw exception below on try 1, retrying in 10 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
 Finally, you can set the factor by which each successive backoff period is scaled using the `exponential` keyword-only argument:
 
 ```{doctest}
->>> retry(fails_often, jitter=False, exponential=3, exceptions=Exception)
+>>> retry(get_ip, jitter=False, exponential=3, exceptions=ConnectionError)
 WARNING: Function threw exception below on try 1, retrying in 1 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 WARNING: Function threw exception below on try 2, retrying in 3 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
+{'ip': '8.8.8.8'}
 ```
 
 ### Logging
@@ -201,15 +208,16 @@ logger.log(log_level, "Function threw...", exc_info=True)
 `tubthumper`'s various interfaces are compatible with methods, including classmethods and staticmethods:
 
 ```{doctest}
->>> class MyClass:
+>>> class Class:
 ...     @retry_decorator(exceptions=ConnectionError)
 ...     def get_ip(self):
 ...         return requests.get("http://ip.jsontest.com").json()
 ...
->>> MyClass().get_ip()
-WARNING: Function threw exception below on try 1, retrying in 0.100701 seconds
+>>> Class().get_ip()
+WARNING: Function threw exception below on try 1, retrying in 0.260492 seconds
 Traceback (most recent call last):
   ...
+requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
@@ -244,7 +252,7 @@ Traceback (most recent call last):
 True
 >>> inspect.isroutine(func)
 True
->>> inspect.ismethod(MyClass().get_ip)
+>>> inspect.ismethod(Class().get_ip)
 True
 ```
 
