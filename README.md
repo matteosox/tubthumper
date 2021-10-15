@@ -32,12 +32,12 @@ $ pip install tubthumper
 ### Usage
 
 Import `tubthumper`'s useful bits:
-```{doctest}
+```python
 >>> from tubthumper import retry, retry_decorator, retry_factory
 ```
 
 Call a function with retry and jittered exponential backoff:
-```{doctest}
+```python
 >>> retry(get_ip, exceptions=ConnectionError)
 WARNING: Function threw exception below on try 1, retrying in 0.844422 seconds
 Traceback (most recent call last):
@@ -47,7 +47,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 ```
 
 Call that same function with positional and keyword arguments:
-```{doctest}
+```python
 >>> retry(get_ip,
 ...     args=(42, "test"), kwargs={"dev": True},
 ...     exceptions=ConnectionError)
@@ -59,7 +59,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 ```
 
 Bake retry behavior into your function with a decorator:
-```{doctest}
+```python
 >>> @retry_decorator(exceptions=ConnectionError)
 ... def get_ip_retry():
 ...     return requests.get("http://ip.jsontest.com").json()
@@ -72,7 +72,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 ```
 
 Create a new function with retry behavior from an existing one:
-```{doctest}
+```python
 >>> get_ip_retry = retry_factory(get_ip, exceptions=ConnectionError)
 >>> get_ip_retry()
 WARNING: Function threw exception below on try 1, retrying in 0.783799 seconds
@@ -90,7 +90,7 @@ While `tubthumper` ships with a set of sensible defaults, its retry behavior is 
 
 Because overbroad except clauses are [the most diabolical Python antipattern](https://realpython.com/the-most-diabolical-python-antipattern/), there is no sensible default for what exception or exceptions to catch and retry. Thus, every `tubthumper` interface has a required `exceptions` keyword-only argument, which takes an exception or tuple of exceptions to catch and retry on, i.e. a sensible lack of a default.
 
-```{doctest}
+```python
 >>> retry(get_ip, exceptions=ConnectionError)
 WARNING: Function threw exception below on try 1, retrying in 0.476597 seconds
 Traceback (most recent call last):
@@ -107,7 +107,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 
 By default, `tubthumper` raises a `tubthumper.RetryError` exception when all retries have been exhausted:
 
-```{doctest}
+```python
 >>> retry(lambda: 1/0, retry_limit=0, exceptions=ZeroDivisionError)
 Traceback (most recent call last):
   ...
@@ -116,7 +116,7 @@ tubthumper._retry_factory.RetryError: Retry limit 0 reached
 
 You can override this behavior using the `reraise` flag to reraise the original exception in place of `RetryError`:
 
-```{doctest}
+```python
 >>> retry(lambda: 1/0, retry_limit=0, reraise=True, exceptions=ZeroDivisionError)
 Traceback (most recent call last):
   ...
@@ -127,7 +127,7 @@ ZeroDivisionError: division by zero
 
 By default, `tubthumper` will retry endlessly, but you have two means of limiting retry behavior. As shown previously, to limit the number of retries attempted, use the `retry_limit` keyword-only argument:
 
-```{doctest}
+```python
 >>> retry(lambda: 1/0, retry_limit=10, exceptions=ZeroDivisionError)
 ...  # Warning logs for each failed call
 Traceback (most recent call last):
@@ -137,7 +137,7 @@ tubthumper._retry_factory.RetryError: Retry limit 10 reached
 
 Alternatively, you can use the `time_limit` keyword-only argument (int or float) to set a time limit for the maximum number of seconds after the function is initially called for a retry attempt to begin:
 
-```{doctest}
+```python
 >>> retry(lambda: 1/0, time_limit=60, exceptions=ZeroDivisionError)
 ...  # Warning logs for each failed call
 Traceback (most recent call last):
@@ -149,7 +149,7 @@ tubthumper._retry_factory.RetryError: Time limit 60 exceeded
 
 The default backoff timing is to double the waiting period with each retry, starting off at one second, with each backoff period jittered, i.e. scaled by a uniformly distributed random number on the [0.0, 1.0) interval. You can disable jittering using the `jitter` keyword-only argument:
 
-```{doctest}
+```python
 >>> retry(get_ip, jitter=False, exceptions=ConnectionError)
 WARNING: Function threw exception below on try 1, retrying in 1 seconds
 Traceback (most recent call last):
@@ -160,7 +160,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 
 You can set the initial backoff period using the `init_backoff` keyword-only argument:
 
-```{doctest}
+```python
 >>> retry(get_ip, jitter=False, init_backoff=10, exceptions=ConnectionError)
 WARNING: Function threw exception below on try 1, retrying in 10 seconds
 Traceback (most recent call last):
@@ -171,7 +171,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 
 Finally, you can set the factor by which each successive backoff period is scaled using the `exponential` keyword-only argument:
 
-```{doctest}
+```python
 >>> retry(get_ip, jitter=False, exponential=3, exceptions=ConnectionError)
 WARNING: Function threw exception below on try 1, retrying in 1 seconds
 Traceback (most recent call last):
@@ -190,7 +190,7 @@ By default, `tubthumper` logs each caught exception at the `logging.WARNING` lev
 
 You can set the logging level using the `log_level` keyword-only argument:
 
-```{doctest}
+```python
 >>> retry(get_ip, log_level=logging.DEBUG, exceptions=ConnectionError) # No warnings
 {'ip': '8.8.8.8'}
 ```
@@ -207,7 +207,7 @@ logger.log(log_level, "Function threw...", exc_info=True)
 
 `tubthumper`'s various interfaces are compatible with methods, including classmethods and staticmethods:
 
-```{doctest}
+```python
 >>> class Class:
 ...     @retry_decorator(exceptions=ConnectionError)
 ...     def get_ip(self):
@@ -225,7 +225,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 
 `tubthumper`'s various interfaces preserve the relevant [dunder](https://wiki.python.org/moin/DunderAlias) attributes of your function:
 
-```{doctest}
+```python
 >>> @retry_decorator(exceptions=ConnectionError)
 ... def func(one: bool, two: float = 3.0) -> complex:
 ...     """This is a docstring"""
@@ -244,7 +244,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 
 `tubthumper` also preserves the inspect module's function signature, and `is*` functions:
 
-```{doctest}
+```python
 >>> import inspect
 >>> inspect.signature(func)
 <Signature (one: bool, two: float = 3.0) -> complex>
@@ -260,7 +260,7 @@ True
 
 `tubthumper`'s various interfaces support coroutine functions, including [generator-based coroutines](https://docs.python.org/3/library/asyncio-task.html#generator-based-coroutines), awaiting them while using `async.sleep` between awaits:
 
-```{doctest}
+```python
 >>> @retry_decorator(exceptions=ConnectionError)
 ... async def get_ip():
 ...     return requests.get("http://ip.jsontest.com").json()

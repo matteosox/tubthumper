@@ -157,6 +157,29 @@ html_static_path = ["_static"]
 html_show_sourcelink = False
 
 
+# -- Build the readme --------------------------------------------------------
+
+
+def build_readme():
+    """Copy README.md over, in the process adding doctests"""
+    with open(
+        os.path.join(_dir_path(), "..", "..", "README.md"), encoding="utf-8"
+    ) as source:
+        readme = source.read()
+
+    dest_dir = os.path.join(_dir_path(), "..", "build")
+    try:
+        os.mkdir(dest_dir)
+    except FileExistsError:
+        pass
+
+    with open(os.path.join(dest_dir, "readme.md"), "w", encoding="utf-8") as dest:
+        dest.write(readme.replace("```python\n>>> ", "```{doctest}\n>>> "))
+
+
+build_readme()
+
+
 # -- Read the Docs runs this to grab the reports artifact from Github --------
 
 if os.environ.get("READTHEDOCS") == "True":
