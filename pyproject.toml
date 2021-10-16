@@ -35,6 +35,11 @@ warn_return_any = true
 no_implicit_reexport = true
 strict_equality = true
 
+[tool.pytest.ini_options]
+cache_dir = "~/.cache/pytest"
+addopts = "-ra --verbose --color=yes"
+testpaths = ["test/unit_tests"]
+
 [tool.coverage.run]
 branch = true
 parallel = true
@@ -63,8 +68,7 @@ toxworkdir = {homedir}/.cache/tox
 [testenv]
 deps = -r{toxinidir}/requirements/test_requirements.txt
 setenv = PYTHONHASHSEED = 0
-allowlist_externals = bash
-commands = bash {toxinidir}/test/inner_unit_tests.sh {posargs}
+commands = coverage run -m pytest {posargs}
 
 [testenv:coverage-report]
 deps = coverage[toml]

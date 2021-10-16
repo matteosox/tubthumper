@@ -22,6 +22,7 @@ SHFMT_STATUS="$NOT_STARTED"
 PYLINT_STATUS="$NOT_STARTED"
 SHELLCHECK_STATUS="$NOT_STARTED"
 MYPY_STATUS="$NOT_STARTED"
+UNIT_TESTS_STATUS="$NOT_STARTED"
 TOX_STATUS="$NOT_STARTED"
 PACKAGING_STATUS="$NOT_STARTED"
 DOCS_STATUS="$NOT_STARTED"
@@ -45,6 +46,7 @@ Test Summary: $TEST_STATUS
   - Pylint: $PYLINT_STATUS
   - ShellCheck: $SHELLCHECK_STATUS
   - Mypy: $MYPY_STATUS
+  - Unit Tests: $UNIT_TESTS_STATUS
   - Tox: $TOX_STATUS
   - Packaging Tests: $PACKAGING_STATUS
   - Docs Tests: $DOCS_STATUS
@@ -165,8 +167,22 @@ echo -e "${LIGHT_CYAN}
 Mypy completed w/ status: $MYPY_STATUS
 
 
-Running unit tests with tox
-===========================
+Running unit tests
+==================
+${NC}"
+UNIT_TESTS_STATUS="$RUNNING"
+if test/unit_tests.sh; then
+    UNIT_TESTS_STATUS="$SUCCESS"
+else
+    EXIT_CODE=1
+    UNIT_TESTS_STATUS="$FAILED"
+fi
+echo -e "${LIGHT_CYAN}
+Unit tests completed w/ status: $UNIT_TESTS_STATUS
+
+
+Running tox
+===========
 ${NC}"
 TOX_STATUS="$RUNNING"
 if test/tox.sh; then

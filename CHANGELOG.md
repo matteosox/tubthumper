@@ -10,7 +10,6 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Ch
 - `retry_decorator` function
 - `retry_factory` function
 - `RetryError` exception
-- `LoggerType` type
 
 ### Changed
 

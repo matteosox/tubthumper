@@ -5,7 +5,6 @@ import logging
 import random
 import unittest
 
-import asynctest
 from mock import AsyncMock, Mock
 
 from tubthumper import RetryError, retry
@@ -16,7 +15,7 @@ tubthumper_logger = logging.getLogger("tubthumper")
 tubthumper_logger.setLevel(logging.ERROR)  # silence warnings from retries
 
 
-class TestRetryAsync(asynctest.TestCase):
+class TestRetryAsync(util.IsolatedAsyncioTestCase):
     """Test case for retry function with coroutines"""
 
     async def test_coroutine_success(self):

@@ -86,10 +86,7 @@ def _download_artfact(artifact_id: int) -> None:
         timeout=10,
     )
     response.raise_for_status()
-    destination = os.path.join(_dir_path(), "source", "_static")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    destination = os.path.join(dir_path, "source", "_static")
     with zipfile.ZipFile(io.BytesIO(response.content)) as myzip:
         myzip.extractall(path=destination)
-
-
-def _dir_path() -> str:
-    return os.path.dirname(os.path.realpath(__file__))

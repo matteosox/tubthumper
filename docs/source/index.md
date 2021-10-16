@@ -1,37 +1,43 @@
 ```{testsetup}
+import logging
+
 import requests
 from requests import ConnectionError
 
-# Spoof main script
-__name__ = "__main__"
+from docs.test import setup
 
-URL = "http://ip.jsontest.com"
-JSON = {"ip": "8.8.8.8"}
+setup()
 
-# Mock a response to requests.get
+
 class Response:
+    """Mock a response to requests.get that succeeds every 3rd time"""
+
     def __init__(self):
         self.counter = 0
 
     def __call__(self, url):
         self.counter += 1
         if self.counter % 3:
-            raise ConnectionError(URL)
+            raise ConnectionError(url)
         return self
 
-    def json(self):
-        return JSON
-
+    @staticmethod
+    def json():
+        """Spoofed json method of response"""
+        return {"ip": "8.8.8.8"}
 
 requests.get = Response()
 
+def get_ip(*_args, **_kwargs):
+    """Example function that needs retrying"""
+    return requests.get("http://ip.jsontest.com").json()
 
-def get_ip(*args, **kwargs):
-    return requests.get(URL).json()
+# Spoof main script
+__name__ = "__main__"
 
 ```
 
-```{include} ../build/readme.md
+```{include} ../build/README.md
 ```
 
 ```{toctree}

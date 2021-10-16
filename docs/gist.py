@@ -47,14 +47,14 @@ def main() -> None:
     logger.info(f"Github Response:\n{pprint.pformat(response.json())}")
 
 
-def _dir_path() -> str:
-    return os.path.dirname(os.path.realpath(__file__))
+def _repo_root() -> str:
+    return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 
 def _get_mypy_score() -> float:
     summary_line = '<th class="summary summary-filename">Total</th>'
     report_path = os.path.join(
-        _dir_path(), "..", "docs", "source", "_static", "mypy", "index.html"
+        _repo_root(), "docs", "source", "_static", "mypy", "index.html"
     )
     with open(report_path, encoding="utf-8") as report_file:
         while not (line := report_file.readline()).startswith(summary_line):
@@ -67,9 +67,7 @@ def _get_mypy_score() -> float:
 
 
 def _get_pylint_score() -> float:
-    report_path = os.path.join(
-        _dir_path(), "..", "docs", "source", "_static", "pylint.txt"
-    )
+    report_path = os.path.join(_repo_root(), "docs", "source", "_static", "pylint.txt")
     with open(report_path, encoding="utf-8") as report_file:
         report_lines = report_file.readlines()
     match = re.match(r"Your code has been rated at (\d{2}\.\d{2})/10", report_lines[-2])

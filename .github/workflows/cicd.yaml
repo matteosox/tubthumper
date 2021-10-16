@@ -37,6 +37,7 @@ jobs:
           path: |
             docs/source/_static/pylint.txt
             docs/source/_static/mypy
+            docs/source/_static/pytest.html
             docs/source/_static/coverage
 
       - name: Login to Docker Hub

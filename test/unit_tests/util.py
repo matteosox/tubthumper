@@ -1,9 +1,17 @@
 """Unit tests for the function retry_decorator"""
 
+import sys
 import time
 from types import MethodType
 
 from mock import AsyncMock, Mock
+
+if sys.version_info >= (3, 8):
+    # pylint: disable-next=unused-import
+    from unittest import IsolatedAsyncioTestCase
+else:
+    # pylint: disable-next=unused-import
+    from asynctest import TestCase as IsolatedAsyncioTestCase
 
 # asyncio event loop uses the "monotonic" timer,
 # and we profile it using the "perf_counter" timer

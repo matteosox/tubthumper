@@ -6,5 +6,6 @@
 
 pylint.rst
 mypy.rst
+pytest.rst
 coverage.rst
 ```

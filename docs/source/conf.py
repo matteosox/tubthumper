@@ -4,7 +4,7 @@ Configuration file for the Sphinx documentation builder.
 For a full list of confiuration options, see the documentation:
 https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
-# pylint: disable=invalid-name, import-error
+# pylint: disable=invalid-name
 
 import datetime
 import doctest
@@ -16,16 +16,15 @@ from packaging.version import Version
 import tubthumper
 
 
-def _dir_path() -> str:
-    return os.path.dirname(os.path.realpath(__file__))
+def _repo_root() -> str:
+    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 
 # Setup sys.path so we can import other modules
-sys.path.append(os.path.join(_dir_path(), ".."))
-sys.path.append(os.path.join(_dir_path(), "..", ".."))
+sys.path.append(_repo_root())
 
-import linkcode
-from download_reports import download_reports
+from docs import linkcode
+from docs.download_reports import download_reports
 
 # -- Project information -----------------------------------------------------
 
@@ -37,7 +36,6 @@ copyright = f"2021-{datetime.datetime.now().year}, {author}"  # pylint: disable=
 release = tubthumper.__version__
 _version = Version(release)
 version = f"{_version.major}.{_version.minor}.{_version.micro}"
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -57,7 +55,6 @@ pygments_dark_style = "monokai"
 # those explicitly ignored.
 nitpicky = True
 nitpick_ignore = [("py:class", "tubthumper._types.T")]
-
 
 # -- Extension configuration -------------------------------------------------
 
@@ -91,35 +88,6 @@ intersphinx_mapping = {
 # `sphinx.ext.doctest` Sphinx extension
 doctest_default_flags = doctest.DONT_ACCEPT_TRUE_FOR_1 | doctest.ELLIPSIS
 
-# Python code that is treated like it were put in a testsetup directive for
-# every file that is tested, and for every group.
-doctest_global_setup = """
-import logging
-import random
-import time
-
-random.seed(0)  # consistent behavior
-time.sleep = lambda arg: None  # don't actually sleep
-
-# Doctest only captures prints, not logging to stdout, so
-# we have to add a handler that prints to tubthumper's logger
-logger = logging.getLogger("tubthumper")
-
-
-class PrintHandler(logging.Handler):
-    def emit(self, record):
-        msg = self.format(record)
-        print(msg)
-
-
-print_handler = PrintHandler()
-formatter = logging.Formatter("%(levelname)s: %(message)s")
-print_handler.setFormatter(formatter)
-if not logger.hasHandlers():
-    logger.addHandler(print_handler)
-
-"""
-
 # We don't need warnings about non-consecutive header level
 suppress_warnings = ["myst.header"]
 
@@ -132,7 +100,6 @@ ogp_site_url = "https://tubthumper.mattefay.com"
 ogp_site_name = f"Tubthumper {tubthumper.__version__}"
 ogp_image = "https://tubthumper.mattefay.com/en/latest/_static/logo.png"
 ogp_image_alt = False
-
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -156,29 +123,26 @@ html_static_path = ["_static"]
 # Hide link to each page's source file in the footer.
 html_show_sourcelink = False
 
-
 # -- Build the readme --------------------------------------------------------
 
 
 def build_readme():
     """Copy README.md over, in the process adding doctests"""
-    with open(
-        os.path.join(_dir_path(), "..", "..", "README.md"), encoding="utf-8"
-    ) as source:
+    name = "README.md"
+    with open(os.path.join(_repo_root(), name), encoding="utf-8") as source:
         readme = source.read()
 
-    dest_dir = os.path.join(_dir_path(), "..", "build")
+    dest_dir = os.path.join(_repo_root(), "docs", "build")
     try:
         os.mkdir(dest_dir)
     except FileExistsError:
         pass
 
-    with open(os.path.join(dest_dir, "readme.md"), "w", encoding="utf-8") as dest:
+    with open(os.path.join(dest_dir, name), "w", encoding="utf-8") as dest:
         dest.write(readme.replace("```python\n>>> ", "```{doctest}\n>>> "))
 
 
 build_readme()
-
 
 # -- Read the Docs runs this to grab the reports artifact from Github --------
 

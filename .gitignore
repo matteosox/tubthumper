@@ -12,5 +12,6 @@ __pycache__/
 # Docs
 /docs/build
 /docs/source/_static/pylint.txt
+/docs/source/_static/pytest.html
 /docs/source/_static/mypy/
 /docs/source/_static/coverage/

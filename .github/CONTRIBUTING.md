@@ -8,9 +8,10 @@ We use Docker as a clean, reproducible development environment within which to b
 
 _TL;DR: Run `cicd/test.sh` to run the full suite of tests._
 
-Running the test suite generates three test reports which are incorporated into the documentation:
+Running the test suite generates four test reports which are incorporated into the documentation:
 - [Pylint](pylint)
 - [MyPy](mypy)
+- [Pytest](pytest)
 - [Coverage](coverage)
 
 ### Version Check
@@ -77,23 +78,23 @@ Mypy will run faster on subsequent runs since mypy caches its results in the Doc
 
 Mypy is setup to run on the `tubthumper` package. To add more modules or packages for type checking, edit `test/mypy.sh`.
 
+### Unit Tests
+
+_TL;DR: Run `test/unit_tests.sh` to unit test your code quickly._
+
+While we use [`unittest`](https://docs.python.org/3/library/unittest.html) to write unit tests, we use [`pytest`](https://docs.pytest.org/) for running them. To unit test your code, run the `test/unit_tests.sh` shell script. This will run unit tests in Python 3.9 only, without any coverage reporting overhead, which should only take about a second.
+
+`pytest` is setup to discover tests in the `test/unit_tests` directory. All test files must match the pattern `test*.py`. `pytest` configuration can be found in the `pyproject.toml` file at the root of the repo. To add more directories for unit test discovery, edit the `testpaths` configuration option.
+
 ### Tox
 
 _TL;DR: Run `test/tox.sh` to run the full suite of unit tests._
 
-We use [tox](https://tox.readthedocs.io/en/latest/config.html) for unit testing across all supported versions of Python. To run the full unit test suite, run the `test/tox.sh` shell script.
+We use [`tox`](https://tox.readthedocs.io/en/latest/config.html) for unit testing across all supported versions of Python. To run the full unit test suite, run the `test/tox.sh` shell script.
 
-If you haven't run this before, the script will initialize tox, creating each Python environment we unit test our code in. This step is skipped on subsequent runs, making it MUCH faster. tox configuration can be found in the `pyproject.toml` file at the root of the repo.
+If you haven't run this before, the script will initialize `tox`, creating each Python environment we unit test our code in. This step is skipped on subsequent runs, making it MUCH faster. `tox` configuration can be found in the `pyproject.toml` file at the root of the repo.
 
-#### Unit Tests
-
-_TL;DR: Run `test/unit_tests.sh` to unit test your code quickly._
-
-We use [unittest](https://docs.python.org/3/library/unittest.html) for unit testing. To unit test your code, run the `test/unit_tests.sh` shell script. This will run unit tests in Python 3.9 only, without any coverage reporting overhead, which should only take about a second.
-
-`unittest` is setup to discover tests using its [test discovery](https://docs.python.org/3/library/unittest.html#test-discovery) functionality from the `test` directory. In practice, we put all unit tests in the `test/unit_tests` package directory. All test files must match the pattern `test*.py`. To add more directories for unit test discovery, edit `test/inner_unit_tests.sh`.
-
-Tox is setup to run the `test/inner_unit_tests.sh` shell script for each supported version of Python.
+Tox is setup to run `pytest` for each supported version of Python.
 
 #### Test Coverage
 
@@ -111,7 +112,7 @@ We use [`build`](https://pypa-build.readthedocs.io/en/latest/) to build source d
 
 _TL;DR: Run `test/docs.sh` to test the documentation._
 
-See [below](#documentation) for more info on the documentation build process. In addition to building the documentation, the `test/docs.sh` shell script uses Sphinx's [`doctest`](https://www.sphinx-doc.org/en/master/usage/extensions/doctest.html) builder to ensure the documented output of usage examples is accurate.
+See [below](#documentation) for more info on the documentation build process. In addition to building the documentation, the `test/docs.sh` shell script uses Sphinx's [`doctest`](https://www.sphinx-doc.org/en/master/usage/extensions/doctest.html) builder to ensure the documented output of usage examples is accurate. Note that the `README.md` file's ` ```python` code sections are transformed into `{doctest}` directives by `docs/source/conf.py` during the documentation build process. This allows the `README.md` to render code with syntax highlighting on Github & PyPI while still ensuring accuracy using `doctest`.
 
 ## Documentation
 
