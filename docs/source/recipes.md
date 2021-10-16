@@ -4,16 +4,16 @@
 from requests import ConnectionError
 
 from tubthumper import retry, retry_decorator, retry_factory
+from docs.test import setup
 
-URL = "http://ip.jsontest.com"
-JSON = {"ip": "8.8.8.8"}
+setup()
 
 
 def get_ip(arg=[0]):
     arg[0] += 1
     if arg[0] % 3:
-        raise ConnectionError(URL)
-    return JSON
+        raise ConnectionError("http://ip.jsontest.com")
+    return {"ip": "8.8.8.8"}
 
 ```
 
