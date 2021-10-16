@@ -37,7 +37,7 @@ __name__ = "__main__"
 
 ```
 
-```{include} ../build/readme.md
+```{include} ../build/README.md
 ```
 
 ```{toctree}
