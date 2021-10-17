@@ -17,13 +17,13 @@ logger = configure_logger(logging.getLogger(__name__))
 def main() -> None:
     """Updates the badge data Gist"""
     mypy_score = _get_mypy_score()
-    logger.info(f"MyPy score: {mypy_score}")
+    logger.info(f"Mypy score: {mypy_score}")
 
     pylint_score = _get_pylint_score()
     logger.info(f"Pylint score: {pylint_score}")
 
     mypy_badge_data = _get_mypy_badge_data(mypy_score)
-    logger.info(f"MyPy badge data:\n{mypy_badge_data}")
+    logger.info(f"Mypy badge data:\n{mypy_badge_data}")
 
     pylint_badge_data = _get_pylint_badge_data(pylint_score)
     logger.info(f"Pylint badge data:\n{pylint_badge_data}")
@@ -77,7 +77,7 @@ def _get_pylint_score() -> float:
 def _get_mypy_badge_data(score: float) -> str:
     message = f"{score:.2f}%"
     hue = round(1.2 * score)
-    return _generate_badge_data(label="MyPy", message=message, hue=hue)
+    return _generate_badge_data(label="Mypy", message=message, hue=hue)
 
 
 def _get_pylint_badge_data(score: float) -> str:

@@ -29,6 +29,8 @@
 $ pip install tubthumper
 ```
 
+`tubthumper` requires Python 3.6 or greater. For Python 3.8 or greater, it has no external dependencies, i.e. standard library only, but earlier versions require the [`dataclasses`](https://pypi.org/project/dataclasses/) backport and [`typing-extensions`](https://pypi.org/project/typing-extensions/).
+
 ### Usage
 
 Import `tubthumper`'s useful bits:
@@ -46,7 +48,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
-Call that same function with positional and keyword arguments:
+Call that same function with positional and keyword arguments, e.g. retry `get_ip(42, "test", dev=True)`:
 ```python
 >>> retry(get_ip,
 ...     args=(42, "test"), kwargs={"dev": True},
@@ -135,7 +137,7 @@ Traceback (most recent call last):
 tubthumper._retry_factory.RetryError: Retry limit 10 reached
 ```
 
-Alternatively, you can use the `time_limit` keyword-only argument (int or float) to set a time limit for the maximum number of seconds after the function is initially called for a retry attempt to begin:
+Alternatively, you can use the `time_limit` keyword-only argument to prevent retry attempts after a certain duration:
 
 ```python
 >>> retry(lambda: 1/0, time_limit=60, exceptions=ZeroDivisionError)
@@ -147,7 +149,7 @@ tubthumper._retry_factory.RetryError: Time limit 60 exceeded
 
 ### Backoff timing
 
-The default backoff timing is to double the waiting period with each retry, starting off at one second, with each backoff period jittered, i.e. scaled by a uniformly distributed random number on the [0.0, 1.0) interval. You can disable jittering using the `jitter` keyword-only argument:
+By default, the backoff duration doubles with each retry, starting off at one second. As well, each backoff period is jittered, i.e. scaled by a uniformly distributed random number on the [0.0, 1.0) interval. You can disable jittering using the `jitter` keyword-only argument:
 
 ```python
 >>> retry(get_ip, jitter=False, exceptions=ConnectionError)
@@ -158,7 +160,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
-You can set the initial backoff period using the `init_backoff` keyword-only argument:
+You can set the initial backoff duration using the `init_backoff` keyword-only argument:
 
 ```python
 >>> retry(get_ip, jitter=False, init_backoff=10, exceptions=ConnectionError)
@@ -169,7 +171,7 @@ requests.exceptions.ConnectionError: http://ip.jsontest.com
 {'ip': '8.8.8.8'}
 ```
 
-Finally, you can set the factor by which each successive backoff period is scaled using the `exponential` keyword-only argument:
+Finally, you can set the factor by which each successive backoff duration is scaled using the `exponential` keyword-only argument:
 
 ```python
 >>> retry(get_ip, jitter=False, exponential=3, exceptions=ConnectionError)
@@ -271,7 +273,7 @@ True
 
 ### Fully type annotated
 
-`tubthumper`'s various interfaces are fully type annotated, passing [MyPy](https://mypy.readthedocs.io/en/stable/)'s static type checker. You can find MyPy's [Type Check Coverage Summary](https://tubthumper.mattefay.com/en/latest/mypy.html) at that link.
+`tubthumper`'s various interfaces are fully type annotated, passing [Mypy](https://mypy.readthedocs.io/en/stable/)'s static type checker. You can find Mypy's [Type Check Coverage Summary](https://tubthumper.mattefay.com/en/latest/mypy.html) at that link.
 
 ### 100% Test Coverage
 

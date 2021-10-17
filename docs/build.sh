@@ -16,7 +16,7 @@ if [[ ! -e "$PYLINT_FILE" ]]; then
 fi
 
 if [[ ! -e "$MYPY_DIR" ]]; then
-    echo "MyPy directory $MYPY_DIR does not exist"
+    echo "Mypy directory $MYPY_DIR does not exist"
     echo "Generating it by running test/mypy.sh"
     test/mypy.sh
 fi
