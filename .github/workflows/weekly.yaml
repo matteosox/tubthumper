@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build from scratch
-        run: docker/build.sh --from-scratch
+        run: docker/build_image.sh --from-scratch
 
       - name: Test
         run: cicd/test.sh

@@ -1,4 +1,4 @@
-MyPy Report
+Mypy Report
 ===========
 
 .. raw:: html
