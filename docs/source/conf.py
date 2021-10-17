@@ -98,7 +98,7 @@ linkcode_resolve = linkcode.linkcode_resolve
 # sphinxext-opengraph settings
 ogp_site_url = "https://tubthumper.mattefay.com"
 ogp_site_name = f"Tubthumper {tubthumper.__version__}"
-ogp_image = "https://tubthumper.mattefay.com/en/latest/_static/logo.png"
+ogp_image = "https://tubthumper.mattefay.com/en/stable/_static/logo.png"
 ogp_image_alt = False
 
 # -- Options for HTML output -------------------------------------------------
