@@ -15,8 +15,8 @@ But how?!
 Most checks are automated, but a few aren't, so make sure to go through and tick them off, even if they don't apply. This checklist is here to help, not deter you. Remember, "Slow is smooth, and smooth is fast".
 
 - [ ] **Version**
-  - Version is not a pre-release (a/b/rc); we don't merge those back into the `main` branch.
-  - Version is incremented correctly, i.e. "Removed" -> major, "Added" -> minor, otherwise -> micro.
+  - Version is incremented (generally a dev increment, unless the target release has changed).
+  - Target release version is incremented correctly, i.e. "Removed" -> major, "Added" -> minor, otherwise -> micro.
 - [ ] **Unit tests**
   - Every input should have a test for it.
   - Every potential raised exception should have a test ensuring it is raised.
