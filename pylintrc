@@ -318,8 +318,7 @@ allowed-redefined-builtins=
 
 # List of strings which can identify a callback function by name. A callback
 # name must start or end with one of those strings.
-callbacks=cb_,
-          _cb
+callbacks=
 
 # A regular expression matching the name of dummy variables (i.e. expected to
 # not be used).
@@ -588,7 +587,7 @@ valid-metaclass-classmethod-first-arg=cls
 max-args=5
 
 # Maximum number of attributes for a class (see R0902).
-max-attributes=10
+max-attributes=9
 
 # Maximum number of boolean expressions in an if statement (see R0916).
 max-bool-expr=5

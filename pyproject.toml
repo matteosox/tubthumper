@@ -49,8 +49,6 @@ source = ["tubthumper"]
 show_missing = true
 fail_under = 100
 exclude_lines = [
-    # impossible to reach code
-    "^ +raise COUNTER_EXCEPTION$",
     # typing-related code
     "^ +\\.\\.\\.$",
 ]

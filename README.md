@@ -216,7 +216,7 @@ logger.log(log_level, "Function threw...", exc_info=True)
 ...         return requests.get("http://ip.jsontest.com").json()
 ...
 >>> Class().get_ip()
-WARNING: Function threw exception below on try 1, retrying in 0.260492 seconds
+WARNING: Function threw exception below on try 1, retrying in 0.719705 seconds
 Traceback (most recent call last):
   ...
 requests.exceptions.ConnectionError: http://ip.jsontest.com
