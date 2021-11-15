@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Ch
 ### Added
 
 ### Changed
+- Reduced overhead of retry utilities by calculating backoff incrementally
 
 ### Deprecated
 

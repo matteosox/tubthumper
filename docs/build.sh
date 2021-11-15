@@ -35,6 +35,6 @@ fi
 
 echo "Building documentation"
 docker/exec.sh \
-    sphinx-build -T -W -b html docs/source/ docs/build/html
+    sphinx-build -T -W --keep-going --color -b html docs/source/ docs/build/html
 
 echo "$0 completed successfully!"
