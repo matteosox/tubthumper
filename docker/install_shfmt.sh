@@ -18,5 +18,5 @@ cleanup() {
 }
 trap cleanup EXIT
 
-curl -sS https://webinstall.dev/shfmt | bash
-mv ~/.local/opt/shfmt-v3.4.0/bin/shfmt /usr/bin/
+curl -sS https://webinstall.dev/shfmt@v3.4.1 | bash
+mv ~/.local/opt/shfmt-v3.4.1/bin/shfmt /usr/bin/
