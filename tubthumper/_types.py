@@ -45,9 +45,7 @@ class Logger(Protocol):
     `structural subtyping <https://www.python.org/dev/peps/pep-0544/>`_.
     """
 
-    def log(
-        self, level: int, msg: str, *args: Any, exc_info: bool, **kwargs: Any
-    ) -> Any:
+    def log(self, level: int, msg: str, *args: object, exc_info: bool) -> None:
         r"""We call this method to log at the configured level with ``exc_info=True``
 
         Args:

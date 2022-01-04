@@ -6,23 +6,23 @@
 #
 asynctest==0.13.0
     # via -r requirements/test_requirements.in
-attrs==21.2.0
+attrs==21.4.0
     # via pytest
-coverage[toml]==6.0.2
+coverage[toml]==6.2
     # via -r requirements/test_requirements.in
 iniconfig==1.1.1
     # via pytest
 mock==4.0.3
     # via -r requirements/test_requirements.in
-packaging==21.0
+packaging==21.3
     # via
     #   -r requirements/test_requirements.in
     #   pytest
 pluggy==1.0.0
     # via pytest
-py==1.10.0
+py==1.11.0
     # via pytest
-pyparsing==2.4.7
+pyparsing==3.0.6
     # via packaging
 pytest==6.2.5
     # via
@@ -35,5 +35,7 @@ pytest-metadata==1.11.0
     # via pytest-html
 toml==0.10.2
     # via pytest
-tomli==1.2.1
-    # via coverage
+tomli==1.2.3
+    # via
+    #   -r requirements/test_requirements.in
+    #   coverage
