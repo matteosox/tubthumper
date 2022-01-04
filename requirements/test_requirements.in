@@ -4,3 +4,4 @@ mock
 packaging
 pytest
 pytest-html
+tomli<2.0.0  # we pull this constraint in to make it compatible with black in requirements.txt

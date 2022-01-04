@@ -3,7 +3,7 @@ Pylint Report
 
 .. include:: _static/pylint.txt
    :start-after: ======
-   :end-line: -3
+   :end-before: Messages
 
 ----
 
