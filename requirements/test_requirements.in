@@ -1,7 +1,8 @@
 asynctest
-coverage[toml]
+coverage[toml] < 6.3  # for Python 3.6 support
 mock
 packaging
-pytest
+pytest < 7.1  # for Python 3.6 support
 pytest-html
-tomli<2.0.0  # we pull this constraint in to make it compatible with black in requirements.txt
+pytest-metadata < 2  # pull in this constraint for Python 3.6 support
+tomli < 2  # pull in this constraint for Python 3.6 support

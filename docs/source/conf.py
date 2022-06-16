@@ -88,6 +88,9 @@ intersphinx_mapping = {
 # `sphinx.ext.doctest` Sphinx extension
 doctest_default_flags = doctest.DONT_ACCEPT_TRUE_FOR_1 | doctest.ELLIPSIS
 
+# Auto-generate Header Anchors
+myst_heading_anchors = 4
+
 # We don't need warnings about non-consecutive header level
 suppress_warnings = ["myst.header"]
 

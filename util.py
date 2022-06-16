@@ -7,7 +7,7 @@ import requests
 
 from tubthumper import retry_decorator
 
-LoggerType = TypeVar("LoggerType", bound=logging.Logger)
+LoggerType = TypeVar("LoggerType", bound=logging.Logger)  # pylint: disable=invalid-name
 
 
 def configure_logger(logger: LoggerType, level: int = logging.INFO) -> LoggerType:
