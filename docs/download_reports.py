@@ -65,7 +65,7 @@ def _get_reports_artifact_id(git_sha: str) -> int:
         for artifact in result["artifacts"]:
             if artifact["name"] == name:
                 return artifact["id"]
-        if result["total_count"] < PER_PAGE:
+        if result["total_count"] < (page * PER_PAGE):
             raise ArtifactNotFoundError(
                 f"Could not find reports artifact for git_sha {git_sha}"
             )
