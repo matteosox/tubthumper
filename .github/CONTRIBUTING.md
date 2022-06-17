@@ -284,7 +284,7 @@ When naming a branch, please use the syntax `username/branch-name-here`. If you 
 
 ## Future Work
 
--- Remove python3.10-distutils once pip migrates from `distutils` to `sysconfig`. See [here](https://pip.pypa.io/en/stable/news/#id60) & [here](https://docs.python.org/3.10/library/distutils.html#module-distutils).
+- Remove python3.10-distutils once pip migrates from `distutils` to `sysconfig`. See [here](https://pip.pypa.io/en/stable/news/#id60) & [here](https://docs.python.org/3.10/library/distutils.html#module-distutils).
 - Update type annotations to use `types.ParamSpec` once Mypy supports them (currently a new feature in Python 3.10). See [here](https://github.com/python/mypy/issues/8645).
 - Remove `-x` command-line argument from `inner_shellcheck.sh` once using version >= 0.8.0 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#added)), and remove `disable=SC1090` (can't find non-constant source) once using version >= 0.7.2 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#changed-1))
 - Remove constraints in `requirements/test_requirements.in` when no longer supporting Python 3.6.
