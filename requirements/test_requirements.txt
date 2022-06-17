@@ -22,9 +22,9 @@ pluggy==1.0.0
     # via pytest
 py==1.11.0
     # via pytest
-pyparsing==3.0.6
+pyparsing==3.0.9
     # via packaging
-pytest==6.2.5
+pytest==7.0.1
     # via
     #   -r requirements/test_requirements.in
     #   pytest-html
@@ -32,10 +32,11 @@ pytest==6.2.5
 pytest-html==3.1.1
     # via -r requirements/test_requirements.in
 pytest-metadata==1.11.0
-    # via pytest-html
-toml==0.10.2
-    # via pytest
+    # via
+    #   -r requirements/test_requirements.in
+    #   pytest-html
 tomli==1.2.3
     # via
     #   -r requirements/test_requirements.in
     #   coverage
+    #   pytest
