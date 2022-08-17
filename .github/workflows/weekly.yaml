@@ -47,8 +47,3 @@ jobs:
 
       - name: Push to Docker Hub
         run: cicd/push_to_dockerhub.sh
-
-      - name: Update Badge Data Gist
-        run: cicd/update_gist.sh
-        env:
-          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
