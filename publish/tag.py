@@ -5,10 +5,18 @@ import argparse
 import logging
 import os
 import pprint
+import sys
 
 from packaging.version import Version
 
 import tubthumper
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
+
+# Setup sys.path so we can import other modules
+sys.path.append(REPO_ROOT)
+
 from util import configure_logger, request_with_retry
 
 logger = configure_logger(logging.getLogger(__name__))

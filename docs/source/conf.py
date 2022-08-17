@@ -15,13 +15,12 @@ from packaging.version import Version
 
 import tubthumper
 
-
-def _repo_root() -> str:
-    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-
+REPO_ROOT = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+)
 
 # Setup sys.path so we can import other modules
-sys.path.append(_repo_root())
+sys.path.append(REPO_ROOT)
 
 from docs import linkcode
 from docs.download_reports import download_reports
@@ -132,10 +131,10 @@ html_show_sourcelink = False
 def build_readme():
     """Copy README.md over, in the process adding doctests"""
     name = "README.md"
-    with open(os.path.join(_repo_root(), name), encoding="utf-8") as source:
+    with open(os.path.join(REPO_ROOT, name), encoding="utf-8") as source:
         readme = source.read()
 
-    dest_dir = os.path.join(_repo_root(), "docs", "build")
+    dest_dir = os.path.join(REPO_ROOT, "docs", "build")
     try:
         os.mkdir(dest_dir)
     except FileExistsError:
