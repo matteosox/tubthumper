@@ -6,6 +6,6 @@ source "$DIR/../docker/strict_mode.sh"
 
 export CUSTOM_COMPILE_COMMAND="requirements/update.sh"
 
-pip-compile --allow-unsafe --verbose requirements/docs_requirements.in > requirements/docs_requirements.txt
-pip-compile --allow-unsafe --verbose requirements/test_requirements.in > requirements/test_requirements.txt
-pip-compile --allow-unsafe --verbose requirements/requirements.in > requirements/requirements.txt
+pip-compile --allow-unsafe --resolver=backtracking --upgrade --verbose --output-file requirements/docs_requirements.txt requirements/docs_requirements.in
+pip-compile --allow-unsafe --resolver=backtracking --upgrade --verbose --output-file requirements/test_requirements.txt requirements/test_requirements.in
+pip-compile --allow-unsafe --resolver=backtracking --upgrade --verbose --output-file requirements/requirements.txt requirements/requirements.in
