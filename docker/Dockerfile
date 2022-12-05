@@ -5,12 +5,15 @@ FROM ubuntu:20.04
 COPY docker/install_packages.sh docker/install_shfmt.sh docker/timer.sh /usr/local/bin/
 RUN --mount=type=cache,target=/var/cache/apt \
     --mount=type=cache,target=/var/lib/apt \
-    install_packages.sh python3.7 python3.7-distutils python3.8 python3.9 python3.9-venv python3.10 python3.10-distutils python3.11 python3.11-distutils pypy3 git shellcheck curl tini
+    install_packages.sh \
+    python3.7 python3.7-distutils python3.8 python3.8-distutils \
+    python3.9 python3.9-distutils python3.10 python3.10-venv \
+    python3.11 pypy3 git shellcheck curl tini
 RUN install_shfmt.sh
 
 # Create and activate virtual environment
 ENV VIRTUAL_ENV=/root/.venv
-RUN python3.9 -m venv "$VIRTUAL_ENV"
+RUN python3.10 -m venv "$VIRTUAL_ENV"
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Setup root home directory
