@@ -6,10 +6,15 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Ch
 ## Unreleased
 
 ### Added
+- Tubthumper now supports Python 3.11
+- `typing_extensions` now installed for Python versions < 3.10
+- Type annotations now use `typing.ParamSpec` to annotate types of decorated functions
 
 ### Changed
+- Package version is now hardcoded instead of stored in a file.
 
 ### Deprecated
+- Tubthumper no longer supports Python 3.6, which has reached its end of life.
 
 ### Removed
 
@@ -17,7 +22,7 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Ch
 
 ### Security
 
-## 0.0.1 (2021-06-17)
+## 0.0.1 (2022-06-17)
 
 ### Changed
 - Reduced overhead of retry utilities by calculating backoff incrementally

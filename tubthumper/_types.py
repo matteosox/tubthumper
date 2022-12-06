@@ -1,40 +1,26 @@
 """Module of types used in tubthumper"""
 
 import sys
-from typing import (
-    Any,
-    Awaitable,
-    Callable,
-    Iterable,
-    Mapping,
-    Optional,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import Any, Iterable, Mapping, Optional, Tuple, Type, TypeVar, Union
 
-if sys.version_info >= (3, 8):
-    from typing import Protocol
+if sys.version_info < (3, 10):
+    from typing_extensions import ParamSpec, Protocol, TypeAlias
 else:
-    from typing_extensions import Protocol
+    from typing import ParamSpec, Protocol, TypeAlias
 
 
-Exceptions = Union[Type[Exception], Tuple[Type[Exception]]]
-Args = Optional[Iterable[Any]]
-Kwargs = Optional[Mapping[str, Any]]
-RetryLimit = float
-TimeLimit = float
-InitBackoff = float
-Exponential = float
-Jitter = bool
-Reraise = bool
-LogLevel = int
+Exceptions: TypeAlias = Union[Type[Exception], Tuple[Type[Exception]]]
+Args: TypeAlias = Optional[Iterable[Any]]
+Kwargs: TypeAlias = Optional[Mapping[str, Any]]
+RetryLimit: TypeAlias = float
+Exponential: TypeAlias = float
+Jitter: TypeAlias = bool
+Reraise: TypeAlias = bool
+LogLevel: TypeAlias = int
+Duration: TypeAlias = float
 
 T = TypeVar("T")
-RetryCallable = Callable[..., T]
-AwaitableCallable = Callable[..., Awaitable[T]]
-Decorator = Callable[[RetryCallable[T]], RetryCallable[T]]
+P = ParamSpec("P")
 
 
 class Logger(Protocol):

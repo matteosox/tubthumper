@@ -29,7 +29,7 @@
 $ pip install tubthumper
 ```
 
-`tubthumper` requires Python 3.6 or greater. For Python 3.8 or greater, it has no external dependencies, i.e. standard library only, but earlier versions require the [`dataclasses`](https://pypi.org/project/dataclasses/) backport and [`typing-extensions`](https://pypi.org/project/typing-extensions/).
+`tubthumper` requires Python 3.7 or greater. For Python 3.10 or greater, it has no external dependencies, i.e. standard library only, but earlier versions require [`typing-extensions`](https://pypi.org/project/typing-extensions/).
 
 ### Usage
 

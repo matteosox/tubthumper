@@ -2,4 +2,5 @@
 
 from tubthumper._interfaces import *
 from tubthumper._retry_factory import *
-from tubthumper._version import version as __version__
+
+__version__ = "0.1.0.dev0"

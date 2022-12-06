@@ -1,8 +1,8 @@
 asynctest
-coverage[toml] < 6.3  # for Python 3.6 support
+coverage[toml]
 mock
 packaging
-pytest < 7.1  # for Python 3.6 support
+pytest
 pytest-html
-pytest-metadata < 2  # pull in this constraint for Python 3.6 support
-tomli < 2  # pull in this constraint for Python 3.6 support
+pytest-metadata
+tomli

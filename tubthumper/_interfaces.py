@@ -1,11 +1,11 @@
 """Interfaces for tubthumper package"""
 
 import logging
+from typing import Callable
 
-from tubthumper import _types
+from tubthumper import _types as tub_types
 from tubthumper._retry_factory import RetryConfig
 from tubthumper._retry_factory import retry_factory as _retry_factory
-from tubthumper._types import Decorator, RetryCallable, T
 
 __all__ = ["retry", "retry_decorator", "retry_factory"]
 
@@ -20,20 +20,20 @@ LOGGER_DEFAULT = logging.getLogger("tubthumper")
 
 
 def retry(
-    func: RetryCallable[T],
+    func: Callable[tub_types.P, tub_types.T],
     *,
-    exceptions: _types.Exceptions,
-    args: _types.Args = None,
-    kwargs: _types.Kwargs = None,
-    retry_limit: _types.RetryLimit = RETRY_LIMIT_DEFAULT,
-    time_limit: _types.TimeLimit = TIME_LIMIT_DEFAULT,
-    init_backoff: _types.InitBackoff = INIT_BACKOFF_DEFAULT,
-    exponential: _types.Exponential = EXPONENTIAL_DEFAULT,
-    jitter: _types.Jitter = JITTER_DEFAULT,
-    reraise: _types.Reraise = RERAISE_DEFAULT,
-    log_level: _types.LogLevel = LOG_LEVEL_DEFAULT,
-    logger: _types.Logger = LOGGER_DEFAULT,
-) -> T:
+    exceptions: tub_types.Exceptions,
+    args: tub_types.Args = None,
+    kwargs: tub_types.Kwargs = None,
+    retry_limit: tub_types.RetryLimit = RETRY_LIMIT_DEFAULT,
+    time_limit: tub_types.Duration = TIME_LIMIT_DEFAULT,
+    init_backoff: tub_types.Duration = INIT_BACKOFF_DEFAULT,
+    exponential: tub_types.Exponential = EXPONENTIAL_DEFAULT,
+    jitter: tub_types.Jitter = JITTER_DEFAULT,
+    reraise: tub_types.Reraise = RERAISE_DEFAULT,
+    log_level: tub_types.LogLevel = LOG_LEVEL_DEFAULT,
+    logger: tub_types.Logger = LOGGER_DEFAULT,
+) -> tub_types.T:
     r"""Call the provided callable with retry logic.
 
     For usage examples, see `here <index.html#usage>`__.
@@ -97,16 +97,16 @@ def retry(
 
 def retry_decorator(
     *,
-    exceptions: _types.Exceptions,
-    retry_limit: _types.RetryLimit = RETRY_LIMIT_DEFAULT,
-    time_limit: _types.TimeLimit = TIME_LIMIT_DEFAULT,
-    init_backoff: _types.InitBackoff = INIT_BACKOFF_DEFAULT,
-    exponential: _types.Exponential = EXPONENTIAL_DEFAULT,
-    jitter: _types.Jitter = JITTER_DEFAULT,
-    reraise: _types.Reraise = RERAISE_DEFAULT,
-    log_level: _types.LogLevel = LOG_LEVEL_DEFAULT,
-    logger: _types.Logger = LOGGER_DEFAULT,
-) -> Decorator[T]:
+    exceptions: tub_types.Exceptions,
+    retry_limit: tub_types.RetryLimit = RETRY_LIMIT_DEFAULT,
+    time_limit: tub_types.Duration = TIME_LIMIT_DEFAULT,
+    init_backoff: tub_types.Duration = INIT_BACKOFF_DEFAULT,
+    exponential: tub_types.Exponential = EXPONENTIAL_DEFAULT,
+    jitter: tub_types.Jitter = JITTER_DEFAULT,
+    reraise: tub_types.Reraise = RERAISE_DEFAULT,
+    log_level: tub_types.LogLevel = LOG_LEVEL_DEFAULT,
+    logger: tub_types.Logger = LOGGER_DEFAULT,
+) -> Callable[[Callable[tub_types.P, tub_types.T]], Callable[tub_types.P, tub_types.T]]:
     r"""Construct a decorator function for defining a function with built-in retry logic.
 
     For usage examples, see `here <index.html#usage>`__.
@@ -146,7 +146,9 @@ def retry_decorator(
         decorates, but with configured retry logic
     """
 
-    def decorator(func: RetryCallable[T]) -> RetryCallable[T]:
+    def decorator(
+        func: Callable[tub_types.P, tub_types.T]
+    ) -> Callable[tub_types.P, tub_types.T]:
         retry_config = RetryConfig(
             exceptions=exceptions,
             retry_limit=retry_limit,
@@ -164,18 +166,18 @@ def retry_decorator(
 
 
 def retry_factory(
-    func: RetryCallable[T],
+    func: Callable[tub_types.P, tub_types.T],
     *,
-    exceptions: _types.Exceptions,
-    retry_limit: _types.RetryLimit = RETRY_LIMIT_DEFAULT,
-    time_limit: _types.TimeLimit = TIME_LIMIT_DEFAULT,
-    init_backoff: _types.InitBackoff = INIT_BACKOFF_DEFAULT,
-    exponential: _types.Exponential = EXPONENTIAL_DEFAULT,
-    jitter: _types.Jitter = JITTER_DEFAULT,
-    reraise: _types.Reraise = RERAISE_DEFAULT,
-    log_level: _types.LogLevel = LOG_LEVEL_DEFAULT,
-    logger: _types.Logger = LOGGER_DEFAULT,
-) -> RetryCallable[T]:
+    exceptions: tub_types.Exceptions,
+    retry_limit: tub_types.RetryLimit = RETRY_LIMIT_DEFAULT,
+    time_limit: tub_types.Duration = TIME_LIMIT_DEFAULT,
+    init_backoff: tub_types.Duration = INIT_BACKOFF_DEFAULT,
+    exponential: tub_types.Exponential = EXPONENTIAL_DEFAULT,
+    jitter: tub_types.Jitter = JITTER_DEFAULT,
+    reraise: tub_types.Reraise = RERAISE_DEFAULT,
+    log_level: tub_types.LogLevel = LOG_LEVEL_DEFAULT,
+    logger: tub_types.Logger = LOGGER_DEFAULT,
+) -> Callable[tub_types.P, tub_types.T]:
     r"""Construct a function with built-in retry logic given a callable to retry.
 
     For usage examples, see `here <index.html#usage>`__.

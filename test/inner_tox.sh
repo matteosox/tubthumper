@@ -12,6 +12,7 @@ fi
 cleanup() {
     mv .coverage docs/source/_static/coverage &> /dev/null && true
     rm -f .coverage.*
+    rm -rf tubthumper.egg-info
 }
 trap cleanup EXIT
 

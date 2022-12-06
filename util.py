@@ -40,7 +40,8 @@ def request_with_retry(
     exponential backoff and jitter. For more info:
     https://docs.python-requests.org/en/latest/api/#requests.request
     """
-    response = requests.request(method, url, **kwargs)
+    timeout = kwargs.pop("timeout", 5)
+    response = requests.request(method, url, timeout=timeout, **kwargs)
     if 500 <= response.status_code < 600:
         response.raise_for_status()
     return response
