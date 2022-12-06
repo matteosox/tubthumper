@@ -3,7 +3,7 @@ name = "tubthumper"
 description = "Python package of retry utilities named after the English anarcho-communist rock band Chumbawamba's 1997 hit Tubthumping"
 readme = "README.md"
 requires-python = ">=3.7"
-license = {file = "LICENSE"}
+license = {text = "Apache License, Version 2.0"}
 keywords = ["retry", "jitter", "exponential-backoff"]
 authors = [{ name = "Matt Fay", email = "matt.e.fay@gmail.com" }]
 classifiers = [
