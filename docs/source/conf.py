@@ -53,7 +53,7 @@ pygments_dark_style = "monokai"
 # Sphinx warns about all references where the target cannot be found, except
 # those explicitly ignored.
 nitpicky = True
-nitpick_ignore = [("py:class", "tubthumper._types.T")]
+nitpick_ignore = [("py:class", "tubthumper._types.T"), ("py:class", "~P")]
 
 # -- Extension configuration -------------------------------------------------
 

@@ -27,7 +27,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 # Copy over source code and install using pip
 COPY tubthumper tubthumper/
-COPY LICENSE pyproject.toml README.md setup.cfg setup.py ./
+COPY LICENSE pyproject.toml README.md ./
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --editable .
 

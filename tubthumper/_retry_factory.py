@@ -5,10 +5,9 @@ import random
 import time
 from dataclasses import dataclass
 from functools import update_wrapper
-from typing import Any, Callable, overload
+from typing import Awaitable, Callable, overload
 
-from tubthumper import _types
-from tubthumper._types import AwaitableCallable, RetryCallable, T
+from tubthumper import _types as tub_types
 
 __all__ = ["RetryError"]
 
@@ -21,35 +20,32 @@ class RetryError(Exception):
 class RetryConfig:
     """Config class for retry logic"""
 
-    exceptions: _types.Exceptions
-    retry_limit: _types.RetryLimit
-    time_limit: _types.TimeLimit
-    init_backoff: _types.InitBackoff
-    exponential: _types.Exponential
-    jitter: _types.Jitter
-    reraise: _types.Reraise
-    log_level: _types.LogLevel
-    logger: _types.Logger
-
-
-Backoff = float
+    exceptions: tub_types.Exceptions
+    retry_limit: tub_types.RetryLimit
+    time_limit: tub_types.Duration
+    init_backoff: tub_types.Duration
+    exponential: tub_types.Exponential
+    jitter: tub_types.Jitter
+    reraise: tub_types.Reraise
+    log_level: tub_types.LogLevel
+    logger: tub_types.Logger
 
 
 class _RetryHandler:
     """Class for handling exceptions to be retried"""
 
-    exceptions: _types.Exceptions
+    exceptions: tub_types.Exceptions
     _retry_config: RetryConfig
-    _timeout: float
+    _timeout: tub_types.Duration
     _count: int
-    _backoff: Backoff
-    _unjittered_backoff: Backoff
+    _backoff: tub_types.Duration
+    _unjittered_backoff: tub_types.Duration
 
     def __init__(self, retry_config: RetryConfig):
         self.exceptions = retry_config.exceptions
         self._retry_config = retry_config
 
-        self._calc_backoff: Callable[[], Backoff]
+        self._calc_backoff: Callable[[], tub_types.Duration]
         if self._retry_config.jitter:
             self._calc_backoff = lambda: self._unjittered_backoff * random.random()
         else:
@@ -61,7 +57,7 @@ class _RetryHandler:
         self._count = 0
         self._unjittered_backoff = self._retry_config.init_backoff
 
-    def handle(self, exc: Exception) -> float:
+    def handle(self, exc: Exception) -> tub_types.Duration:
         """
         Handles the exception, either:
         (a) raising a RetryError (or the exception provided), or
@@ -103,17 +99,17 @@ class _RetryHandler:
 
 @overload
 def retry_factory(
-    func: AwaitableCallable[T],
+    func: Callable[tub_types.P, Awaitable[tub_types.T]],
     retry_config: RetryConfig,
-) -> AwaitableCallable[T]:
+) -> Callable[tub_types.P, Awaitable[tub_types.T]]:
     ...
 
 
 @overload
 def retry_factory(
-    func: RetryCallable[T],
+    func: Callable[tub_types.P, tub_types.T],
     retry_config: RetryConfig,
-) -> RetryCallable[T]:
+) -> Callable[tub_types.P, tub_types.T]:
     ...
 
 
@@ -132,10 +128,12 @@ def retry_factory(func, retry_config):  # type: ignore
 
 
 def _async_retry_factory(
-    func: AwaitableCallable[T],
+    func: Callable[tub_types.P, Awaitable[tub_types.T]],
     retry_handler: _RetryHandler,
-) -> AwaitableCallable[T]:
-    async def retry_func(*args: Any, **kwargs: Any) -> T:
+) -> Callable[tub_types.P, Awaitable[tub_types.T]]:
+    async def retry_func(
+        *args: tub_types.P.args, **kwargs: tub_types.P.kwargs
+    ) -> tub_types.T:
         retry_handler.start()
         while True:
             try:
@@ -148,10 +146,12 @@ def _async_retry_factory(
 
 
 def _sync_retry_factory(
-    func: RetryCallable[T],
+    func: Callable[tub_types.P, tub_types.T],
     retry_handler: _RetryHandler,
-) -> RetryCallable[T]:
-    def retry_func(*args: Any, **kwargs: Any) -> T:
+) -> Callable[tub_types.P, tub_types.T]:
+    def retry_func(
+        *args: tub_types.P.args, **kwargs: tub_types.P.kwargs
+    ) -> tub_types.T:
         retry_handler.start()
         while True:
             try:

@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Ch
 
 ### Added
 - Tubthumper now supports Python 3.11
+- `typing_extensions` now installed for Python versions < 3.10
+- Type annotations now use `typing.ParamSpec` to annotate types of decorated functions
 
 ### Changed
 

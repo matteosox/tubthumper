@@ -5,7 +5,6 @@ import unittest
 from packaging.version import Version
 
 import tubthumper
-from tubthumper import _version
 
 
 class TestVersion(unittest.TestCase):
@@ -13,8 +12,7 @@ class TestVersion(unittest.TestCase):
 
     def test_version(self):
         """Test the version string"""
-        Version(_version.version)
-        self.assertEqual(tubthumper.__version__, _version.version)
+        Version(tubthumper.__version__)
 
 
 if __name__ == "main":

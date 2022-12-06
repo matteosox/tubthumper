@@ -21,7 +21,6 @@ docker run \
     --detach \
     --name "$CONTAINER_NAME" \
     --volume "$REPO_DIR":/root/tubthumper \
-    --volume /root/tubthumper/tubthumper.egg-info \
     "$IMAGE_REF"
 
 echo "$0 completed successfully!"

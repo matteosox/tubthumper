@@ -14,12 +14,6 @@ Running the test suite generates four test reports which are incorporated into t
 - [Pytest](pytest)
 - [Coverage](coverage)
 
-### Version Check
-
-_TL;DR: Run `test/version.sh` to confirm version is valid._
-
-The `test/version.sh` shell script checks the current version, ensuring that it isn't identical to any versions from the `main` branch's history. When starting a new feature branch, you'll want to increment the version, likely by incrementing the `.devN` number, in order to pass this test.
-
 ### Requirements Check
 
 _TL;DR: Run `test/requirements.sh` to confirm requirements are up-to-date._
@@ -284,5 +278,4 @@ When naming a branch, please use the syntax `username/branch-name-here`. If you 
 
 ## Future Work
 
-- Update type annotations to use `types.ParamSpec` once Mypy supports them (currently a new feature in Python 3.10). See [here](https://github.com/python/mypy/issues/8645).
 - Remove `-x` command-line argument from `inner_shellcheck.sh` once using version >= 0.8.0 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#added)), and remove `disable=SC1090` (can't find non-constant source) once using version >= 0.7.2 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#changed-1))

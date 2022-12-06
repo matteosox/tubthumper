@@ -14,5 +14,3 @@ tubthumper/**/__pycache__/
 !LICENSE
 !pyproject.toml
 !README.md
-!setup.cfg
-!setup.py

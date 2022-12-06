@@ -1,9 +1,57 @@
+[project]
+name = "tubthumper"
+description = "Python package of retry utilities named after the English anarcho-communist rock band Chumbawamba's 1997 hit Tubthumping"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+keywords = ["retry", "jitter", "exponential-backoff"]
+authors = [{ name = "Matt Fay", email = "matt.e.fay@gmail.com" }]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+dependencies = [
+  "typing-extensions; python_version < '3.10'",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://tubthumper.mattefay.com"
+Changelog = "https://tubthumper.mattefay.com/en/stable/changelog.html"
+Source = "https://github.com/matteosox/tubthumper"
+"Bug Tracker" = "https://github.com/matteosox/tubthumper/issues"
+
 [build-system]
 requires = [
     "setuptools>=42",
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["tubthumper"]
+package-data = {"tubthumper" = ["py.typed"]}
+zip-safe = true
+
+[tool.setuptools.dynamic]
+version = {attr = "tubthumper.__version__"}
 
 [tool.black]
 verbose = true

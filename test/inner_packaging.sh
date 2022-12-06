@@ -6,6 +6,7 @@ source "$DIR/../docker/strict_mode.sh"
 
 cleanup() {
     rm -rf dist
+    rm -rf tubthumper.egg-info
 }
 trap cleanup EXIT
 
