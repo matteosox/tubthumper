@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Ch
 - Type annotations now use `typing.ParamSpec` to annotate types of decorated functions
 
 ### Changed
+- Package version is now hardcoded instead of stored in a file.
 
 ### Deprecated
 - Tubthumper no longer supports Python 3.6, which has reached its end of life.
