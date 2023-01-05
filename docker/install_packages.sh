@@ -19,7 +19,7 @@ apt-get update
 apt-get --yes upgrade
 
 # Add deadsnakes ppa to install other versions of Python
-apt-get --yes install --no-install-recommends software-properties-common
+apt-get --yes install --no-install-recommends software-properties-common gpg-agent
 add-apt-repository ppa:deadsnakes/ppa
 add-apt-repository ppa:pypy/ppa
 apt-get update
