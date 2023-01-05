@@ -1,15 +1,14 @@
-# syntax=docker/dockerfile:1.2
-FROM ubuntu:20.04
+# syntax=docker/dockerfile:1.4
+FROM ubuntu:22.04
 
 # Install OS-level packages
-COPY docker/install_packages.sh docker/install_shfmt.sh docker/timer.sh /usr/local/bin/
+COPY docker/install_packages.sh docker/timer.sh /usr/local/bin/
 RUN --mount=type=cache,target=/var/cache/apt \
     --mount=type=cache,target=/var/lib/apt \
     install_packages.sh \
     python3.7 python3.7-distutils python3.8 python3.8-distutils \
     python3.9 python3.9-distutils python3.10 python3.10-venv \
-    python3.11 pypy3 git shellcheck curl tini
-RUN install_shfmt.sh
+    python3.11 pypy3 git shellcheck shfmt curl tini
 
 # Create and activate virtual environment
 ENV VIRTUAL_ENV=/root/.venv
