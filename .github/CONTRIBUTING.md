@@ -278,4 +278,4 @@ When naming a branch, please use the syntax `username/branch-name-here`. If you 
 
 ## Future Work
 
-- Remove `-x` command-line argument from `inner_shellcheck.sh` once using version >= 0.8.0 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#added)), and remove `disable=SC1090` (can't find non-constant source) once using version >= 0.7.2 (see [here](https://github.com/koalaman/shellcheck/blob/master/CHANGELOG.md#changed-1))
+None for now!

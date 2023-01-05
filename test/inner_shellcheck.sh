@@ -19,7 +19,7 @@ trap report_status EXIT
 
 for script in $SHELL_SCRIPTS; do
     STATUSES[$script]=RUNNING
-    if shellcheck -x "$script"; then
+    if shellcheck "$script"; then
         STATUSES[$script]=SUCCESS
     else
         EXIT_CODE=1
