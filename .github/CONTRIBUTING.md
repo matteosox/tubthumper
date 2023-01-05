@@ -278,4 +278,4 @@ When naming a branch, please use the syntax `username/branch-name-here`. If you 
 
 ## Future Work
 
-None for now!
+- Upgrade tox and unpin it in `cicd.yaml`.
