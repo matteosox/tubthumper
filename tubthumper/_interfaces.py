@@ -19,7 +19,7 @@ LOG_LEVEL_DEFAULT = logging.WARNING
 LOGGER_DEFAULT = logging.getLogger("tubthumper")
 
 
-def retry(
+def retry(  # pylint: disable=too-many-arguments
     func: Callable[tub_types.P, tub_types.T],
     *,
     exceptions: tub_types.Exceptions,
@@ -95,7 +95,7 @@ def retry(
     return retry_func(*args, **kwargs)
 
 
-def retry_decorator(
+def retry_decorator(  # pylint: disable=too-many-arguments
     *,
     exceptions: tub_types.Exceptions,
     retry_limit: tub_types.RetryLimit = RETRY_LIMIT_DEFAULT,
@@ -165,7 +165,7 @@ def retry_decorator(
     return decorator
 
 
-def retry_factory(
+def retry_factory(  # pylint: disable=too-many-arguments
     func: Callable[tub_types.P, tub_types.T],
     *,
     exceptions: tub_types.Exceptions,

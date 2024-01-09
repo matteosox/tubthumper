@@ -277,5 +277,3 @@ The `main` branch has [branch protections](https://help.github.com/en/github/adm
 When naming a branch, please use the syntax `username/branch-name-here`. If you plan to collaborate with others on that branch, use `team/branch-name-here`.
 
 ## Future Work
-
-- Upgrade tox and unpin it in `cicd.yaml`.

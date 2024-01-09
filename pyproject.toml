@@ -2,7 +2,7 @@
 name = "tubthumper"
 description = "Python package of retry utilities named after the English anarcho-communist rock band Chumbawamba's 1997 hit Tubthumping"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = {text = "Apache License, Version 2.0"}
 keywords = ["retry", "jitter", "exponential-backoff"]
 authors = [{ name = "Matt Fay", email = "matt.e.fay@gmail.com" }]
@@ -14,11 +14,11 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
@@ -56,7 +56,7 @@ version = {attr = "tubthumper.__version__"}
 [tool.black]
 verbose = true
 color = true
-target_version = ["py37", "py38", "py39", "py310", "py311"]
+target_version = ["py38", "py39", "py310", "py311", "py312"]
 line_length = 88
 
 [tool.isort]
@@ -107,9 +107,9 @@ directory = "docs/source/_static/coverage"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py37, py38, py39, py310, py311, pypy3.8, coverage-report
+envlist = py38, py39, py310, py311, py312, pypy3.10, coverage-report
 isolated_build = true
-toxworkdir = {homedir}/.cache/tox
+toxworkdir = {tox_root}/../.cache/tox
 
 [testenv]
 deps = -r{toxinidir}/requirements/test_requirements.txt
@@ -119,7 +119,7 @@ commands = coverage run -m pytest {posargs}
 [testenv:coverage-report]
 deps = coverage[toml]
 skip_install = true
-depends = py37, py38, py39, py310, py311, pypy3.8
+depends = py38, py39, py310, py311, py312, pypy3.10
 ignore_errors = true
 commands =
     coverage combine
@@ -128,12 +128,12 @@ commands =
 
 [gh-actions]
 python =
-    3.7: py37
     3.8: py38
     3.9: py39
     3.10: py310
     3.11: py311
-    pypy-3.8: pypy3.8
+    3.12: py312
+    pypy-3.10: pypy3.10
 """
 
 [tool.check-wheel-contents]
