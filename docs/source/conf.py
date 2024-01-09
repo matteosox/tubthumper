@@ -79,9 +79,7 @@ extensions = [
 autodoc_typehints = "description"
 
 # Add links to modules and objects in the Python standard library documentation
-intersphinx_mapping = {
-    "https://docs.python.org/3": None,
-}
+intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # Default flags for testing `doctest` directives used by the
 # `sphinx.ext.doctest` Sphinx extension

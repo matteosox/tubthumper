@@ -3,19 +3,13 @@
 All notable changes for `tubthumper` will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
 
-## Unreleased
+## 0.2.0 (2024-01-08)
 
 ### Added
-
-### Changed
+- Tubthumper now supports Python 3.12
 
 ### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+- Tubthumper no longer supports Python 3.7, which has reached its end of life.
 
 ## 0.1.0 (2022-12-05)
 

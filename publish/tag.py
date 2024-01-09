@@ -64,7 +64,7 @@ def _get_changes(version: str) -> str:
             if line.startswith(search_pattern):
                 break
         else:
-            raise Exception(f"Could not find {search_pattern} in CHANGELOG.md")
+            raise LookupError(f"Could not find {search_pattern} in CHANGELOG.md")
 
         for line in file_obj:
             if line.startswith("## "):

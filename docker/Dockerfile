@@ -6,13 +6,15 @@ COPY docker/install_packages.sh docker/timer.sh /usr/local/bin/
 RUN --mount=type=cache,target=/var/cache/apt \
     --mount=type=cache,target=/var/lib/apt \
     install_packages.sh \
-    python3.7 python3.7-distutils python3.8 python3.8-distutils \
-    python3.9 python3.9-distutils python3.10 python3.10-venv \
-    python3.11 pypy3 git shellcheck shfmt curl tini
+    python3.8 python3.8-distutils \
+    python3.9 python3.9-distutils \
+    python3.10 \
+    python3.11 python3.11-venv \
+    pypy3 git shellcheck shfmt curl tini
 
 # Create and activate virtual environment
 ENV VIRTUAL_ENV=/root/.venv
-RUN python3.10 -m venv "$VIRTUAL_ENV"
+RUN python3.11 -m venv "$VIRTUAL_ENV"
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Setup root home directory
