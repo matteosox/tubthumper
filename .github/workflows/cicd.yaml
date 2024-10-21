@@ -28,6 +28,11 @@ jobs:
         with:
           python-version-file: ".python-version"
 
+      - name: Install just
+        run: sudo apt-get --yes install --no-install-recommends just
+        env:
+          DEBIAN_FRONTEND: noninteractive
+
       - name: Test
         run: just test
 
@@ -51,6 +56,8 @@ jobs:
     env:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}
+    permissions:
+      id-token: write
 
     steps:
     - name: Checkout
@@ -73,8 +80,9 @@ jobs:
         uv run --python ${{ matrix.python-version }} coverage xml --fail-under 0
 
     - name: Upload to Codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v4
       with:
         env_vars: OS,PYTHON
         fail_ci_if_error: true
         verbose: true
+        use_oidc: true

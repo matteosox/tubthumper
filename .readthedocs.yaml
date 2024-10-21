@@ -12,5 +12,4 @@ build:
     - asdf install uv latest
     - asdf global uv latest
     - uv sync --locked
-    - source .venv/bin/activate
-    - sphinx-build -T -W -b html -d docs/_build/doctrees -D language=en docs/source $READTHEDOCS_OUTPUT/html
+    - uv run sphinx-build -T -W -b html -d docs/_build/doctrees -D language=en docs/source $READTHEDOCS_OUTPUT/html
