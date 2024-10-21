@@ -5,8 +5,6 @@
 [![Downloads: n/a](https://static.pepy.tech/personalized-badge/tubthumper?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads)](https://pepy.tech/project/tubthumper)
 [![PyPI: n/a](https://img.shields.io/badge/dynamic/json?color=blueviolet&label=PyPI&query=%24.info.version&url=https%3A%2F%2Fpypi.org%2Fpypi%2Ftubthumper%2Fjson)](https://pypi.org/project/tubthumper/)
 [![codecov: n/a](https://codecov.io/gh/matteosox/tubthumper/branch/main/graph/badge.svg?token=8VKKDG9SMZ)](https://codecov.io/gh/matteosox/tubthumper)
-[![MyPY: n/a](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fmatteosox%2Fbd79bbd912687bf44fac6b7887d18f14%2Fraw%2Fmypy.json)](https://tubthumper.mattefay.com/en/stable/mypy.html)
-[![Pylint: n/a](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fmatteosox%2Fbd79bbd912687bf44fac6b7887d18f14%2Fraw%2Fpylint.json)](https://tubthumper.mattefay.com/en/stable/pylint.html)
 
 ----
 
@@ -273,8 +271,8 @@ True
 
 ### Fully type annotated
 
-`tubthumper`'s various interfaces are fully type annotated, passing [Mypy](https://mypy.readthedocs.io/en/stable/)'s static type checker. You can find Mypy's [Type Check Coverage Summary](https://tubthumper.mattefay.com/en/stable/mypy.html) at that link.
+`tubthumper`'s various interfaces are fully type annotated, passing [pyright](https://microsoft.github.io/pyright/#/).
 
 ### 100% Test Coverage
 
-`tubthumper` achieves 100% test coverage across three supported operating systems (Windows, MacOS, & Linux). You can find the [Linux coverage report](https://tubthumper.mattefay.com/en/stable/coverage.html) at that link, or the full coverage report on [Codecov](https://codecov.io/gh/matteosox/tubthumper).
+`tubthumper` achieves 100% test coverage across three supported operating systems (Windows, MacOS, & Linux). You can find the coverage report on [Codecov](https://codecov.io/gh/matteosox/tubthumper).
