@@ -29,9 +29,7 @@ jobs:
           python-version-file: ".python-version"
 
       - name: Install just
-        run: sudo apt-get --yes install --no-install-recommends just
-        env:
-          DEBIAN_FRONTEND: noninteractive
+        uses: extractions/setup-just@v2
 
       - name: Test
         run: just test
