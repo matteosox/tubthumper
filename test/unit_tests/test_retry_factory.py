@@ -1,10 +1,10 @@
 """Unit tests for the function retry_decorator"""
-# pylint: disable=too-many-public-methods
 
 import inspect
 import logging
 import random
 import unittest
+from typing import cast
 
 from mock import AsyncMock, Mock
 
@@ -16,7 +16,7 @@ tubthumper_logger = logging.getLogger("tubthumper")
 tubthumper_logger.setLevel(logging.ERROR)  # silence warnings from retries
 
 
-class TestRetryFactoryAsync(util.IsolatedAsyncioTestCase):
+class TestRetryFactoryAsync(unittest.IsolatedAsyncioTestCase):
     """Test case for retry factory with coroutines"""
 
     async def test_coroutine_success(self):
@@ -285,7 +285,7 @@ class TestRetryFactoryAsync(util.IsolatedAsyncioTestCase):
             )
 
         obj = _Class()
-        func = obj.method
+        func = cast(AsyncMock, obj.method)
         wrapped_func = retry_factory(
             func,
             retry_limit=1,
@@ -307,7 +307,7 @@ class TestRetryFactoryAsync(util.IsolatedAsyncioTestCase):
                 )
             )
 
-        func = _Class.method
+        func = cast(AsyncMock, _Class.method)
         wrapped_func = retry_factory(
             func,
             retry_limit=1,
@@ -330,7 +330,7 @@ class TestRetryFactoryAsync(util.IsolatedAsyncioTestCase):
             )
 
         obj = _Class()
-        func = obj.method
+        func = cast(AsyncMock, obj.method)
         wrapped_func = retry_factory(
             func,
             retry_limit=1,
@@ -352,7 +352,7 @@ class TestRetryFactoryAsync(util.IsolatedAsyncioTestCase):
                 )
             )
 
-        func = _Class.method
+        func = cast(AsyncMock, _Class.method)
         wrapped_func = retry_factory(
             func,
             retry_limit=1,
@@ -381,9 +381,9 @@ class TestRetryFactory(unittest.TestCase):
         """Test that the retry decorator only allows keyword arguments"""
         func = Mock()
         with self.assertRaises(TypeError):
-            retry_factory(  # pylint: disable=missing-kwoa,too-many-function-args
+            retry_factory(
                 func,
-                constants.TestException,
+                constants.TestException,  # pyright: ignore [reportCallIssue]
             )
 
     @staticmethod
@@ -633,13 +633,16 @@ class TestRetryFactory(unittest.TestCase):
         method_mock = util.create_method_mock(side_effect=constants.TestException)
 
         class _Class:
-            method = classmethod(
-                retry_factory(
-                    method_mock,
-                    exceptions=constants.TestException,
-                    retry_limit=1,
-                    init_backoff=0,
-                )
+            method = cast(
+                Mock,
+                classmethod(
+                    retry_factory(
+                        method_mock,
+                        exceptions=constants.TestException,
+                        retry_limit=1,
+                        init_backoff=0,
+                    )
+                ),
             )
 
         obj = _Class()
@@ -653,13 +656,16 @@ class TestRetryFactory(unittest.TestCase):
         method_mock = util.create_method_mock(side_effect=constants.TestException)
 
         class _Class:
-            method = classmethod(
-                retry_factory(
-                    method_mock,
-                    exceptions=constants.TestException,
-                    retry_limit=1,
-                    init_backoff=0,
-                )
+            method = cast(
+                Mock,
+                classmethod(
+                    retry_factory(
+                        method_mock,
+                        exceptions=constants.TestException,
+                        retry_limit=1,
+                        init_backoff=0,
+                    )
+                ),
             )
 
         with self.assertRaises(RetryError):
@@ -783,7 +789,7 @@ class TestRetryFactory(unittest.TestCase):
             method = retry_factory(func, exceptions=constants.TestException)
 
         obj = _Class()
-        self.assertTrue(inspect.ismethod(obj.method))
+        self.assertTrue(inspect.ismethod(obj.method))  # pyright: ignore [reportAttributeAccessIssue]
 
     def test_iscoroutinefunction(self):
         """Test the the decorated function is recognized as a coroutine function"""

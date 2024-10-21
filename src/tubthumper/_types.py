@@ -9,7 +9,7 @@ else:
     from typing import ParamSpec, Protocol, TypeAlias
 
 
-Exceptions: TypeAlias = Union[Type[Exception], Tuple[Type[Exception]]]
+Exceptions: TypeAlias = Union[Type[Exception], Tuple[Type[Exception], ...]]
 Args: TypeAlias = Optional[Iterable[Any]]
 Kwargs: TypeAlias = Optional[Mapping[str, Any]]
 RetryLimit: TypeAlias = float

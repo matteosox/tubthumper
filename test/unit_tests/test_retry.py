@@ -1,9 +1,9 @@
 """Unit tests for the function retry"""
-# pylint: disable=too-many-public-methods
 
 import logging
 import random
 import unittest
+from typing import cast
 
 from mock import AsyncMock, Mock
 
@@ -15,7 +15,7 @@ tubthumper_logger = logging.getLogger("tubthumper")
 tubthumper_logger.setLevel(logging.ERROR)  # silence warnings from retries
 
 
-class TestRetryAsync(util.IsolatedAsyncioTestCase):
+class TestRetryAsync(unittest.IsolatedAsyncioTestCase):
     """Test case for retry function with coroutines"""
 
     async def test_coroutine_success(self):
@@ -270,7 +270,7 @@ class TestRetryAsync(util.IsolatedAsyncioTestCase):
             )
 
         obj = _Class()
-        func = obj.method
+        func = cast(AsyncMock, obj.method)
         with self.assertRaises(RetryError):
             await retry(
                 func,
@@ -293,7 +293,7 @@ class TestRetryAsync(util.IsolatedAsyncioTestCase):
                 )
             )
 
-        func = _Class.method
+        func = cast(AsyncMock, _Class.method)
         with self.assertRaises(RetryError):
             await retry(
                 func,
@@ -317,7 +317,7 @@ class TestRetryAsync(util.IsolatedAsyncioTestCase):
             )
 
         obj = _Class()
-        func = obj.method
+        func = cast(AsyncMock, obj.method)
         with self.assertRaises(RetryError):
             await retry(
                 func,
@@ -340,7 +340,7 @@ class TestRetryAsync(util.IsolatedAsyncioTestCase):
                 )
             )
 
-        func = _Class.method
+        func = cast(AsyncMock, _Class.method)
         with self.assertRaises(RetryError):
             await retry(
                 func,
@@ -369,9 +369,7 @@ class TestRetry(unittest.TestCase):
         """Test that the retry function only allows one positional argument"""
         func = Mock()
         with self.assertRaises(TypeError):
-            retry(  # pylint: disable=too-many-function-args
-                func, None, exceptions=constants.TestException
-            )
+            retry(func, None, exceptions=constants.TestException)  # pyright: ignore [reportCallIssue]
 
     @staticmethod
     def test_func_call():
@@ -611,7 +609,7 @@ class TestRetry(unittest.TestCase):
             )
 
         obj = _Class()
-        func = obj.method
+        func = cast(Mock, obj.method)
         with self.assertRaises(RetryError):
             retry(
                 func,
@@ -633,6 +631,7 @@ class TestRetry(unittest.TestCase):
             )
 
         func = _Class.method
+        func = cast(Mock, _Class.method)
         with self.assertRaises(RetryError):
             retry(
                 func,
@@ -654,7 +653,7 @@ class TestRetry(unittest.TestCase):
             )
 
         obj = _Class()
-        func = obj.method
+        func = cast(Mock, obj.method)
         with self.assertRaises(RetryError):
             retry(
                 func,
@@ -675,7 +674,7 @@ class TestRetry(unittest.TestCase):
                 util.create_method_mock(side_effect=constants.TestException)
             )
 
-        func = _Class.method
+        func = cast(Mock, _Class.method)
         with self.assertRaises(RetryError):
             retry(
                 func,

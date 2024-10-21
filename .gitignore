@@ -4,6 +4,9 @@
 # Python
 __pycache__/
 *.pyc
+*.egg-info/
+.ipynb_checkpoints/
+src/tubthumper/_version.py
 
 # VS Code
 /.vscode/
@@ -11,7 +14,7 @@ __pycache__/
 
 # Docs
 /docs/build
-/docs/source/_static/pylint.txt
-/docs/source/_static/pytest.html
-/docs/source/_static/mypy/
-/docs/source/_static/coverage/
+/docs/source/api/
+
+# Coverage
+.coverage*

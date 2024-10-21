@@ -4,7 +4,6 @@ Configuration file for the Sphinx documentation builder.
 For a full list of confiuration options, see the documentation:
 https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
-# pylint: disable=invalid-name
 
 import datetime
 import doctest
@@ -22,14 +21,13 @@ REPO_ROOT = os.path.dirname(
 # Setup sys.path so we can import other modules
 sys.path.append(REPO_ROOT)
 
-from docs import linkcode
-from docs.download_reports import download_reports
+from docs import linkcode  # noqa: E402
 
 # -- Project information -----------------------------------------------------
 
 project = "Tubthumper"
 author = "Matt Fay"
-copyright = f"2021-{datetime.datetime.now().year}, {author}"  # pylint: disable=redefined-builtin
+copyright = f"2021-{datetime.datetime.now().year}, {author}"
 
 # The full version, including alpha/beta/rc tags
 release = tubthumper.__version__
@@ -72,6 +70,9 @@ extensions = [
     "sphinx_copybutton",
     "sphinxext.opengraph",
 ]
+
+# Document everything in __all__
+autosummary_ignore_module_all = False
 
 # Show typehints as content of the function or method The typehints of
 # overloaded functions or methods will still be represented in the
@@ -123,6 +124,9 @@ html_static_path = ["_static"]
 # Hide link to each page's source file in the footer.
 html_show_sourcelink = False
 
+# Set canonical URL from the Read the Docs Domain
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
+
 # -- Build the readme --------------------------------------------------------
 
 
@@ -143,8 +147,3 @@ def build_readme():
 
 
 build_readme()
-
-# -- Read the Docs runs this to grab the reports artifact from Github --------
-
-if os.environ.get("READTHEDOCS") == "True":
-    download_reports()

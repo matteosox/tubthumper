@@ -1,31 +1,9 @@
 API Reference
 =============
 
-.. currentmodule:: tubthumper
-
-Summary
--------
-
 .. autosummary::
+    :toctree: api
+    :template: custom_module.rst
+    :recursive:
 
-   retry
-   retry_decorator
-   retry_factory
-   RetryError
-
-Interfaces
-----------
-
-.. autofunction:: retry
-
-.. autodecorator:: retry_decorator
-
-.. autofunction:: retry_factory
-
-.. autoexception:: RetryError
-
-Odds & Ends
------------
-
-.. autoclass:: tubthumper._types.Logger
-    :members:
+    tubthumper
