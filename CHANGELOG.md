@@ -3,6 +3,17 @@
 All notable changes for `tubthumper` will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
 
+## 0.3.0 (2024-10-20)
+
+### Added
+- Tubthumper now supports Python 3.13
+
+### Fixed
+- Type annotation for `exceptions` argument of public interfaces now allows tuples of length greater than one exception.
+
+### Deprecated
+- Tubthumper no longer supports Python 3.8, which has reached its end of life.
+
 ## 0.2.0 (2024-01-08)
 
 ### Added
