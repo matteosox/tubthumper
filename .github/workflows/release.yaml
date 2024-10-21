@@ -25,5 +25,8 @@ jobs:
         with:
           python-version-file: ".python-version"
 
+      - name: Install just
+        uses: extractions/setup-just@v2
+
       - name: Publish package to pypi
         run: just publish
