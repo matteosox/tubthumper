@@ -7,8 +7,6 @@ from tubthumper import _types as tub_types
 from tubthumper._retry_factory import RetryConfig
 from tubthumper._retry_factory import retry_factory as _retry_factory
 
-__all__ = ["retry", "retry_decorator", "retry_factory"]
-
 RETRY_LIMIT_DEFAULT = float("inf")
 TIME_LIMIT_DEFAULT = float("inf")
 INIT_BACKOFF_DEFAULT = 1
@@ -19,7 +17,7 @@ LOG_LEVEL_DEFAULT = logging.WARNING
 LOGGER_DEFAULT = logging.getLogger("tubthumper")
 
 
-def retry(  # pylint: disable=too-many-arguments
+def retry(
     func: Callable[tub_types.P, tub_types.T],
     *,
     exceptions: tub_types.Exceptions,
@@ -92,10 +90,10 @@ def retry(  # pylint: disable=too-many-arguments
         logger=logger,
     )
     retry_func = _retry_factory(func, retry_config)
-    return retry_func(*args, **kwargs)
+    return retry_func(*args, **kwargs)  # pyright: ignore [reportCallIssue]
 
 
-def retry_decorator(  # pylint: disable=too-many-arguments
+def retry_decorator(
     *,
     exceptions: tub_types.Exceptions,
     retry_limit: tub_types.RetryLimit = RETRY_LIMIT_DEFAULT,
@@ -147,7 +145,7 @@ def retry_decorator(  # pylint: disable=too-many-arguments
     """
 
     def decorator(
-        func: Callable[tub_types.P, tub_types.T]
+        func: Callable[tub_types.P, tub_types.T],
     ) -> Callable[tub_types.P, tub_types.T]:
         retry_config = RetryConfig(
             exceptions=exceptions,
@@ -165,7 +163,7 @@ def retry_decorator(  # pylint: disable=too-many-arguments
     return decorator
 
 
-def retry_factory(  # pylint: disable=too-many-arguments
+def retry_factory(
     func: Callable[tub_types.P, tub_types.T],
     *,
     exceptions: tub_types.Exceptions,

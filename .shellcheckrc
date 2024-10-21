@@ -1,8 +1,0 @@
-# Allow opening any 'source'd file, even if not specified as input
-external-sources=true
-
-# Emit warnings in sourced files
-check-sourced=true
-
-# Look for 'source'd files relative to the checked script
-source-path=SCRIPTDIR

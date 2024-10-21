@@ -1,10 +1,10 @@
 """Unit tests for the function retry_decorator"""
-# pylint: disable=too-many-public-methods
 
 import inspect
 import logging
 import random
 import unittest
+from typing import cast
 
 from mock import AsyncMock, Mock
 
@@ -16,7 +16,7 @@ tubthumper_logger = logging.getLogger("tubthumper")
 tubthumper_logger.setLevel(logging.ERROR)  # silence warnings from retries
 
 
-class TestRetryDecoratorAsync(util.IsolatedAsyncioTestCase):
+class TestRetryDecoratorAsync(unittest.IsolatedAsyncioTestCase):
     """Test case for retry decorator with coroutines"""
 
     async def test_coroutine_success(self):
@@ -277,7 +277,7 @@ class TestRetryDecoratorAsync(util.IsolatedAsyncioTestCase):
             )
 
         obj = _Class()
-        func = obj.method
+        func = cast(Mock, obj.method)
         dec_func = retry_decorator(
             retry_limit=1,
             init_backoff=0,
@@ -298,7 +298,7 @@ class TestRetryDecoratorAsync(util.IsolatedAsyncioTestCase):
                 )
             )
 
-        func = _Class.method
+        func = cast(Mock, _Class.method)
         dec_func = retry_decorator(
             retry_limit=1,
             init_backoff=0,
@@ -320,7 +320,7 @@ class TestRetryDecoratorAsync(util.IsolatedAsyncioTestCase):
             )
 
         obj = _Class()
-        func = obj.method
+        func = cast(Mock, obj.method)
         dec_func = retry_decorator(
             retry_limit=1,
             init_backoff=0,
@@ -341,7 +341,7 @@ class TestRetryDecoratorAsync(util.IsolatedAsyncioTestCase):
                 )
             )
 
-        func = _Class.method
+        func = cast(Mock, _Class.method)
         dec_func = retry_decorator(
             retry_limit=1,
             init_backoff=0,
@@ -368,9 +368,7 @@ class TestRetryDecorator(unittest.TestCase):
     def test_only_keyword_args(self):
         """Test that the retry decorator only allows keyword arguments"""
         with self.assertRaises(TypeError):
-            retry_decorator(  # pylint: disable=missing-kwoa,too-many-function-args
-                constants.TestException
-            )
+            retry_decorator(constants.TestException)  # pyright: ignore [reportCallIssue]
 
     @staticmethod
     def test_func_call():
@@ -606,10 +604,15 @@ class TestRetryDecorator(unittest.TestCase):
         method_mock = util.create_method_mock(side_effect=constants.TestException)
 
         class _Class:
-            method = classmethod(
-                retry_decorator(
-                    exceptions=constants.TestException, retry_limit=1, init_backoff=0
-                )(method_mock)
+            method = cast(
+                Mock,
+                classmethod(
+                    retry_decorator(
+                        exceptions=constants.TestException,
+                        retry_limit=1,
+                        init_backoff=0,
+                    )(method_mock)
+                ),
             )
 
         obj = _Class()
@@ -623,10 +626,15 @@ class TestRetryDecorator(unittest.TestCase):
         method_mock = util.create_method_mock(side_effect=constants.TestException)
 
         class _Class:
-            method = classmethod(
-                retry_decorator(
-                    exceptions=constants.TestException, retry_limit=1, init_backoff=0
-                )(method_mock)
+            method = cast(
+                Mock,
+                classmethod(
+                    retry_decorator(
+                        exceptions=constants.TestException,
+                        retry_limit=1,
+                        init_backoff=0,
+                    )(method_mock)
+                ),
             )
 
         with self.assertRaises(RetryError):
@@ -744,7 +752,7 @@ class TestRetryDecorator(unittest.TestCase):
             method = retry_decorator(exceptions=constants.TestException)(func)
 
         obj = _Class()
-        self.assertTrue(inspect.ismethod(obj.method))
+        self.assertTrue(inspect.ismethod(obj.method))  # pyright: ignore [reportAttributeAccessIssue]
 
     def test_iscoroutinefunction(self):
         """Test the the decorated function is recognized as a coroutine function"""

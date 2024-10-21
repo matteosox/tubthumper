@@ -9,8 +9,6 @@ from typing import Awaitable, Callable, overload
 
 from tubthumper import _types as tub_types
 
-__all__ = ["RetryError"]
-
 
 class RetryError(Exception):
     """Exception raised when a retry or time limit is reached"""
@@ -101,16 +99,14 @@ class _RetryHandler:
 def retry_factory(
     func: Callable[tub_types.P, Awaitable[tub_types.T]],
     retry_config: RetryConfig,
-) -> Callable[tub_types.P, Awaitable[tub_types.T]]:
-    ...
+) -> Callable[tub_types.P, Awaitable[tub_types.T]]: ...
 
 
 @overload
 def retry_factory(
     func: Callable[tub_types.P, tub_types.T],
     retry_config: RetryConfig,
-) -> Callable[tub_types.P, tub_types.T]:
-    ...
+) -> Callable[tub_types.P, tub_types.T]: ...
 
 
 def retry_factory(func, retry_config):  # type: ignore

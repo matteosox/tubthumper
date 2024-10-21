@@ -35,14 +35,14 @@ class _InsomniaTime(ModuleType):
     def sleep(_):
         """Don't sleep"""
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str):
         return getattr(time, name)
 
 
 class _PrintHandler(logging.Handler):
     """Simple logging handler that uses the print function"""
 
-    def emit(self, record):
+    def emit(self, record: logging.LogRecord):
         """Format a record into a message and print it"""
         msg = self.format(record)
         print(msg)

@@ -49,7 +49,8 @@ api.rst
 credits.md
 changelog.md
 contributor_guide.md
-Report an Issue <https://github.com/matteosox/tubthumper/issues>
 GitHub <https://github.com/matteosox/tubthumper>
+Bug Report <https://github.com/matteosox/tubthumper/issues/new/choose>
+Feature Request <https://github.com/matteosox/tubthumper/issues/new/choose>
 PyPI <https://pypi.org/project/tubthumper>
 ```

@@ -1,5 +1,6 @@
 """Python module with single public linkcode_resolve function"""
 
+import importlib.metadata
 import inspect
 import os
 import shlex
@@ -11,7 +12,7 @@ from packaging.version import Version
 import tubthumper
 
 
-def linkcode_resolve(domain: str, info: dict) -> str:
+def linkcode_resolve(domain: str, info: dict[str, str]) -> str | None:
     """
     linkcode Sphinx extension uses this function to map objects to be
     documented to external URLs where the code is kept, in our case
@@ -21,8 +22,12 @@ def linkcode_resolve(domain: str, info: dict) -> str:
     if domain != "py":
         raise ValueError(f"Not currently documenting {domain}, only Python")
 
+    if not info["module"]:
+        return None
+
     modname = info["module"]
     fullname = info["fullname"]
+
     rel_url = _get_rel_url(modname, fullname)
     blob = _get_blob()
 
@@ -30,11 +35,11 @@ def linkcode_resolve(domain: str, info: dict) -> str:
 
 
 def _get_blob() -> str:
-    version_str = tubthumper.__version__
+    version_str = importlib.metadata.version("tubthumper")
     version = Version(version_str)
     if version.is_devrelease or version.is_postrelease:
         return _get_git_sha()
-    return version_str
+    return f"v{version_str}"
 
 
 def _get_git_sha() -> str:
@@ -49,28 +54,32 @@ def _get_git_sha() -> str:
 
 def _get_rel_url(modname: str, fullname: str) -> str:
     """Get the relative url given the module name and fullname"""
-    obj = sys.modules.get(modname)
+    obj = sys.modules[modname]
     for part in fullname.split("."):
-        obj = getattr(obj, part)
+        try:
+            obj = getattr(obj, part)
+        except AttributeError:
+            # When documenting instance attributes, they are not defined on the class,
+            # so just reference the class
+            pass
 
     # strip decorators, which would resolve to the source of the decorator
     # possibly an upstream bug in getsourcefile, bpo-1764286
-    try:
-        unwrap = inspect.unwrap
-    except AttributeError:
-        pass
-    else:
-        obj = unwrap(obj)
+    obj = inspect.unwrap(obj)  # type: ignore[arg-type]
 
     # Can only get source files for some Python objects
+    source_file = None
     try:
         source_file = inspect.getsourcefile(obj)
     except TypeError:
-        source_file = sys.modules.get(modname).__file__
+        source_file = sys.modules[modname].__file__
     finally:
-        rel_path = os.path.relpath(
-            source_file, start=os.path.dirname(tubthumper.__file__)
-        )
+        if source_file is None:
+            rel_path = ""
+        else:
+            rel_path = os.path.relpath(
+                source_file, start=os.path.dirname(tubthumper.__file__)
+            )
 
     # Can only get source lines for some Python objects
     try:
