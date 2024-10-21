@@ -12,13 +12,14 @@ def main() -> None:
     auth = Auth.Token(os.environ["GITHUB_TOKEN"])
     github = Github(auth=auth)
     repo = github.get_repo("matteosox/tubthumper")
-    tag = f"f{tubthumper.__version__}"
+    tag = f"v{tubthumper.__version__}"
     name = tubthumper.__version__
     prerelease = Version(tubthumper.__version__).is_prerelease
     repo.create_git_release(
         tag=tag,
         name=name,
         draft=True,
+        generate_release_notes=True,
         prerelease=prerelease,
     )
 
