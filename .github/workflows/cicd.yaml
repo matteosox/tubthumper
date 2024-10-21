@@ -45,7 +45,7 @@ jobs:
 
       - name: Publish to TestPyPI
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: just publish testpypi
+        run: just publish repository=testpypi
 
   os_compatibility:
     runs-on: ${{ matrix.os }}

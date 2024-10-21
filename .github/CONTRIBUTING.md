@@ -2,7 +2,12 @@
 
 ## Getting started
 
-We use Docker as a clean, reproducible development environment within which to build, test, generate docs, and so on. As long as you have a modern version of Docker, you should be able to run the full test suite using the `cicd/test.sh` shell script, discussed [below](#tests). That's it! Of course, running things natively isn't a supported/maintained thing.
+We use
+- [`uv`](https://docs.astral.sh/uv/) as a Python project and package manager
+- [`just`](https://just.systems/) as a command runner
+- [`git`](https://git-scm.com/) as a distributed version control system
+
+That should be all you need to install!
 
 ## Tests
 
