@@ -766,7 +766,3 @@ class TestRetryDecorator(unittest.TestCase):
         dec_func = retry_decorator(exceptions=constants.TestException)(func)
         dec_func_repr = repr(dec_func)
         self.assertRegex(dec_func_repr, constants.REPR_REGEX)
-
-
-if __name__ == "__main__":
-    unittest.main()

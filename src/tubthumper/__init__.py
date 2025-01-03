@@ -6,10 +6,10 @@ from tubthumper._types import Logger
 from tubthumper._version import __version__
 
 __all__ = [
+    "Logger",
+    "RetryError",
+    "__version__",
     "retry",
     "retry_decorator",
     "retry_factory",
-    "RetryError",
-    "Logger",
-    "__version__",
 ]

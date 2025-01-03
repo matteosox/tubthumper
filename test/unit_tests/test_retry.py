@@ -686,7 +686,3 @@ class TestRetry(unittest.TestCase):
             )
         self.assertEqual(func.call_count, 2)
         func.assert_called_with(*constants.ARGS, **constants.KWARGS)
-
-
-if __name__ == "__main__":
-    unittest.main()

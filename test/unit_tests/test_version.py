@@ -13,7 +13,3 @@ class TestVersion(unittest.TestCase):
     def test_version(self):
         """Test the version string"""
         Version(tubthumper.__version__)
-
-
-if __name__ == "main":
-    unittest.main()
