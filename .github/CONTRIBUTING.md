@@ -13,7 +13,7 @@ That should be all you need to install!
 
 _TL;DR: Run `just` to run the full suite of tests._
 
-Note: any of the following commands run with the pinned Python version in `.python-version`, but can be run with a custom version, e.g. `just python=3.13 test`.
+Note: any of the following commands run with the pinned Python version in `.python-version`, but can be run with a custom version, e.g. `UV_PYTHON=3.13 just test`.
 
 ### Code Formatting
 
@@ -49,8 +49,6 @@ All args are simply passed to `pytest`, so go to town!
 _TL;DR: Run `just coverage` to run coverage analysis of the Python unit test suite across all supported versions of Python._
 
 We use [coverage](https://coverage.readthedocs.io/en) to test the code coverage of our Python unit test suite. This command runs the unit test suite with each version of Python supported, combining before reporting the results.
-
-Note: this does not get run by `just test` and is not part of CI, only to help developers track coverage on the OS of their local development environment.
 
 ### Documentation Tests
 
@@ -122,7 +120,7 @@ This is the "main" job that runs on every commit to a branch with a pull request
 
 ### OS Compatibility
 
-Using Github Actions' [build matrix feature](https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix), we're able to run unit tests on MacOS, Windows, & Linux, for each supported version of Python. The coverage report from each of these is then uploaded to [Codecov](https://about.codecov.io/).
+Using Github Actions' [build matrix feature](https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix), we're able to run unit tests on MacOS, Windows, & Linux. The coverage report from each of these is then uploaded to [Codecov](https://about.codecov.io/).
 
 ## Pull Requests
 

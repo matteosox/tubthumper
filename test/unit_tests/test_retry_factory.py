@@ -803,7 +803,3 @@ class TestRetryFactory(unittest.TestCase):
         wrapped_func = retry_factory(func, exceptions=constants.TestException)
         dec_func_repr = repr(wrapped_func)
         self.assertRegex(dec_func_repr, constants.REPR_REGEX)
-
-
-if __name__ == "__main__":
-    unittest.main()
